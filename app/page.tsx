@@ -37,40 +37,26 @@ export default function Home() {
 
   return (
     <>
-      <Section tone="dark" className="border-b border-white/10">
-        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div>
-            <Badge tone="gold">Northern California Training Provider</Badge>
-            <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              Professional medical, defensive, workplace, and group training.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-              NorCal MedTac provides practical hands-on preparedness training for
-              individuals, businesses, clubs, armed professionals, public safety
-              personnel, medical personnel, and organizations.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button href="/classes" size="lg" variant="primary">
-                View Upcoming Classes
-              </Button>
-              <Button href="/group-training" size="lg" variant="secondary">
-                Request Group Training
-              </Button>
-            </div>
-            <p className="mt-5 text-sm font-medium text-white/68">
-              AHA, ASHI, ITLS, EMT skills, and instructor credential references
-              appear throughout class information.
-            </p>
-          </div>
-          <div className="rounded-lg border border-white/10 bg-graphite p-5">
-            <div className="aspect-[4/3] rounded-md border border-white/10 bg-charcoal p-5">
-              <div className="flex h-full flex-col justify-end">
-                <p className="max-w-sm text-2xl font-semibold leading-tight">
-                  Preparedness training for classrooms, workplaces, and range
-                  environments.
-                </p>
-              </div>
-            </div>
+      <Section
+        tone="light"
+        className="border-b border-charcoal/10 bg-[linear-gradient(180deg,#F4F2ED_0%,#EDEAE3_100%)]"
+      >
+        <div className="max-w-3xl">
+          <Badge tone="olive">Northern California Training Provider</Badge>
+          <h1 className="mt-5 max-w-3xl text-4xl font-bold leading-tight text-charcoal sm:text-5xl lg:text-6xl">
+            Medical and defensive training built for real-world situations.
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-charcoal/66">
+            Practical, safety-first, real-world readiness training for
+            individuals, professionals, and groups.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button href="/classes" size="lg" variant="primary">
+              View Upcoming Classes
+            </Button>
+            <Button href="/group-training" size="lg" variant="ghost">
+              Request Group Training
+            </Button>
           </div>
         </div>
       </Section>
@@ -79,8 +65,8 @@ export default function Home() {
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Badge tone="red">Upcoming Classes</Badge>
-            <h2 className="mt-4 text-3xl font-semibold">Upcoming Classes</h2>
-            <p className="mt-3 max-w-2xl leading-7 text-charcoal/72">
+            <h2 className="mt-4 text-4xl font-bold leading-tight">Upcoming Classes</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-charcoal/66">
               Browse scheduled training events with clear dates, locations,
               availability, and registration actions.
             </p>
@@ -99,7 +85,7 @@ export default function Home() {
       <Section tone="warm">
         <div className="mb-8">
           <Badge tone="olive">Training Pathways</Badge>
-          <h2 className="mt-4 text-3xl font-semibold">Training Pathways</h2>
+          <h2 className="mt-4 text-4xl font-bold leading-tight">Training Pathways</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {pathways.map((category) =>
@@ -121,7 +107,7 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
           <div>
             <Badge tone="gold">Why Train With NorCal MedTac</Badge>
-            <h2 className="mt-4 text-3xl font-semibold">
+            <h2 className="mt-4 text-4xl font-bold leading-tight">
               Practical, calm, and safety-first instruction.
             </h2>
           </div>
@@ -139,7 +125,7 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <Badge tone="gold">Credentials</Badge>
-            <h2 className="mt-4 text-3xl font-semibold">
+            <h2 className="mt-4 text-4xl font-bold leading-tight">
               Training credibility is visible before registration.
             </h2>
           </div>
@@ -162,10 +148,10 @@ export default function Home() {
         <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <Badge tone="olive">Group Training</Badge>
-            <h2 className="mt-4 text-3xl font-semibold">
+            <h2 className="mt-4 text-4xl font-bold leading-tight">
               Custom training for businesses, clubs, and organizations.
             </h2>
-            <p className="mt-3 max-w-2xl leading-7 text-charcoal/72">
+            <p className="mt-3 max-w-2xl leading-7 text-charcoal/66">
               Workplace CPR and first aid, emergency preparedness, tactical
               medicine, defensive skills, and team refreshers can be structured
               around group needs.
@@ -180,7 +166,7 @@ export default function Home() {
       <Section tone="light">
         <div className="mb-8">
           <Badge tone="gold">What To Expect</Badge>
-          <h2 className="mt-4 text-3xl font-semibold">
+          <h2 className="mt-4 text-4xl font-bold leading-tight">
             Clear preparation before class day.
           </h2>
         </div>
@@ -197,8 +183,8 @@ export default function Home() {
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Badge tone="neutral">Merch Preview</Badge>
-            <h2 className="mt-4 text-3xl font-semibold">Merch</h2>
-            <p className="mt-3 max-w-2xl leading-7 text-charcoal/72">
+            <h2 className="mt-4 text-4xl font-bold leading-tight">Merch</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-charcoal/66">
               Merchandise is shown separately from training registration.
             </p>
           </div>
@@ -216,8 +202,8 @@ export default function Home() {
       <Section tone="dark">
         <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <h2 className="text-3xl font-semibold">Ready to plan training?</h2>
-            <p className="mt-3 max-w-2xl leading-7 text-white/72">
+            <h2 className="text-4xl font-bold leading-tight">Ready to plan training?</h2>
+            <p className="mt-3 max-w-2xl leading-7 text-white/66">
               View the calendar for scheduled classes or contact NorCal MedTac
               with questions before registering.
             </p>

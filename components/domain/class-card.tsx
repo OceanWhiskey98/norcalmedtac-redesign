@@ -29,13 +29,13 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
     trainingClass.status === "soldOut" || trainingClass.status === "closed";
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden">
-      <div className="flex aspect-[16/9] items-end bg-graphite p-4 text-white">
+    <Card className="flex h-full flex-col overflow-hidden bg-[#fbfaf7] shadow-[0_10px_28px_rgba(24,26,27,0.08)]">
+      <div className="flex aspect-[16/9] items-end bg-graphite p-5 text-white">
         <span className="text-sm font-semibold">
           {category?.name ?? "Training Class"}
         </span>
       </div>
-      <div className="flex flex-1 flex-col gap-5 p-5">
+      <div className="flex flex-1 flex-col gap-5 p-6">
         <div className="flex flex-wrap gap-2">
           <Badge tone={category?.accent === "red" ? "red" : "olive"}>
             {category?.name ?? "Training"}
@@ -45,27 +45,27 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
           </Badge>
         </div>
         <div>
-          <h3 className="text-xl font-semibold leading-tight">
+          <h3 className="text-2xl font-bold leading-tight text-charcoal">
             {trainingClass.title}
           </h3>
           <p className="mt-3 text-sm leading-6 text-charcoal/72">
             {trainingClass.summary}
           </p>
         </div>
-        <dl className="grid gap-2 text-sm text-charcoal/78">
+        <dl className="grid gap-2 text-sm text-charcoal/58">
           <div className="flex justify-between gap-4">
             <dt>Date</dt>
-            <dd className="font-semibold text-charcoal">{trainingClass.date}</dd>
+            <dd className="font-medium text-charcoal/82">{trainingClass.date}</dd>
           </div>
           <div className="flex justify-between gap-4">
             <dt>Time</dt>
-            <dd className="font-semibold text-charcoal">
+            <dd className="font-medium text-charcoal/82">
               {trainingClass.startTime}
             </dd>
           </div>
           <div className="flex justify-between gap-4">
             <dt>Location</dt>
-            <dd className="font-semibold text-charcoal">
+            <dd className="font-medium text-charcoal/82">
               {trainingClass.locationCity}, {trainingClass.locationState}
             </dd>
           </div>
@@ -81,6 +81,7 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
         ) : null}
         <div className="mt-auto grid gap-3 sm:grid-cols-2">
           <Button
+            className="shadow-[0_8px_18px_rgba(178,51,47,0.18)]"
             disabled={disabled}
             href={disabled ? "#" : trainingClass.registrationUrl}
             variant="primary"

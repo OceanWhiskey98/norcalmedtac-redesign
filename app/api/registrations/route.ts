@@ -8,10 +8,32 @@ import { getRemainingSeatsForClass } from "@/lib/supabase/registrations";
 
 export const dynamic = "force-dynamic";
 
-type RegistrationRequestBody = Partial<RegistrationInsert>;
+type RegistrationRequestBody = Partial<
+  Pick<
+    RegistrationInsert,
+    | "classSlug"
+    | "firstName"
+    | "lastName"
+    | "email"
+    | "phone"
+    | "seats"
+    | "notes"
+  >
+>;
+
+type ParsedRegistration = Pick<
+  RegistrationInsert,
+  | "classSlug"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "seats"
+  | "notes"
+>;
 
 type ParsedRegistrationPayload =
-  | { ok: true; registration: RegistrationInsert }
+  | { ok: true; registration: ParsedRegistration }
   | { ok: false; message: string };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -143,9 +165,18 @@ export async function POST(request: Request) {
     );
   }
 
+  const registrationInsert: RegistrationInsert = {
+    ...registration,
+    amountDue: Math.round(trainingClass.price * registration.seats * 100),
+    currency: "usd",
+    paymentStatus: "unpaid",
+    registrationStatus: "pending",
+    source: "website",
+  };
+
   const { data, error } = await supabase
     .from("registrations")
-    .insert(registration)
+    .insert(registrationInsert)
     .select("id")
     .single();
 

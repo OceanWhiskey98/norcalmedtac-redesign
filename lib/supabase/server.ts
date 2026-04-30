@@ -1,13 +1,18 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 export type RegistrationInsert = {
+  amountDue: number;
   classSlug: string;
+  currency: "usd";
   firstName: string;
   lastName: string;
   email: string;
+  paymentStatus: "unpaid";
   phone: string;
+  registrationStatus: "pending";
   seats: number;
   notes: string | null;
+  source: "website";
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

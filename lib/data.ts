@@ -90,6 +90,30 @@ export type HomepageContent = {
   finalCtaBody: string;
 };
 
+export type TitledSummary = {
+  title: string;
+  summary: string;
+};
+
+export type GroupTrainingPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  useCases: TitledSummary[];
+  trainingOptionsLabel: string;
+  trainingOptionsHeadline: string;
+  trainingOptions: TitledSummary[];
+  stepsLabel: string;
+  stepsHeadline: string;
+  steps: TitledSummary[];
+  credentialsLabel: string;
+  credentialsHeadline: string;
+  credentialsBody: string;
+  formLabel: string;
+  formHeadline: string;
+  formBody: string;
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -290,6 +314,98 @@ export const homepageContent: HomepageContent = {
   finalCtaHeadline: "Ready to train with confidence?",
   finalCtaBody:
     "View upcoming classes or contact NorCal MedTac to find the right training for you.",
+};
+
+export const groupTrainingPageContent: GroupTrainingPageContent = {
+  heroLabel: "Group Training",
+  heroHeadline:
+    "Custom training for teams, workplaces, clubs, and organizations.",
+  heroBody:
+    "NorCal MedTac provides mobile and custom training for groups that need practical medical, preparedness, tactical medicine, or defensive skills instruction.",
+  useCases: [
+    {
+      title: "Workplace CPR/first aid",
+      summary:
+        "Certification-focused medical training for teams that need clear emergency response skills.",
+    },
+    {
+      title: "Business emergency preparedness",
+      summary:
+        "Practical readiness instruction for organizations building safer workplace response plans.",
+    },
+    {
+      title: "Club or private group training",
+      summary:
+        "Private classes structured around the group's goals, experience level, and schedule.",
+    },
+    {
+      title: "Security or armed professional training",
+      summary:
+        "Safety-first medical and defensive skills refreshers for professional environments.",
+    },
+    {
+      title: "Public safety or medical team refreshers",
+      summary:
+        "Focused refreshers for teams that need practical repetition and instructor-led skills review.",
+    },
+  ],
+  trainingOptionsLabel: "Training Options",
+  trainingOptionsHeadline: "Build a class around your group needs.",
+  trainingOptions: [
+    {
+      title: "Medical & certification training",
+      summary:
+        "CPR, AED, first aid, bleeding control, and emergency care formats for teams.",
+    },
+    {
+      title: "Tactical medicine",
+      summary:
+        "Hands-on casualty care and practical medical response for austere or higher-risk settings.",
+    },
+    {
+      title: "Defensive skills",
+      summary:
+        "Structured defensive training built around safety, fundamentals, and group readiness.",
+    },
+    {
+      title: "Custom emergency preparedness",
+      summary:
+        "Preparedness sessions tailored to your workplace, club, or organizational context.",
+    },
+  ],
+  stepsLabel: "How It Works",
+  stepsHeadline: "A simple path from inquiry to training.",
+  steps: [
+    {
+      title: "Submit inquiry",
+      summary:
+        "Share your group size, location, training goals, and preferred timing.",
+    },
+    {
+      title: "Define group needs",
+      summary:
+        "NorCal MedTac helps align the format, prerequisites, equipment, and outcomes.",
+    },
+    {
+      title: "Schedule training",
+      summary:
+        "Choose a practical date, class length, and venue plan for your group.",
+    },
+    {
+      title: "Train on-site or at an agreed location",
+      summary:
+        "Instruction can be delivered at a workplace, partner location, or other suitable site.",
+    },
+  ],
+  credentialsLabel: "Credentials",
+  credentialsHeadline:
+    "Instruction aligned with recognized standards and real field experience.",
+  credentialsBody:
+    "Group training can reference AHA, ASHI, ITLS, EMT skills, instructor credentials, and class-specific safety expectations where applicable.",
+  formLabel: "Inquiry Form",
+  formHeadline: "Request Group Training",
+  formBody:
+    "This form is front-end only for the prototype and does not send email or store submissions.",
 };
 
 export const classes: TrainingClass[] = [

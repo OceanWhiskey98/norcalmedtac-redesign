@@ -38,7 +38,7 @@ export const groupTrainingPageType = defineType({
   title: "Group Training Page",
   type: "document",
   description:
-    "Page-level copy for Group Training. Inquiry form remains front-end only in this phase.",
+    "Page-level copy for Group Training, including inquiry form intro messaging and follow-up expectations.",
   fieldsets: [
     {
       name: "hero",

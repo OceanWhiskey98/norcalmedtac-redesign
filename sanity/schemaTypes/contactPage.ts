@@ -13,7 +13,7 @@ export const contactPageType = defineType({
   title: "Contact Page",
   type: "document",
   description:
-    "Page-level copy for Contact page sections. Contact form is display-only/front-end in this phase.",
+    "Page-level copy for Contact page sections, including contact form intro messaging and follow-up expectations.",
   fieldsets: [
     {
       name: "hero",

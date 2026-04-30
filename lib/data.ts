@@ -499,7 +499,7 @@ export const groupTrainingPageContent: GroupTrainingPageContent = {
   formLabel: "Inquiry Form",
   formHeadline: "Request Group Training",
   formBody:
-    "This form is front-end only for the prototype and does not send email or store submissions.",
+    "Group training inquiries are submitted, and the NorCal MedTac team will follow up to coordinate details.",
 };
 
 export const contactPageContent: ContactPageContent = {
@@ -510,7 +510,7 @@ export const contactPageContent: ContactPageContent = {
   formLabel: "Contact Form",
   formHeadline: "Send a training question.",
   formBody:
-    "This form is front-end only for the prototype and does not send email or store submissions.",
+    "Contact inquiries are submitted, and the NorCal MedTac team will follow up.",
   faqLabel: "FAQ Summary",
   faqHeadline: "Common questions before registering.",
   contactCards: [

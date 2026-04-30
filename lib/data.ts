@@ -141,6 +141,28 @@ export type ContactPageContent = {
   faqs: FaqSummary[];
 };
 
+export type TextItem = {
+  text: string;
+};
+
+export type AboutPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  missionLabel: string;
+  missionHeadline: string;
+  missionBody: string;
+  audiencesLabel: string;
+  audiencesHeadline: string;
+  audiences: TextItem[];
+  philosophyPoints: TitledSummary[];
+  instructorLabel: string;
+  instructorHeadline: string;
+  finalCtaLabel: string;
+  finalCtaHeadline: string;
+  finalCtaBody: string;
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -486,6 +508,68 @@ export const contactPageContent: ContactPageContent = {
         "Yes. Use the group training inquiry path for workplace, club, private group, and organization training requests.",
     },
   ],
+};
+
+export const aboutPageContent: AboutPageContent = {
+  heroLabel: "About",
+  heroHeadline:
+    "A professional training organization built around practical readiness.",
+  heroBody:
+    "{businessName} provides hands-on medical, defensive, workplace, and group training for students who need clear instruction before real situations happen.",
+  missionLabel: "Mission",
+  missionHeadline:
+    "Training that is serious, practical, and easy to understand.",
+  missionBody:
+    "{businessName} serves {serviceArea} as a professional training provider that accepts registrations, not as a store that sells classes. Course details, instructor credibility, safety expectations, and registration clarity come first.",
+  audiencesLabel: "Who The Training Serves",
+  audiencesHeadline:
+    "Practical training for individuals, professionals, and groups.",
+  audiences: [
+    {
+      text: "Civilians seeking practical emergency or defensive training",
+    },
+    {
+      text: "Businesses needing workplace preparedness training",
+    },
+    {
+      text: "Clubs and private groups requesting custom instruction",
+    },
+    {
+      text: "Armed professionals and public safety personnel",
+    },
+    {
+      text: "Medical personnel seeking refreshers or continuing education",
+    },
+  ],
+  philosophyPoints: [
+    {
+      title: "Practical curriculum",
+      summary:
+        "Instruction is organized around clear skills, realistic expectations, and useful repetition.",
+    },
+    {
+      title: "Calm instruction",
+      summary:
+        "Students get direct, steady coaching without theatrics or fear-based messaging.",
+    },
+    {
+      title: "Safety-first environment",
+      summary:
+        "Class expectations, prerequisites, and conduct standards are stated before students train.",
+    },
+    {
+      title: "Clear prerequisites and expectations",
+      summary:
+        "Students can review what to bring, who the class is for, and what the training covers.",
+    },
+  ],
+  instructorLabel: "Instructor Credibility",
+  instructorHeadline: "Instructors with relevant credentials and specialties.",
+  finalCtaLabel: "Why Choose NorCal MedTac",
+  finalCtaHeadline:
+    "Clear information, capable instruction, and safety-first training environments.",
+  finalCtaBody:
+    "Students can review prerequisites, what to bring, class expectations, and registration details before reserving a seat.",
 };
 
 export const classes: TrainingClass[] = [

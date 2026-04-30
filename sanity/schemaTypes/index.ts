@@ -1,3 +1,4 @@
+import { aboutPageType } from "./aboutPage";
 import { contactPageType } from "./contactPage";
 import { homepageContentType } from "./homepageContent";
 import { groupTrainingPageType } from "./groupTrainingPage";
@@ -6,6 +7,7 @@ import { scheduledClassType } from "./scheduledClass";
 import { siteSettingsType } from "./siteSettings";
 
 export const schemaTypes = [
+  aboutPageType,
   contactPageType,
   homepageContentType,
   groupTrainingPageType,

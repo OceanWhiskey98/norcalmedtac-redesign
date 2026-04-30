@@ -54,8 +54,6 @@ scheduled classes across the homepage, `/classes`, `/calendar`,
 - Homepage, `/classes`, and `/calendar` show upcoming classes only.
 - Class detail and registration routes can still load past or closed classes by
   slug.
-- Registration records are not stored yet. The registration flow is still a
-  front-end placeholder and does not save attendee information.
 
 ### Run Sanity Studio
 
@@ -90,3 +88,52 @@ Sanity-powered list.
 ```bash
 npm run build
 ```
+
+## Supabase Registration Storage
+
+Class registration requests from `/register/[slug]` are stored in Supabase.
+There is no authentication, payment processing, Stripe, or admin UI yet.
+
+### Create a Supabase project
+
+1. Create a Supabase account or log into an existing account.
+2. Create a new project.
+3. Open the Supabase SQL editor.
+4. Run the SQL in `supabase/registrations.sql` to create the `registrations`
+   table.
+
+The table stores:
+
+- `id`
+- `classSlug`
+- `firstName`
+- `lastName`
+- `email`
+- `phone`
+- `seats`
+- `notes`
+- `createdAt`
+
+### Supabase environment variables
+
+Add these values to `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
+
+Use the service role key only on the server. Do not expose it in client
+components or browser code.
+
+### Registration behavior
+
+When a student submits the registration form:
+
+1. The form posts to `/api/registrations`.
+2. The route validates the attendee fields and class slug.
+3. The route writes the registration request to Supabase.
+4. The page shows the existing registration confirmation state.
+
+Registration records are stored, but seats are not enforced, authentication is
+not enabled, and no payment is collected yet.

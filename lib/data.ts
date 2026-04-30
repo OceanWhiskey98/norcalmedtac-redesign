@@ -182,10 +182,15 @@ export type Merchandise = {
   price: number;
   currency: "USD";
   images: string[];
-  variants: string[];
+  imageAlt: string;
+  variants: Array<{
+    label: string;
+    values: string[];
+  }>;
   inventoryStatus: "inStock" | "lowStock" | "outOfStock";
   shoppingUrl: string;
   featured: boolean;
+  sortOrder: number;
 };
 
 export const categories: Category[] = [
@@ -729,10 +734,17 @@ export const merchandise: Merchandise[] = [
     price: 32,
     currency: "USD",
     images: [],
-    variants: ["Small", "Medium", "Large", "XL"],
+    imageAlt: "",
+    variants: [
+      {
+        label: "Size",
+        values: ["Small", "Medium", "Large", "XL"],
+      },
+    ],
     inventoryStatus: "inStock",
     shoppingUrl: "/merch/norcal-medtac-training-shirt",
     featured: true,
+    sortOrder: 1,
   },
   {
     id: "product-med-patch",
@@ -743,10 +755,17 @@ export const merchandise: Merchandise[] = [
     price: 12,
     currency: "USD",
     images: [],
-    variants: ["Red", "Olive"],
+    imageAlt: "",
+    variants: [
+      {
+        label: "Color",
+        values: ["Red", "Olive"],
+      },
+    ],
     inventoryStatus: "lowStock",
     shoppingUrl: "/merch/medical-identification-patch",
     featured: true,
+    sortOrder: 2,
   },
   {
     id: "product-gift-certificate",
@@ -757,10 +776,17 @@ export const merchandise: Merchandise[] = [
     price: 100,
     currency: "USD",
     images: [],
-    variants: ["$100", "$150", "$250"],
+    imageAlt: "",
+    variants: [
+      {
+        label: "Value",
+        values: ["$100", "$150", "$250"],
+      },
+    ],
     inventoryStatus: "inStock",
     shoppingUrl: "/merch/training-gift-certificate",
     featured: true,
+    sortOrder: 3,
   },
 ];
 

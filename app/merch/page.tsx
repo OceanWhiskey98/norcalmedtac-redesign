@@ -2,11 +2,13 @@ import { ProductCard } from "@/components/domain/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { merchandise } from "@/lib/data";
+import { getMerchProducts } from "@/lib/sanity/merch";
 
 const categories = ["Apparel", "Patches", "Gear", "Gift Certificates", "Accessories"];
 
-export default function MerchPage() {
+export default async function MerchPage() {
+  const products = await getMerchProducts();
+
   return (
     <>
       <Section className="bg-white" tone="light">
@@ -37,7 +39,7 @@ export default function MerchPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {merchandise.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

@@ -14,13 +14,26 @@ const inventoryLabels: Record<Merchandise["inventoryStatus"], string> = {
 };
 
 export function ProductCard({ product }: ProductCardProps) {
+  const primaryImage = product.images[0];
+  const shoppingUrl = product.shoppingUrl.startsWith("http")
+    ? product.shoppingUrl
+    : undefined;
+
   return (
     <Card className="flex h-full flex-col overflow-hidden">
-      <div className="flex min-h-56 items-end bg-warm-gray p-5 transition-transform duration-200 group-hover:scale-[1.02]">
-        <span className="text-sm font-semibold text-charcoal">
-          {product.category}
-        </span>
-      </div>
+      {primaryImage ? (
+        <img
+          alt={product.imageAlt || product.title}
+          className="h-56 w-full object-cover"
+          src={primaryImage}
+        />
+      ) : (
+        <div className="flex min-h-56 items-end bg-warm-gray p-5 transition-transform duration-200 group-hover:scale-[1.02]">
+          <span className="text-sm font-semibold text-charcoal">
+            {product.category}
+          </span>
+        </div>
+      )}
       <div className="flex flex-1 flex-col gap-5 p-5 md:p-6">
         <Badge tone="neutral">{product.category}</Badge>
         <div>
@@ -40,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
           <Button
             disabled={product.inventoryStatus === "outOfStock"}
-            href={product.shoppingUrl}
+            href={shoppingUrl}
             variant="primary"
           >
             Add to Cart

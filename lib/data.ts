@@ -163,6 +163,24 @@ export type AboutPageContent = {
   finalCtaBody: string;
 };
 
+export type LinkSummary = {
+  title: string;
+  summary: string;
+  href?: string;
+};
+
+export type ClassesPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  filterHelperText: string;
+  featuredClassLabel: string;
+  groupTrainingCtaHeadline: string;
+  groupTrainingCtaBody: string;
+  supportSectionHeadline: string;
+  supportCards: LinkSummary[];
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -575,6 +593,39 @@ export const aboutPageContent: AboutPageContent = {
     "Clear information, capable instruction, and safety-first training environments.",
   finalCtaBody:
     "Students can review prerequisites, what to bring, class expectations, and registration details before reserving a seat.",
+};
+
+export const classesPageContent: ClassesPageContent = {
+  heroLabel: "Classes",
+  heroHeadline: "Upcoming Classes",
+  heroBody:
+    "Browse scheduled medical, defensive, certification, and preparedness training.",
+  filterHelperText:
+    "Filters are included as front-end placeholders for this prototype.",
+  featuredClassLabel: "Featured Next Class",
+  groupTrainingCtaHeadline: "Need a private, workplace, or club class?",
+  groupTrainingCtaBody:
+    "Request training for your team, organization, or private group.",
+  supportSectionHeadline:
+    "Review expectations, policies, and registration guidance before attending.",
+  supportCards: [
+    {
+      title: "FAQs",
+      summary:
+        "Review common student questions about class expectations and preparation.",
+      href: "/contact",
+    },
+    {
+      title: "Policies",
+      summary:
+        "Review class expectations, waivers, transfer guidance, and attendance policies.",
+    },
+    {
+      title: "Refund & Cancellation Policy",
+      summary:
+        "Review cancellation timing and related registration details before reserving a seat.",
+    },
+  ],
 };
 
 export const classes: TrainingClass[] = [

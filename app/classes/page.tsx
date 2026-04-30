@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { getCategory } from "@/lib/data";
+import { getClassesPage } from "@/lib/sanity/classes-page";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
 
 const filters = [
@@ -16,7 +17,10 @@ const filters = [
 ];
 
 export default async function ClassesPage() {
-  const classes = await getUpcomingClasses();
+  const [content, classes] = await Promise.all([
+    getClassesPage(),
+    getUpcomingClasses(),
+  ]);
   const featuredClass = classes[0];
   const featuredCategory = featuredClass
     ? getCategory(featuredClass.categoryId)
@@ -26,15 +30,18 @@ export default async function ClassesPage() {
     <>
       <Section className="bg-white" tone="light">
         <div className="max-w-3xl">
-          <Badge tone="red">Classes</Badge>
+          <Badge tone="red">{content.heroLabel}</Badge>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
-            Upcoming Classes
+            {content.heroHeadline}
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
-            Browse scheduled medical, defensive, certification, and preparedness
-            training. Filters are included as front-end placeholders for this
-            prototype.
+            {content.heroBody}
           </p>
+          {content.filterHelperText ? (
+            <p className="mt-3 text-sm leading-relaxed text-charcoal/58">
+              {content.filterHelperText}
+            </p>
+          ) : null}
         </div>
       </Section>
 
@@ -56,7 +63,7 @@ export default async function ClassesPage() {
         {featuredClass ? (
           <div className="mb-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
             <div>
-              <Badge tone="olive">Featured Next Class</Badge>
+              <Badge tone="olive">{content.featuredClassLabel}</Badge>
               <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl">
                 {featuredClass.title}
               </h2>
@@ -122,10 +129,10 @@ export default async function ClassesPage() {
           <div>
             <Badge tone="olive">Group Training</Badge>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-              Need a private, workplace, or club class?
+              {content.groupTrainingCtaHeadline}
             </h2>
             <p className="mt-3 leading-relaxed text-charcoal/62">
-              Request training for your team, organization, or private group.
+              {content.groupTrainingCtaBody}
             </p>
           </div>
           <Button href="/group-training" variant="outline">
@@ -135,14 +142,25 @@ export default async function ClassesPage() {
       </Section>
 
       <Section className="bg-neutral-50" tone="light">
+        <div className="mb-6 max-w-3xl">
+          <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">
+            {content.supportSectionHeadline}
+          </h2>
+        </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {["FAQs", "Policies", "Refund & Cancellation Policy"].map((item) => (
-            <Card className="p-6" key={item}>
-              <h3 className="font-semibold text-neutral-900">{item}</h3>
+          {content.supportCards.map((item) => (
+            <Card className="p-6" key={item.title}>
+              <h3 className="font-semibold text-neutral-900">{item.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-charcoal/62">
-                Review class expectations, waivers, transfers, cancellation
-                timing, and other registration details before attending.
+                {item.summary}
               </p>
+              {item.href ? (
+                <div className="mt-4">
+                  <Button href={item.href} size="sm" variant="outline">
+                    Open
+                  </Button>
+                </div>
+              ) : null}
             </Card>
           ))}
         </div>

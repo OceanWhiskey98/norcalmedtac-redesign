@@ -3,15 +3,8 @@ import { ClassRegistrationForm } from "@/components/forms/class-registration-for
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import {
-  classStatusLabels,
-  formatCurrency,
-  getCategory,
-} from "@/lib/data";
-import {
-  getClassBySlug,
-  getClassStaticParams,
-} from "@/lib/sanity/classes";
+import { classStatusLabels, formatCurrency, getCategory } from "@/lib/data";
+import { getClassBySlug, getClassStaticParams } from "@/lib/sanity/classes";
 
 type RegisterPageProps = {
   params: Promise<{ slug: string }>;
@@ -53,7 +46,9 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
             <Badge tone={category?.accent === "red" ? "red" : "olive"}>
               {category?.name ?? "Training"}
             </Badge>
-            <Badge tone="neutral">{classStatusLabels[trainingClass.status]}</Badge>
+            <Badge tone="neutral">
+              {classStatusLabels[trainingClass.status]}
+            </Badge>
           </div>
           <h2 className="mt-5 text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl">
             {trainingClass.title}

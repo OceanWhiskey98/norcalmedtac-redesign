@@ -19,10 +19,10 @@ export function ClassRegistrationForm({
 }: ClassRegistrationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [seats, setSeats] = useState(1);
-  const total = useMemo(() => trainingClass.price * seats, [
-    seats,
-    trainingClass.price,
-  ]);
+  const total = useMemo(
+    () => trainingClass.price * seats,
+    [seats, trainingClass.price],
+  );
   const disabled =
     trainingClass.status === "soldOut" || trainingClass.status === "closed";
   const trustBullets = [
@@ -54,15 +54,18 @@ export function ClassRegistrationForm({
           <div>
             <h3 className="font-semibold text-neutral-900">Prerequisites</h3>
             <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-charcoal/68">
-              {[...trainingClass.prerequisites, ...trainingClass.legalRequirements].map(
-                (item) => (
-                  <li key={item}>{item}</li>
-                ),
-              )}
+              {[
+                ...trainingClass.prerequisites,
+                ...trainingClass.legalRequirements,
+              ].map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-neutral-900">Arrival / Location</h3>
+            <h3 className="font-semibold text-neutral-900">
+              Arrival / Location
+            </h3>
             <p className="mt-3 text-sm leading-relaxed text-charcoal/68">
               {trainingClass.locationName}, {trainingClass.locationCity},{" "}
               {trainingClass.locationState}. Arrival notes are placeholder
@@ -125,7 +128,11 @@ export function ClassRegistrationForm({
               placeholder="Share any questions before registration."
             />
           </label>
-          <Button className="mt-3 w-full sm:w-fit" disabled={disabled} type="submit">
+          <Button
+            className="mt-3 w-full sm:w-fit"
+            disabled={disabled}
+            type="submit"
+          >
             Reserve Seat - {formatCurrency(total)}
           </Button>
           <p className="text-sm leading-relaxed text-charcoal/58">

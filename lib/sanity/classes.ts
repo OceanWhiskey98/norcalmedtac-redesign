@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 
 type SanityClassStatus = "open" | "full" | "waitlist" | "closed";
+export type NormalizedTrainingClass = TrainingClass;
 
 export type SanityScheduledClassDocument = {
   id: string;
@@ -42,6 +43,11 @@ export type SanityScheduledClassDocument = {
   image?: string | null;
   relatedClassIds?: string[] | null;
 };
+
+type SanityClassBySlugResult =
+  | { status: "found"; trainingClass: NormalizedTrainingClass }
+  | { status: "missing" }
+  | { status: "fallback" };
 
 const classFields = groq`
   "id": _id,
@@ -92,7 +98,9 @@ function asStringList(value: string[] | null | undefined): string[] {
   return Array.isArray(value) ? value : [];
 }
 
-function normalizeStatus(status: SanityScheduledClassDocument["status"]): ClassStatus {
+function normalizeStatus(
+  status: SanityScheduledClassDocument["status"],
+): ClassStatus {
   switch (status) {
     case "full":
       return "soldOut";
@@ -106,7 +114,9 @@ function normalizeStatus(status: SanityScheduledClassDocument["status"]): ClassS
   }
 }
 
-function normalizeClass(document: SanityScheduledClassDocument): TrainingClass {
+function normalizeClass(
+  document: SanityScheduledClassDocument,
+): NormalizedTrainingClass {
   return {
     id: document.id,
     title: document.title,
@@ -143,12 +153,15 @@ function normalizeClass(document: SanityScheduledClassDocument): TrainingClass {
 }
 
 function sortByDateAscending(
-  trainingClasses: TrainingClass[],
-): TrainingClass[] {
+  trainingClasses: NormalizedTrainingClass[],
+): NormalizedTrainingClass[] {
   return [...trainingClasses].sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function isUpcomingClass(trainingClass: TrainingClass, now = new Date()): boolean {
+function isUpcomingClass(
+  trainingClass: NormalizedTrainingClass,
+  now = new Date(),
+): boolean {
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
 
@@ -156,7 +169,7 @@ function isUpcomingClass(trainingClass: TrainingClass, now = new Date()): boolea
   return classDate >= today;
 }
 
-async function fetchSanityClasses(): Promise<TrainingClass[] | null> {
+async function fetchSanityClasses(): Promise<NormalizedTrainingClass[] | null> {
   if (!sanityClient) {
     return null;
   }
@@ -170,16 +183,19 @@ async function fetchSanityClasses(): Promise<TrainingClass[] | null> {
 
     return sortByDateAscending(documents.map(normalizeClass));
   } catch (error) {
-    console.warn("Sanity class fetch failed; falling back to mock data.", error);
+    console.warn(
+      "Sanity class fetch failed; falling back to mock data.",
+      error,
+    );
     return null;
   }
 }
 
 async function fetchSanityClassBySlug(
   slug: string,
-): Promise<TrainingClass | null | undefined> {
+): Promise<SanityClassBySlugResult> {
   if (!sanityClient) {
-    return undefined;
+    return { status: "fallback" };
   }
 
   try {
@@ -190,26 +206,28 @@ async function fetchSanityClassBySlug(
         { next: { revalidate: 60 } },
       );
 
-    return document ? normalizeClass(document) : undefined;
+    return document
+      ? { status: "found", trainingClass: normalizeClass(document) }
+      : { status: "missing" };
   } catch (error) {
     console.warn(
       "Sanity class detail fetch failed; falling back to mock data.",
       error,
     );
-    return null;
+    return { status: "fallback" };
   }
 }
 
-function getFallbackClasses(): TrainingClass[] {
+function getFallbackClasses(): NormalizedTrainingClass[] {
   return sortByDateAscending(fallbackClasses);
 }
 
-export async function getClasses(): Promise<TrainingClass[]> {
+export async function getClasses(): Promise<NormalizedTrainingClass[]> {
   const sanityClasses = await fetchSanityClasses();
   return sanityClasses ?? getFallbackClasses();
 }
 
-export async function getUpcomingClasses(): Promise<TrainingClass[]> {
+export async function getUpcomingClasses(): Promise<NormalizedTrainingClass[]> {
   const trainingClasses = await getClasses();
   return trainingClasses.filter((trainingClass) =>
     isUpcomingClass(trainingClass),
@@ -218,14 +236,20 @@ export async function getUpcomingClasses(): Promise<TrainingClass[]> {
 
 export async function getClassBySlug(
   slug: string,
-): Promise<TrainingClass | undefined> {
-  const sanityClass = await fetchSanityClassBySlug(slug);
+): Promise<NormalizedTrainingClass | undefined> {
+  const result = await fetchSanityClassBySlug(slug);
 
-  if (sanityClass !== null) {
-    return sanityClass;
+  if (result.status === "found") {
+    return result.trainingClass;
   }
 
-  return getFallbackClasses().find((trainingClass) => trainingClass.slug === slug);
+  if (result.status === "missing") {
+    return undefined;
+  }
+
+  return getFallbackClasses().find(
+    (trainingClass) => trainingClass.slug === slug,
+  );
 }
 
 export async function getClassStaticParams(): Promise<Array<{ slug: string }>> {

@@ -41,7 +41,10 @@ export default async function ClassesPage() {
       <Section className="bg-neutral-50" tone="light">
         <div className="mb-10 grid gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:grid-cols-3 xl:grid-cols-6">
           {filters.map((filter) => (
-            <label className="grid gap-2 text-sm font-medium text-neutral-900" key={filter}>
+            <label
+              className="grid gap-2 text-sm font-medium text-neutral-900"
+              key={filter}
+            >
               {filter}
               <select className="min-h-11 rounded-xl border border-neutral-300 bg-white px-3 text-sm text-charcoal/62">
                 <option>{filter}</option>
@@ -81,8 +84,13 @@ export default async function ClassesPage() {
                 </div>
               </dl>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={`/register/${featuredClass.slug}`}>Register</Button>
-                <Button href={`/classes/${featuredClass.slug}`} variant="outline">
+                <Button href={`/register/${featuredClass.slug}`}>
+                  Register
+                </Button>
+                <Button
+                  href={`/classes/${featuredClass.slug}`}
+                  variant="outline"
+                >
                   View Details
                 </Button>
               </div>

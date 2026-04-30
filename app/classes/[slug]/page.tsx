@@ -85,7 +85,9 @@ function DetailSection({
   );
 }
 
-export default async function ClassDetailPage({ params }: ClassDetailPageProps) {
+export default async function ClassDetailPage({
+  params,
+}: ClassDetailPageProps) {
   const { slug } = await params;
   const trainingClass = await getClassBySlug(slug);
 
@@ -145,7 +147,10 @@ export default async function ClassDetailPage({ params }: ClassDetailPageProps) 
             <dl className="mt-5 grid gap-4 text-sm leading-relaxed text-charcoal/62">
               {[
                 ["Date", trainingClass.date],
-                ["Time", `${trainingClass.startTime} - ${trainingClass.endTime}`],
+                [
+                  "Time",
+                  `${trainingClass.startTime} - ${trainingClass.endTime}`,
+                ],
                 ["Duration", trainingClass.duration],
                 [
                   "Location",

@@ -122,7 +122,8 @@ export const scheduledClassType = defineType({
     defineField({
       name: "category",
       title: "Category",
-      description: "Choose the primary training category for browsing and badges.",
+      description:
+        "Choose the primary training category for browsing and badges.",
       type: "string",
       fieldset: "basics",
       options: {
@@ -133,7 +134,8 @@ export const scheduledClassType = defineType({
     defineField({
       name: "summary",
       title: "Summary",
-      description: "One or two concise sentences for cards and page introductions.",
+      description:
+        "One or two concise sentences for cards and page introductions.",
       type: "text",
       fieldset: "basics",
       rows: 3,
@@ -231,7 +233,8 @@ export const scheduledClassType = defineType({
     defineField({
       name: "seatsAvailable",
       title: "Seats Available",
-      description: "Current available seats. Update this as registrations change.",
+      description:
+        "Current available seats. Update this as registrations change.",
       type: "number",
       fieldset: "registration",
       validation: (rule) => rule.required().min(0),
@@ -264,7 +267,8 @@ export const scheduledClassType = defineType({
     defineField({
       name: "certification",
       title: "Certification",
-      description: "Certification name, or none if the class is not certification-based.",
+      description:
+        "Certification name, or none if the class is not certification-based.",
       type: "string",
       fieldset: "registration",
       initialValue: "none",
@@ -321,8 +325,7 @@ export const scheduledClassType = defineType({
       name: "instructor",
       title: "Instructor",
       type: "string",
-      description:
-        "Choose the instructor shown on the class detail page.",
+      description: "Choose the instructor shown on the class detail page.",
       fieldset: "relationships",
       options: {
         list: instructorOptions,
@@ -342,7 +345,8 @@ export const scheduledClassType = defineType({
       name: "relatedClasses",
       title: "Related Classes",
       type: "array",
-      description: "Optional related classes shown at the bottom of the detail page.",
+      description:
+        "Optional related classes shown at the bottom of the detail page.",
       fieldset: "relationships",
       of: [{ type: "reference", to: [{ type: "scheduledClass" }] }],
     }),

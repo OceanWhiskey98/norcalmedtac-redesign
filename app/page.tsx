@@ -54,10 +54,7 @@ export default async function Home() {
 
   return (
     <>
-      <Section
-        tone="light"
-        className="border-b border-neutral-200 bg-white"
-      >
+      <Section tone="light" className="border-b border-neutral-200 bg-white">
         <div className="grid min-h-[70vh] gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-center">
           <div className="max-w-3xl">
             <Badge tone="olive">Northern California Training Provider</Badge>
@@ -82,7 +79,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="space-y-3 rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl md:p-8">
-            <Badge tone="neutral">What you'll learn</Badge>
+            <Badge tone="neutral">What you&apos;ll learn</Badge>
             <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">
               Practical skills for high-pressure moments.
             </h2>
@@ -120,7 +117,9 @@ export default async function Home() {
         <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Badge tone="red">Upcoming Classes</Badge>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">Upcoming Classes</h2>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">
+              Upcoming Classes
+            </h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-charcoal/62">
               Browse scheduled training events with clear dates, locations,
               availability, and registration actions.
@@ -217,16 +216,20 @@ export default async function Home() {
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            {["AHA", "ASHI", "ITLS", "EMT skills", "Instructor credentials"].map(
-              (credential) => (
-                <div
-                  className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-5 text-neutral-300 transition-all duration-200 hover:bg-neutral-800"
-                  key={credential}
-                >
-                  <p className="font-semibold text-white">{credential}</p>
-                </div>
-              ),
-            )}
+            {[
+              "AHA",
+              "ASHI",
+              "ITLS",
+              "EMT skills",
+              "Instructor credentials",
+            ].map((credential) => (
+              <div
+                className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-5 text-neutral-300 transition-all duration-200 hover:bg-neutral-800"
+                key={credential}
+              >
+                <p className="font-semibold text-white">{credential}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Section>
@@ -270,7 +273,9 @@ export default async function Home() {
         <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Badge tone="neutral">Merch Preview</Badge>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">Merch</h2>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">
+              Merch
+            </h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-charcoal/62">
               Merchandise is shown separately from training registration.
             </p>
@@ -289,7 +294,9 @@ export default async function Home() {
       <Section tone="dark" className="bg-neutral-900">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">Ready to train with confidence?</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
+              Ready to train with confidence?
+            </h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-neutral-300">
               View upcoming classes or contact NorCal MedTac to find the right
               training for you.

@@ -21,7 +21,7 @@ export function Section({
 }: SectionProps) {
   return (
     <section id={id} className={`${tones[tone]} ${className}`}>
-      <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+      <div className="mx-auto w-full max-w-7xl px-6 py-20 md:px-8 md:py-28 lg:px-10">
         {children}
       </div>
     </section>

@@ -16,16 +16,18 @@ const inventoryLabels: Record<Merchandise["inventoryStatus"], string> = {
 export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="flex h-full flex-col overflow-hidden">
-      <div className="flex aspect-[4/3] items-end bg-warm-gray p-4">
+      <div className="flex min-h-56 items-end bg-warm-gray p-5 transition-transform duration-200 group-hover:scale-[1.02]">
         <span className="text-sm font-semibold text-charcoal">
           {product.category}
         </span>
       </div>
-      <div className="flex flex-1 flex-col gap-4 p-5">
+      <div className="flex flex-1 flex-col gap-5 p-5 md:p-6">
         <Badge tone="neutral">{product.category}</Badge>
         <div>
-          <h3 className="text-lg font-semibold leading-tight">{product.title}</h3>
-          <p className="mt-2 text-sm leading-6 text-charcoal/72">
+          <h3 className="text-xl font-semibold leading-tight text-charcoal">
+            {product.title}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-charcoal/62">
             {product.description}
           </p>
         </div>
@@ -39,7 +41,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <Button
             disabled={product.inventoryStatus === "outOfStock"}
             href={product.shoppingUrl}
-            variant="secondary"
+            variant="primary"
           >
             Add to Cart
           </Button>

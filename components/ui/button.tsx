@@ -15,13 +15,13 @@ type ButtonProps = {
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "border-medical-red bg-medical-red text-white hover:bg-[#982c28] hover:border-[#982c28]",
+    "border-red-600 bg-red-600 text-white hover:border-red-700 hover:bg-red-700",
   secondary:
-    "border-field-olive bg-field-olive text-white hover:bg-[#3f4d32] hover:border-[#3f4d32]",
+    "border-neutral-300 bg-white/70 text-charcoal hover:bg-neutral-100",
   outline:
-    "border-charcoal/25 bg-transparent text-charcoal hover:border-charcoal hover:bg-charcoal hover:text-white",
+    "border-neutral-300 bg-transparent text-charcoal hover:bg-neutral-100",
   ghost:
-    "border-transparent bg-transparent text-charcoal hover:bg-warm-gray/55",
+    "border-transparent bg-transparent text-charcoal hover:bg-neutral-100",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -40,7 +40,7 @@ export function Button({
   className = "",
 }: ButtonProps) {
   const classes = [
-    "inline-flex items-center justify-center rounded-md border font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-muted-gold",
+    "inline-flex items-center justify-center rounded-xl border font-semibold transition-all duration-200 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-muted-gold",
     variants[variant],
     sizes[size],
     disabled ? "pointer-events-none cursor-not-allowed opacity-55" : "",

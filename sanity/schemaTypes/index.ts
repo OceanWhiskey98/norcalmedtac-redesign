@@ -1,4 +1,5 @@
 import { aboutPageType } from "./aboutPage";
+import { calendarPageType } from "./calendarPage";
 import { classesPageType } from "./classesPage";
 import { contactPageType } from "./contactPage";
 import { homepageContentType } from "./homepageContent";
@@ -10,6 +11,7 @@ import { siteSettingsType } from "./siteSettings";
 
 export const schemaTypes = [
   aboutPageType,
+  calendarPageType,
   classesPageType,
   contactPageType,
   homepageContentType,

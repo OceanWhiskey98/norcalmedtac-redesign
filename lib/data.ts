@@ -181,6 +181,15 @@ export type ClassesPageContent = {
   supportCards: LinkSummary[];
 };
 
+export type CalendarPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  filterIntroCopy: string;
+  emptyStateHeadline: string;
+  emptyStateBody: string;
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -626,6 +635,18 @@ export const classesPageContent: ClassesPageContent = {
         "Review cancellation timing and related registration details before reserving a seat.",
     },
   ],
+};
+
+export const calendarPageContent: CalendarPageContent = {
+  heroLabel: "Calendar",
+  heroHeadline: "Calendar",
+  heroBody:
+    "View upcoming classes in chronological order. The monthly selector and filters are front-end placeholders for this prototype.",
+  filterIntroCopy:
+    "Use these front-end placeholder controls to preview the future calendar filtering experience.",
+  emptyStateHeadline: "No scheduled classes are published.",
+  emptyStateBody:
+    "Published scheduled classes from Sanity Studio will appear here in chronological order.",
 };
 
 export const classes: TrainingClass[] = [

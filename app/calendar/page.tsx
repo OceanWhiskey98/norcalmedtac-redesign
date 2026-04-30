@@ -8,6 +8,7 @@ import {
   formatCurrency,
   getCategory,
 } from "@/lib/data";
+import { getCalendarPage } from "@/lib/sanity/calendar-page";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
 
 const filters = ["Category", "Month", "Location", "Certification", "Availability"];
@@ -18,7 +19,10 @@ function monthKey(date: string) {
 }
 
 export default async function CalendarPage() {
-  const classes = await getUpcomingClasses();
+  const [content, classes] = await Promise.all([
+    getCalendarPage(),
+    getUpcomingClasses(),
+  ]);
   const sortedClasses = [...classes].sort((a, b) => a.date.localeCompare(b.date));
   const grouped = sortedClasses.reduce<Record<string, typeof sortedClasses>>((acc, item) => {
     const key = monthKey(item.date);
@@ -31,13 +35,12 @@ export default async function CalendarPage() {
     <>
       <Section className="bg-white" tone="light">
         <div className="max-w-3xl">
-          <Badge tone="red">Calendar</Badge>
+          <Badge tone="red">{content.heroLabel}</Badge>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
-            Calendar
+            {content.heroHeadline}
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
-            View upcoming classes in chronological order. The monthly selector
-            and filters are front-end placeholders for this prototype.
+            {content.heroBody}
           </p>
         </div>
       </Section>
@@ -61,6 +64,11 @@ export default async function CalendarPage() {
             </Card>
             <Card className="p-6">
               <h2 className="font-semibold text-neutral-900">Filters</h2>
+              {content.filterIntroCopy ? (
+                <p className="mt-3 text-sm leading-relaxed text-charcoal/62">
+                  {content.filterIntroCopy}
+                </p>
+              ) : null}
               <div className="mt-4 grid gap-3">
                 {filters.map((filter) => (
                   <select
@@ -75,17 +83,18 @@ export default async function CalendarPage() {
           </aside>
 
           <div className="space-y-12">
-            {months.map((month) => (
-              <section id={month.replaceAll(" ", "-")} key={month}>
-                <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">
-                  {month}
-                </h2>
-                <div className="mt-6 grid gap-4">
-                  {grouped[month].map((trainingClass) => {
-                    const category = getCategory(trainingClass.categoryId);
-                    const disabled =
-                      trainingClass.status === "soldOut" ||
-                      trainingClass.status === "closed";
+            {months.length > 0 ? (
+              months.map((month) => (
+                <section id={month.replaceAll(" ", "-")} key={month}>
+                  <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">
+                    {month}
+                  </h2>
+                  <div className="mt-6 grid gap-4">
+                    {grouped[month].map((trainingClass) => {
+                      const category = getCategory(trainingClass.categoryId);
+                      const disabled =
+                        trainingClass.status === "soldOut" ||
+                        trainingClass.status === "closed";
 
                     return (
                       <Card className="p-5 md:p-6" key={trainingClass.id}>
@@ -122,9 +131,19 @@ export default async function CalendarPage() {
                       </Card>
                     );
                   })}
-                </div>
-              </section>
-            ))}
+                  </div>
+                </section>
+              ))
+            ) : (
+              <Card className="p-6 md:p-8">
+                <h2 className="font-semibold text-neutral-900">
+                  {content.emptyStateHeadline}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-charcoal/62">
+                  {content.emptyStateBody}
+                </p>
+              </Card>
+            )}
           </div>
         </div>
       </Section>

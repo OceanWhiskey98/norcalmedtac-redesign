@@ -113,7 +113,7 @@ export default function CalendarPage() {
                             >
                               {classCtaLabels[trainingClass.status]}
                             </Button>
-                            <Button href={`/classes#${trainingClass.slug}`} variant="outline">
+                            <Button href={`/classes/${trainingClass.slug}`} variant="outline">
                               View Details
                             </Button>
                           </div>

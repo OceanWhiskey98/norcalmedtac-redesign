@@ -20,6 +20,8 @@ export function ClassRegistrationForm({
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [seatsRemainingAfterRegistration, setSeatsRemainingAfterRegistration] =
+    useState<number | null>(null);
   const [seats, setSeats] = useState(1);
   const total = useMemo(
     () => trainingClass.price * seats,
@@ -44,6 +46,12 @@ export function ClassRegistrationForm({
           Your registration request has been saved. No payment was collected.
           Confirmation details are shown here as a placeholder.
         </p>
+        {seatsRemainingAfterRegistration !== null ? (
+          <p className="mt-3 text-sm font-medium text-charcoal/62">
+            {seatsRemainingAfterRegistration} seat(s) remaining after this
+            registration request.
+          </p>
+        ) : null}
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           <div>
             <h3 className="font-semibold text-neutral-900">What To Bring</h3>
@@ -117,13 +125,22 @@ export function ClassRegistrationForm({
                 body: JSON.stringify(payload),
               });
 
+              const result = (await response.json()) as {
+                message?: string;
+                seatsRemaining?: number;
+              };
+
               if (!response.ok) {
-                const result = (await response.json()) as { message?: string };
                 throw new Error(
                   result.message ?? "Registration could not be saved.",
                 );
               }
 
+              setSeatsRemainingAfterRegistration(
+                typeof result.seatsRemaining === "number"
+                  ? result.seatsRemaining
+                  : null,
+              );
               setSubmitted(true);
             } catch (error) {
               setErrorMessage(

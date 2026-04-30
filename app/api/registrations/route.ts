@@ -4,6 +4,7 @@ import {
   getSupabaseAdminClient,
   type RegistrationInsert,
 } from "@/lib/supabase/server";
+import { getRemainingSeatsForClass } from "@/lib/supabase/registrations";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +13,6 @@ type RegistrationRequestBody = Partial<RegistrationInsert>;
 type ParsedRegistrationPayload =
   | { ok: true; registration: RegistrationInsert }
   | { ok: false; message: string };
-
-type ExistingRegistrationSeat = {
-  seats: number | null;
-};
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -70,26 +67,6 @@ function parseRegistrationPayload(
   };
 }
 
-async function getRegisteredSeatCount(
-  supabase: NonNullable<ReturnType<typeof getSupabaseAdminClient>>,
-  classSlug: string,
-): Promise<{ seats: number; error: unknown | null }> {
-  const { data, error } = await supabase
-    .from("registrations")
-    .select("seats")
-    .eq("classSlug", classSlug);
-
-  if (error) {
-    return { seats: 0, error };
-  }
-
-  const registeredSeats = (
-    (data as ExistingRegistrationSeat[] | null) ?? []
-  ).reduce((total, registration) => total + (registration.seats ?? 0), 0);
-
-  return { seats: registeredSeats, error: null };
-}
-
 export async function POST(request: Request) {
   const supabase = getSupabaseAdminClient();
 
@@ -138,15 +115,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const registeredSeatCount = await getRegisteredSeatCount(
-    supabase,
+  const remainingSeatCount = await getRemainingSeatsForClass(
     registration.classSlug,
+    trainingClass.capacity,
   );
 
-  if (registeredSeatCount.error) {
+  if (remainingSeatCount.error) {
     console.error(
       "Supabase registration seat lookup failed.",
-      registeredSeatCount.error,
+      remainingSeatCount.error,
     );
 
     return NextResponse.json(
@@ -155,10 +132,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const remainingSeats = Math.max(
-    trainingClass.capacity - registeredSeatCount.seats,
-    0,
-  );
+  const remainingSeats = remainingSeatCount.remainingSeats ?? 0;
 
   if (registration.seats > remainingSeats) {
     return NextResponse.json(

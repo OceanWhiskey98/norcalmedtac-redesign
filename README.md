@@ -45,6 +45,18 @@ environment variables above are present, Sanity is the source of truth for
 scheduled classes across the homepage, `/classes`, `/calendar`,
 `/classes/[slug]`, and `/register/[slug]`.
 
+### Class data behavior
+
+- Sanity is the class content source when `NEXT_PUBLIC_SANITY_PROJECT_ID` and
+  `NEXT_PUBLIC_SANITY_DATASET` are configured.
+- Local mock classes in `lib/data.ts` are fallback only when Sanity is not
+  configured or a Sanity fetch fails.
+- Homepage, `/classes`, and `/calendar` show upcoming classes only.
+- Class detail and registration routes can still load past or closed classes by
+  slug.
+- Registration records are not stored yet. The registration flow is still a
+  front-end placeholder and does not save attendee information.
+
 ### Run Sanity Studio
 
 Start the Next.js dev server:

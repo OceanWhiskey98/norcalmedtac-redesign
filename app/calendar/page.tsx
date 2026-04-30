@@ -8,7 +8,7 @@ import {
   formatCurrency,
   getCategory,
 } from "@/lib/data";
-import { getClasses } from "@/lib/sanity/classes";
+import { getUpcomingClasses } from "@/lib/sanity/classes";
 
 const filters = ["Category", "Month", "Location", "Certification", "Availability"];
 const monthNames = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
@@ -18,7 +18,7 @@ function monthKey(date: string) {
 }
 
 export default async function CalendarPage() {
-  const classes = await getClasses();
+  const classes = await getUpcomingClasses();
   const sortedClasses = [...classes].sort((a, b) => a.date.localeCompare(b.date));
   const grouped = sortedClasses.reduce<Record<string, typeof sortedClasses>>((acc, item) => {
     const key = monthKey(item.date);

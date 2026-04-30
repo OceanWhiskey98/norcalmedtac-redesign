@@ -2,16 +2,48 @@ import { groq } from "next-sanity";
 import { sanityClient } from "@/lib/sanity/client";
 import {
   classes as fallbackClasses,
+  type CertificationBody,
+  type ClassStatus,
+  type SkillLevel,
   type TrainingClass,
 } from "@/lib/data";
 
-type SanityClass = Omit<TrainingClass, "currency" | "status"> & {
-  currency?: "USD";
-  status?: TrainingClass["status"] | "full";
+type SanityClassStatus = "open" | "full" | "waitlist" | "closed";
+
+export type SanityScheduledClassDocument = {
+  id: string;
+  title: string;
+  slug: string;
+  categoryId: string;
+  summary: string;
+  description: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  duration?: string | null;
+  locationName: string;
+  locationCity: string;
+  locationState: string;
+  locationAddress?: string | null;
+  price: number;
+  capacity: number;
+  seatsAvailable: number;
+  status?: SanityClassStatus | null;
+  skillLevel?: SkillLevel | null;
+  certification?: string | null;
+  certificationBody?: CertificationBody | null;
+  audience?: string[] | null;
+  prerequisites?: string[] | null;
+  whatYouWillLearn?: string[] | null;
+  whatToBring?: string[] | null;
+  safetyRequirements?: string[] | null;
+  legalRequirements?: string[] | null;
+  instructorIds?: string[] | null;
+  image?: string | null;
+  relatedClassIds?: string[] | null;
 };
 
-const scheduledClassProjection = groq`
-  _id,
+const classFields = groq`
   "id": _id,
   title,
   "slug": slug.current,
@@ -27,7 +59,6 @@ const scheduledClassProjection = groq`
   locationState,
   locationAddress,
   price,
-  "currency": "USD",
   capacity,
   seatsAvailable,
   status,
@@ -45,49 +76,84 @@ const scheduledClassProjection = groq`
   "relatedClassIds": relatedClasses[]->_id
 `;
 
-const scheduledClassesQuery = groq`
+const allClassesQuery = groq`
   *[_type == "scheduledClass" && defined(slug.current)] | order(date asc) {
-    ${scheduledClassProjection}
+    ${classFields}
   }
 `;
 
-const scheduledClassBySlugQuery = groq`
+const classBySlugQuery = groq`
   *[_type == "scheduledClass" && slug.current == $slug][0] {
-    ${scheduledClassProjection}
+    ${classFields}
   }
 `;
 
-function normalizeStringList(value: unknown): string[] {
-  return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string")
-    : [];
+function asStringList(value: string[] | null | undefined): string[] {
+  return Array.isArray(value) ? value : [];
 }
 
-function normalizeStatus(status: SanityClass["status"]): TrainingClass["status"] {
-  if (status === "full") {
-    return "soldOut";
+function normalizeStatus(status: SanityScheduledClassDocument["status"]): ClassStatus {
+  switch (status) {
+    case "full":
+      return "soldOut";
+    case "waitlist":
+      return "waitlist";
+    case "closed":
+      return "closed";
+    case "open":
+    default:
+      return "open";
   }
-
-  return status ?? "open";
 }
 
-function normalizeClass(item: SanityClass): TrainingClass {
+function normalizeClass(document: SanityScheduledClassDocument): TrainingClass {
   return {
-    ...item,
+    id: document.id,
+    title: document.title,
+    slug: document.slug,
+    categoryId: document.categoryId,
+    summary: document.summary,
+    description: document.description,
+    date: document.date,
+    startTime: document.startTime,
+    endTime: document.endTime,
+    duration: document.duration ?? "",
+    locationName: document.locationName,
+    locationCity: document.locationCity,
+    locationState: document.locationState,
+    locationAddress: document.locationAddress ?? "",
+    price: document.price,
     currency: "USD",
-    status: normalizeStatus(item.status),
-    locationAddress: item.locationAddress ?? "",
-    certification: item.certification ?? "none",
-    audience: normalizeStringList(item.audience),
-    prerequisites: normalizeStringList(item.prerequisites),
-    whatYouWillLearn: normalizeStringList(item.whatYouWillLearn),
-    whatToBring: normalizeStringList(item.whatToBring),
-    safetyRequirements: normalizeStringList(item.safetyRequirements),
-    legalRequirements: normalizeStringList(item.legalRequirements),
-    instructorIds: normalizeStringList(item.instructorIds),
-    image: item.image ?? "",
-    relatedClassIds: normalizeStringList(item.relatedClassIds),
+    capacity: document.capacity,
+    seatsAvailable: document.seatsAvailable,
+    status: normalizeStatus(document.status),
+    skillLevel: document.skillLevel ?? "allLevels",
+    certification: document.certification ?? "none",
+    certificationBody: document.certificationBody ?? "none",
+    audience: asStringList(document.audience),
+    prerequisites: asStringList(document.prerequisites),
+    whatYouWillLearn: asStringList(document.whatYouWillLearn),
+    whatToBring: asStringList(document.whatToBring),
+    safetyRequirements: asStringList(document.safetyRequirements),
+    legalRequirements: asStringList(document.legalRequirements),
+    instructorIds: asStringList(document.instructorIds),
+    image: document.image ?? "",
+    relatedClassIds: asStringList(document.relatedClassIds),
   };
+}
+
+function sortByDateAscending(
+  trainingClasses: TrainingClass[],
+): TrainingClass[] {
+  return [...trainingClasses].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function isUpcomingClass(trainingClass: TrainingClass, now = new Date()): boolean {
+  const today = new Date(now);
+  today.setHours(0, 0, 0, 0);
+
+  const classDate = new Date(`${trainingClass.date}T00:00:00`);
+  return classDate >= today;
 }
 
 async function fetchSanityClasses(): Promise<TrainingClass[] | null> {
@@ -96,50 +162,73 @@ async function fetchSanityClasses(): Promise<TrainingClass[] | null> {
   }
 
   try {
-    const results = await sanityClient.fetch<SanityClass[]>(
-      scheduledClassesQuery,
+    const documents = await sanityClient.fetch<SanityScheduledClassDocument[]>(
+      allClassesQuery,
       {},
       { next: { revalidate: 60 } },
     );
 
-    return results.map(normalizeClass);
+    return sortByDateAscending(documents.map(normalizeClass));
   } catch (error) {
     console.warn("Sanity class fetch failed; falling back to mock data.", error);
     return null;
   }
 }
 
+async function fetchSanityClassBySlug(
+  slug: string,
+): Promise<TrainingClass | null | undefined> {
+  if (!sanityClient) {
+    return undefined;
+  }
+
+  try {
+    const document =
+      await sanityClient.fetch<SanityScheduledClassDocument | null>(
+        classBySlugQuery,
+        { slug },
+        { next: { revalidate: 60 } },
+      );
+
+    return document ? normalizeClass(document) : undefined;
+  } catch (error) {
+    console.warn(
+      "Sanity class detail fetch failed; falling back to mock data.",
+      error,
+    );
+    return null;
+  }
+}
+
+function getFallbackClasses(): TrainingClass[] {
+  return sortByDateAscending(fallbackClasses);
+}
+
 export async function getClasses(): Promise<TrainingClass[]> {
   const sanityClasses = await fetchSanityClasses();
-  return sanityClasses ?? fallbackClasses;
+  return sanityClasses ?? getFallbackClasses();
+}
+
+export async function getUpcomingClasses(): Promise<TrainingClass[]> {
+  const trainingClasses = await getClasses();
+  return trainingClasses.filter((trainingClass) =>
+    isUpcomingClass(trainingClass),
+  );
 }
 
 export async function getClassBySlug(
   slug: string,
 ): Promise<TrainingClass | undefined> {
-  if (sanityClient) {
-    try {
-      const result = await sanityClient.fetch<SanityClass | null>(
-        scheduledClassBySlugQuery,
-        { slug },
-        { next: { revalidate: 60 } },
-      );
+  const sanityClass = await fetchSanityClassBySlug(slug);
 
-      if (result) {
-        return normalizeClass(result);
-      }
-    } catch (error) {
-      console.warn(
-        "Sanity class detail fetch failed; falling back to mock data.",
-        error,
-      );
-    }
+  if (sanityClass !== null) {
+    return sanityClass;
   }
 
-  return fallbackClasses.find((trainingClass) => trainingClass.slug === slug);
+  return getFallbackClasses().find((trainingClass) => trainingClass.slug === slug);
 }
 
-export async function getClassStaticParams() {
+export async function getClassStaticParams(): Promise<Array<{ slug: string }>> {
   const trainingClasses = await getClasses();
   return trainingClasses.map((trainingClass) => ({
     slug: trainingClass.slug,

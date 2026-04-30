@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { getCategory } from "@/lib/data";
-import { getClasses } from "@/lib/sanity/classes";
+import { getUpcomingClasses } from "@/lib/sanity/classes";
 
 const filters = [
   "Category",
@@ -16,7 +16,7 @@ const filters = [
 ];
 
 export default async function ClassesPage() {
-  const classes = await getClasses();
+  const classes = await getUpcomingClasses();
   const featuredClass = classes[0];
   const featuredCategory = featuredClass
     ? getCategory(featuredClass.categoryId)

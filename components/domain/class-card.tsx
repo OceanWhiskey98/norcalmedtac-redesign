@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   classCtaLabels,
-  classes,
   classStatusLabels,
   formatCurrency,
   getCategory,
@@ -96,8 +95,4 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
       </div>
     </Card>
   );
-}
-
-export function FeaturedClassCard() {
-  return <ClassCard trainingClass={classes[0]} />;
 }

@@ -5,8 +5,9 @@ import {
   type TrainingClass,
 } from "@/lib/data";
 
-type SanityClass = Omit<TrainingClass, "currency"> & {
+type SanityClass = Omit<TrainingClass, "currency" | "status"> & {
   currency?: "USD";
+  status?: TrainingClass["status"] | "full";
 };
 
 const scheduledClassProjection = groq`
@@ -62,10 +63,19 @@ function normalizeStringList(value: unknown): string[] {
     : [];
 }
 
+function normalizeStatus(status: SanityClass["status"]): TrainingClass["status"] {
+  if (status === "full") {
+    return "soldOut";
+  }
+
+  return status ?? "open";
+}
+
 function normalizeClass(item: SanityClass): TrainingClass {
   return {
     ...item,
     currency: "USD",
+    status: normalizeStatus(item.status),
     locationAddress: item.locationAddress ?? "",
     certification: item.certification ?? "none",
     audience: normalizeStringList(item.audience),
@@ -91,10 +101,6 @@ async function fetchSanityClasses(): Promise<TrainingClass[] | null> {
       {},
       { next: { revalidate: 60 } },
     );
-
-    if (!results.length) {
-      return null;
-    }
 
     return results.map(normalizeClass);
   } catch (error) {

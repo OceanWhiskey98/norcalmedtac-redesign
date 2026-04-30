@@ -18,7 +18,9 @@ const filters = [
 export default async function ClassesPage() {
   const classes = await getClasses();
   const featuredClass = classes[0];
-  const featuredCategory = getCategory(featuredClass.categoryId);
+  const featuredCategory = featuredClass
+    ? getCategory(featuredClass.categoryId)
+    : undefined;
 
   return (
     <>
@@ -48,44 +50,55 @@ export default async function ClassesPage() {
           ))}
         </div>
 
-        <div className="mb-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
-          <div>
-            <Badge tone="olive">Featured Next Class</Badge>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl">
-              {featuredClass.title}
-            </h2>
-            <p className="mt-3 leading-relaxed text-charcoal/62">
-              {featuredClass.summary}
-            </p>
-            <dl className="mt-6 grid gap-3 text-sm text-charcoal/62 sm:grid-cols-2">
-              <div>
-                <dt className="font-medium text-neutral-900">Date</dt>
-                <dd>{featuredClass.date}</dd>
+        {featuredClass ? (
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+            <div>
+              <Badge tone="olive">Featured Next Class</Badge>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl">
+                {featuredClass.title}
+              </h2>
+              <p className="mt-3 leading-relaxed text-charcoal/62">
+                {featuredClass.summary}
+              </p>
+              <dl className="mt-6 grid gap-3 text-sm text-charcoal/62 sm:grid-cols-2">
+                <div>
+                  <dt className="font-medium text-neutral-900">Date</dt>
+                  <dd>{featuredClass.date}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-neutral-900">Location</dt>
+                  <dd>
+                    {featuredClass.locationCity}, {featuredClass.locationState}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-neutral-900">Category</dt>
+                  <dd>{featuredCategory?.name}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-neutral-900">Seats</dt>
+                  <dd>{featuredClass.seatsAvailable} available</dd>
+                </div>
+              </dl>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button href={`/register/${featuredClass.slug}`}>Register</Button>
+                <Button href={`/classes/${featuredClass.slug}`} variant="outline">
+                  View Details
+                </Button>
               </div>
-              <div>
-                <dt className="font-medium text-neutral-900">Location</dt>
-                <dd>
-                  {featuredClass.locationCity}, {featuredClass.locationState}
-                </dd>
-              </div>
-              <div>
-                <dt className="font-medium text-neutral-900">Category</dt>
-                <dd>{featuredCategory?.name}</dd>
-              </div>
-              <div>
-                <dt className="font-medium text-neutral-900">Seats</dt>
-                <dd>{featuredClass.seatsAvailable} available</dd>
-              </div>
-            </dl>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button href={`/register/${featuredClass.slug}`}>Register</Button>
-              <Button href={`/classes/${featuredClass.slug}`} variant="outline">
-                View Details
-              </Button>
             </div>
+            <ClassCard trainingClass={featuredClass} />
           </div>
-          <ClassCard trainingClass={featuredClass} />
-        </div>
+        ) : (
+          <Card className="mb-12 p-6">
+            <h2 className="font-semibold text-neutral-900">
+              No scheduled classes are published.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-charcoal/62">
+              Published classes from Sanity Studio will appear here.
+            </p>
+          </Card>
+        )}
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {classes.map((trainingClass) => (

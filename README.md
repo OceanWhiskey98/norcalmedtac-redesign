@@ -40,7 +40,10 @@ NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-01-01
 ```
 
-Only published Sanity class documents are read by the public site.
+Only published Sanity class documents are read by the public site. When the
+environment variables above are present, Sanity is the source of truth for
+scheduled classes across the homepage, `/classes`, `/calendar`,
+`/classes/[slug]`, and `/register/[slug]`.
 
 ### Run Sanity Studio
 
@@ -65,8 +68,8 @@ Then open [http://localhost:3000/studio](http://localhost:3000/studio).
 6. The class appears on the homepage, `/classes`, `/calendar`,
    `/classes/[slug]`, and `/register/[slug]`.
 
-To close or remove a class, update its `status` to `Registration Closed`, unpublish
-it, or delete it in Sanity Studio. Closed classes stay visible with disabled
+To close or remove a class, update its `status` to `Closed`, unpublish it, or
+delete it in Sanity Studio. Full and closed classes stay visible with disabled
 registration CTAs; unpublished or deleted classes are removed from the public
 Sanity-powered list.
 

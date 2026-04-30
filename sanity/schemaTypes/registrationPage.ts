@@ -4,6 +4,8 @@ export const registrationPageType = defineType({
   name: "registrationPage",
   title: "Registration Page",
   type: "document",
+  description:
+    "Page-shell copy around class registration. This does not change registration, seat checks, or payment behavior.",
   fieldsets: [
     {
       name: "hero",
@@ -30,12 +32,14 @@ export const registrationPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the registration page headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main registration page headline.",
       type: "string",
       fieldset: "hero",
       validation: (rule) => rule.required(),
@@ -50,6 +54,7 @@ export const registrationPageType = defineType({
     defineField({
       name: "noPaymentNote",
       title: "No-Payment Note",
+      description: "Clarifies that submitting the form does not charge payment.",
       type: "string",
       fieldset: "registrationNotes",
     }),
@@ -70,6 +75,7 @@ export const registrationPageType = defineType({
     defineField({
       name: "formIntroHelpText",
       title: "Form Intro Help Text",
+      description: "Short instructions for completing the registration form.",
       type: "text",
       rows: 3,
       fieldset: "formIntro",
@@ -89,6 +95,7 @@ export const registrationPageType = defineType({
     defineField({
       name: "successBody",
       title: "Success Body",
+      description: "Post-submit confirmation text shown after successful registration.",
       type: "text",
       rows: 3,
       fieldset: "success",

@@ -37,6 +37,8 @@ export const groupTrainingPageType = defineType({
   name: "groupTrainingPage",
   title: "Group Training Page",
   type: "document",
+  description:
+    "Page-level copy for Group Training. Inquiry form remains front-end only in this phase.",
   fieldsets: [
     {
       name: "hero",
@@ -68,12 +70,14 @@ export const groupTrainingPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the Group Training headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main Group Training page headline.",
       type: "text",
       rows: 2,
       fieldset: "hero",
@@ -153,12 +157,14 @@ export const groupTrainingPageType = defineType({
     defineField({
       name: "formHeadline",
       title: "Form Headline",
+      description: "Headline shown above the group inquiry form.",
       type: "string",
       fieldset: "formIntro",
     }),
     defineField({
       name: "formBody",
       title: "Form Body",
+      description: "Supporting text for form expectations and response timing.",
       type: "text",
       rows: 3,
       fieldset: "formIntro",

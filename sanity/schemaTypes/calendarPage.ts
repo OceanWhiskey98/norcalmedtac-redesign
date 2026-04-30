@@ -4,6 +4,8 @@ export const calendarPageType = defineType({
   name: "calendarPage",
   title: "Calendar Page",
   type: "document",
+  description:
+    "Copy for the calendar page shell, filters intro, and empty-state messaging.",
   fieldsets: [
     {
       name: "hero",
@@ -25,12 +27,14 @@ export const calendarPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the Calendar page headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main Calendar page headline.",
       type: "string",
       fieldset: "hero",
       validation: (rule) => rule.required(),
@@ -45,6 +49,7 @@ export const calendarPageType = defineType({
     defineField({
       name: "filterIntroCopy",
       title: "Filter Intro Copy",
+      description: "Short helper copy for navigating months and class dates.",
       type: "text",
       rows: 2,
       fieldset: "filters",
@@ -52,6 +57,7 @@ export const calendarPageType = defineType({
     defineField({
       name: "emptyStateHeadline",
       title: "Empty-State Headline",
+      description: "Shown when no upcoming classes are available in the selected view.",
       type: "string",
       fieldset: "emptyState",
     }),

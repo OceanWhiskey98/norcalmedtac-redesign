@@ -12,6 +12,8 @@ export const contactPageType = defineType({
   name: "contactPage",
   title: "Contact Page",
   type: "document",
+  description:
+    "Page-level copy for Contact page sections. Contact form is display-only/front-end in this phase.",
   fieldsets: [
     {
       name: "hero",
@@ -33,12 +35,14 @@ export const contactPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the Contact page headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main Contact page headline.",
       type: "string",
       fieldset: "hero",
       validation: (rule) => rule.required(),
@@ -59,6 +63,7 @@ export const contactPageType = defineType({
     defineField({
       name: "formHeadline",
       title: "Form Headline",
+      description: "Headline shown above the contact form.",
       type: "string",
       fieldset: "formIntro",
     }),
@@ -72,7 +77,8 @@ export const contactPageType = defineType({
     defineField({
       name: "contactCards",
       title: "Contact Cards",
-      description: "Short cards shown below the contact form.",
+      description:
+        "Short cards shown below the contact form for quick contact paths.",
       type: "array",
       of: [
         {
@@ -99,6 +105,7 @@ export const contactPageType = defineType({
             defineField({
               name: "tone",
               title: "Badge Tone",
+              description: "Visual accent style used for this card.",
               type: "string",
               options: {
                 list: toneOptions,

@@ -18,6 +18,8 @@ export const merchProductType = defineType({
   name: "merchProduct",
   title: "Merch Product",
   type: "document",
+  description:
+    "Merchandise catalog items only. Classes are managed separately as registrations in Scheduled Classes.",
   fieldsets: [
     {
       name: "basics",
@@ -51,6 +53,7 @@ export const merchProductType = defineType({
     defineField({
       name: "slug",
       title: "Slug",
+      description: "Used for the merch route when no shopping URL is provided.",
       type: "slug",
       fieldset: "basics",
       options: {
@@ -72,6 +75,7 @@ export const merchProductType = defineType({
     defineField({
       name: "description",
       title: "Description",
+      description: "Short product description shown in merch card/details contexts.",
       type: "text",
       rows: 3,
       fieldset: "basics",
@@ -157,10 +161,27 @@ export const merchProductType = defineType({
         "Placeholder or external link used by the merch card button. Leave blank to use /merch/[slug].",
       type: "string",
       fieldset: "commerce",
+      validation: (rule) =>
+        rule.custom((value) => {
+          if (!value) return true;
+          if (value.startsWith("/")) return true;
+
+          try {
+            const parsed = new URL(value);
+            if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+              return true;
+            }
+          } catch {
+            return "Use an internal path (/) or a full http/https URL.";
+          }
+
+          return "Use an internal path (/) or a full http/https URL.";
+        }),
     }),
     defineField({
       name: "images",
       title: "Images",
+      description: "Product gallery images for merch cards.",
       type: "array",
       fieldset: "media",
       of: [
@@ -175,6 +196,7 @@ export const merchProductType = defineType({
     defineField({
       name: "imageAlt",
       title: "Image Alt Text",
+      description: "Accessible description for product imagery.",
       type: "string",
       fieldset: "media",
     }),
@@ -191,6 +213,7 @@ export const merchProductType = defineType({
       type: "number",
       fieldset: "organization",
       initialValue: 100,
+      validation: (rule) => rule.min(0),
     }),
   ],
   preview: {

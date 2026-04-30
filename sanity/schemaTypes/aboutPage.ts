@@ -63,6 +63,8 @@ export const aboutPageType = defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
+  description:
+    "Copy for the About page shell. Instructor cards come from the Instructors document list.",
   fieldsets: [
     {
       name: "hero",
@@ -94,12 +96,14 @@ export const aboutPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the About page headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main About page headline.",
       type: "text",
       rows: 2,
       fieldset: "hero",
@@ -123,6 +127,7 @@ export const aboutPageType = defineType({
     defineField({
       name: "missionHeadline",
       title: "Mission Headline",
+      description: "Headline for the mission section.",
       type: "string",
       fieldset: "mission",
     }),
@@ -150,7 +155,7 @@ export const aboutPageType = defineType({
     textArray(
       "audiences",
       "Audiences",
-      "Who the training serves.",
+      "Who the training serves. One short point per item.",
     ),
     titledSummaryArray(
       "philosophyPoints",
@@ -166,6 +171,7 @@ export const aboutPageType = defineType({
     defineField({
       name: "instructorHeadline",
       title: "Instructor Headline",
+      description: "Intro text shown above instructor cards.",
       type: "string",
       fieldset: "instructorIntro",
     }),

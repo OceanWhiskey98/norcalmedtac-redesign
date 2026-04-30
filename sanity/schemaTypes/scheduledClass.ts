@@ -65,6 +65,8 @@ export const scheduledClassType = defineType({
   name: "scheduledClass",
   title: "Scheduled Class",
   type: "document",
+  description:
+    "Scheduled training sessions. These are class registrations, not merch products.",
   fieldsets: [
     {
       name: "basics",
@@ -217,7 +219,8 @@ export const scheduledClassType = defineType({
     defineField({
       name: "price",
       title: "Price",
-      description: "Class registration price in USD. Enter numbers only.",
+      description:
+        "Class registration price in USD. Enter numbers only; this is not checkout/payment configuration.",
       type: "number",
       fieldset: "registration",
       validation: (rule) => rule.required().min(0),
@@ -234,7 +237,7 @@ export const scheduledClassType = defineType({
       name: "seatsAvailable",
       title: "Seats Available",
       description:
-        "Current available seats. Update this as registrations change.",
+        "Display value for planning context. Live seat checks are enforced by registration logic.",
       type: "number",
       fieldset: "registration",
       validation: (rule) => rule.required().min(0),

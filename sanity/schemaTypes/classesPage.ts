@@ -4,6 +4,8 @@ export const classesPageType = defineType({
   name: "classesPage",
   title: "Classes Page",
   type: "document",
+  description:
+    "Copy for the Classes discovery page shell. Class entries themselves are managed in Scheduled Classes.",
   fieldsets: [
     {
       name: "hero",
@@ -30,12 +32,14 @@ export const classesPageType = defineType({
     defineField({
       name: "heroLabel",
       title: "Hero Label",
+      description: "Small label above the Classes page headline.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "heroHeadline",
       title: "Hero Headline",
+      description: "Main Classes page headline.",
       type: "string",
       fieldset: "hero",
       validation: (rule) => rule.required(),
@@ -50,18 +54,21 @@ export const classesPageType = defineType({
     defineField({
       name: "filterHelperText",
       title: "Filter Helper Copy",
+      description: "Short helper line near class filter controls.",
       type: "string",
       fieldset: "hero",
     }),
     defineField({
       name: "featuredClassLabel",
       title: "Featured Class Label",
+      description: "Label shown above the featured/upcoming class highlight.",
       type: "string",
       fieldset: "featured",
     }),
     defineField({
       name: "groupTrainingCtaHeadline",
       title: "Group Training CTA Headline",
+      description: "Headline for the classes-page group training callout.",
       type: "string",
       fieldset: "groupCta",
     }),
@@ -105,6 +112,12 @@ export const classesPageType = defineType({
               title: "Link (Optional)",
               type: "string",
               description: "Optional internal route such as /contact.",
+              validation: (rule) => rule.custom((value) => {
+                if (!value) return true;
+                return value.startsWith("/")
+                  ? true
+                  : "Use an internal route that starts with /";
+              }),
             }),
           ],
           preview: {

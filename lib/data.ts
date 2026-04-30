@@ -114,6 +114,33 @@ export type GroupTrainingPageContent = {
   formBody: string;
 };
 
+export type BadgeTone = "olive" | "red" | "gold" | "graphite" | "neutral";
+
+export type ContactCard = {
+  label: string;
+  title: string;
+  body: string;
+  tone: BadgeTone;
+};
+
+export type FaqSummary = {
+  question: string;
+  answer: string;
+};
+
+export type ContactPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  formLabel: string;
+  formHeadline: string;
+  formBody: string;
+  faqLabel: string;
+  faqHeadline: string;
+  contactCards: ContactCard[];
+  faqs: FaqSummary[];
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -406,6 +433,59 @@ export const groupTrainingPageContent: GroupTrainingPageContent = {
   formHeadline: "Request Group Training",
   formBody:
     "This form is front-end only for the prototype and does not send email or store submissions.",
+};
+
+export const contactPageContent: ContactPageContent = {
+  heroLabel: "Contact",
+  heroHeadline: "Contact NorCal MedTac",
+  heroBody:
+    "Ask a question before registering, request training guidance, or start a conversation about group instruction.",
+  formLabel: "Contact Form",
+  formHeadline: "Send a training question.",
+  formBody:
+    "This form is front-end only for the prototype and does not send email or store submissions.",
+  faqLabel: "FAQ Summary",
+  faqHeadline: "Common questions before registering.",
+  contactCards: [
+    {
+      label: "Training Inquiry",
+      title: "Individual class questions",
+      body:
+        "Ask about prerequisites, class expectations, what to bring, or registration details.",
+      tone: "red",
+    },
+    {
+      label: "Service Area",
+      title: "Northern California",
+      body:
+        "Training is centered on Northern California with scheduled, partner-location, and group training options.",
+      tone: "olive",
+    },
+    {
+      label: "Group Training",
+      title: "Workplace and private groups",
+      body:
+        "Use the group training page for custom class inquiries and mobile training requests.",
+      tone: "gold",
+    },
+  ],
+  faqs: [
+    {
+      question: "How do I choose the right class?",
+      answer:
+        "Share your goals, experience level, and any certification needs so NorCal MedTac can point you toward the most practical option.",
+    },
+    {
+      question: "What should I bring to training?",
+      answer:
+        "Each class page lists prerequisites, required equipment, what to bring, and arrival expectations before registration.",
+    },
+    {
+      question: "Can NorCal MedTac train my workplace or group?",
+      answer:
+        "Yes. Use the group training inquiry path for workplace, club, private group, and organization training requests.",
+    },
+  ],
 };
 
 export const classes: TrainingClass[] = [

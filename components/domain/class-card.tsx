@@ -84,7 +84,7 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
           <Button
             className="min-h-12 font-medium shadow-[0_8px_18px_rgba(220,38,38,0.18)]"
             disabled={disabled}
-            href={disabled ? "#" : trainingClass.registrationUrl}
+            href={disabled ? "#" : `/register/${trainingClass.slug}`}
             variant="primary"
           >
             {ctaLabel}

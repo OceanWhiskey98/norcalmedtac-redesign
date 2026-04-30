@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { categories, classes, merchandise } from "@/lib/data";
+import { categories, merchandise } from "@/lib/data";
+import { getClasses } from "@/lib/sanity/classes";
 
 const pathwayIds = [
   "medical-certification",
@@ -44,7 +45,8 @@ const trustStats = [
   "Used by EMS, security, and civilians",
 ];
 
-export default function Home() {
+export default async function Home() {
+  const classes = await getClasses();
   const pathways = pathwayIds
     .map((id) => categories.find((category) => category.id === id))
     .filter(Boolean);

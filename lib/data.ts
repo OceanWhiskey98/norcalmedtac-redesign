@@ -41,7 +41,6 @@ export type TrainingClass = {
   legalRequirements: string[];
   instructorIds: string[];
   image: string;
-  registrationUrl: string;
   relatedClassIds: string[];
 };
 
@@ -234,7 +233,6 @@ export const classes: TrainingClass[] = [
     legalRequirements: [],
     instructorIds: ["alex-morgan"],
     image: "",
-    registrationUrl: "/registration/cpr-aed-first-aid-may",
     relatedClassIds: ["class-stop-the-bleed-may"],
   },
   {
@@ -270,7 +268,6 @@ export const classes: TrainingClass[] = [
     legalRequirements: [],
     instructorIds: ["alex-morgan"],
     image: "",
-    registrationUrl: "/registration/trauma-care-fundamentals-may",
     relatedClassIds: ["class-cpr-first-aid-may"],
   },
   {
@@ -306,7 +303,6 @@ export const classes: TrainingClass[] = [
     legalRequirements: ["Students must meet applicable eligibility requirements"],
     instructorIds: ["jordan-reyes"],
     image: "",
-    registrationUrl: "/registration/concealed-carry-preparation-june",
     relatedClassIds: ["class-defensive-handgun-june"],
   },
   {
@@ -342,7 +338,6 @@ export const classes: TrainingClass[] = [
     legalRequirements: ["Students must legally possess required equipment"],
     instructorIds: ["jordan-reyes"],
     image: "",
-    registrationUrl: "/registration/defensive-handgun-skills-june",
     relatedClassIds: ["class-ccw-june"],
   },
 ];

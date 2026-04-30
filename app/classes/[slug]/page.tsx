@@ -6,13 +6,17 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import {
   classCtaLabels,
-  classes,
   classStatusLabels,
   formatCurrency,
   getCategory,
   instructors,
   type TrainingClass,
 } from "@/lib/data";
+import {
+  getClassBySlug,
+  getClasses,
+  getClassStaticParams,
+} from "@/lib/sanity/classes";
 
 type ClassDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -40,9 +44,7 @@ const policies = [
 ];
 
 export function generateStaticParams() {
-  return classes.map((trainingClass) => ({
-    slug: trainingClass.slug,
-  }));
+  return getClassStaticParams();
 }
 
 function DetailList({ items }: { items: string[] }) {
@@ -85,7 +87,7 @@ function DetailSection({
 
 export default async function ClassDetailPage({ params }: ClassDetailPageProps) {
   const { slug } = await params;
-  const trainingClass = classes.find((item) => item.slug === slug);
+  const trainingClass = await getClassBySlug(slug);
 
   if (!trainingClass) {
     notFound();
@@ -95,7 +97,8 @@ export default async function ClassDetailPage({ params }: ClassDetailPageProps) 
   const instructor = instructors.find((item) =>
     trainingClass.instructorIds.includes(item.id),
   );
-  const relatedClasses = classes.filter((item) =>
+  const allClasses = await getClasses();
+  const relatedClasses = allClasses.filter((item) =>
     trainingClass.relatedClassIds.includes(item.id),
   );
   const disabled =
@@ -124,7 +127,7 @@ export default async function ClassDetailPage({ params }: ClassDetailPageProps) 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button
                 disabled={disabled}
-                href={disabled ? "#" : trainingClass.registrationUrl}
+                href={disabled ? "#" : `/register/${trainingClass.slug}`}
                 size="lg"
               >
                 {ctaLabel}
@@ -307,7 +310,7 @@ export default async function ClassDetailPage({ params }: ClassDetailPageProps) 
           </div>
           <Button
             disabled={disabled}
-            href={disabled ? "#" : trainingClass.registrationUrl}
+            href={disabled ? "#" : `/register/${trainingClass.slug}`}
             size="sm"
           >
             {ctaLabel}

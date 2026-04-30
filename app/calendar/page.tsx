@@ -4,11 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import {
   classCtaLabels,
-  classes,
   classStatusLabels,
   formatCurrency,
   getCategory,
 } from "@/lib/data";
+import { getClasses } from "@/lib/sanity/classes";
 
 const filters = ["Category", "Month", "Location", "Certification", "Availability"];
 const monthNames = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
@@ -17,9 +17,10 @@ function monthKey(date: string) {
   return monthNames.format(new Date(`${date}T12:00:00`));
 }
 
-export default function CalendarPage() {
+export default async function CalendarPage() {
+  const classes = await getClasses();
   const sortedClasses = [...classes].sort((a, b) => a.date.localeCompare(b.date));
-  const grouped = sortedClasses.reduce<Record<string, typeof classes>>((acc, item) => {
+  const grouped = sortedClasses.reduce<Record<string, typeof sortedClasses>>((acc, item) => {
     const key = monthKey(item.date);
     acc[key] = [...(acc[key] ?? []), item];
     return acc;
@@ -109,7 +110,7 @@ export default function CalendarPage() {
                           <div className="flex flex-col gap-3 sm:flex-row">
                             <Button
                               disabled={disabled}
-                              href={disabled ? "#" : trainingClass.registrationUrl}
+                              href={disabled ? "#" : `/register/${trainingClass.slug}`}
                             >
                               {classCtaLabels[trainingClass.status]}
                             </Button>

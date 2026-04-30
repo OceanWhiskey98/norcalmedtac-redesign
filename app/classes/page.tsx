@@ -3,7 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { classes, getCategory } from "@/lib/data";
+import { getCategory } from "@/lib/data";
+import { getClasses } from "@/lib/sanity/classes";
 
 const filters = [
   "Category",
@@ -14,7 +15,8 @@ const filters = [
   "Availability",
 ];
 
-export default function ClassesPage() {
+export default async function ClassesPage() {
+  const classes = await getClasses();
   const featuredClass = classes[0];
   const featuredCategory = getCategory(featuredClass.categoryId);
 
@@ -76,7 +78,7 @@ export default function ClassesPage() {
               </div>
             </dl>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button href={featuredClass.registrationUrl}>Register</Button>
+              <Button href={`/register/${featuredClass.slug}`}>Register</Button>
               <Button href={`/classes/${featuredClass.slug}`} variant="outline">
                 View Details
               </Button>

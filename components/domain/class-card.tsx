@@ -29,11 +29,21 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
 
   return (
     <Card className="flex h-full flex-col overflow-hidden bg-[#fbfaf7]">
-      <div className="flex aspect-[16/9] items-end bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 p-5 text-white md:p-6">
-        <span className="text-sm font-semibold">
-          {category?.name ?? "Training Class"}
-        </span>
-      </div>
+      {trainingClass.image ? (
+        <div className="aspect-[16/9] overflow-hidden">
+          <img
+            alt={trainingClass.imageAlt || trainingClass.title}
+            className="h-full w-full object-cover"
+            src={trainingClass.image}
+          />
+        </div>
+      ) : (
+        <div className="flex aspect-[16/9] items-end bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 p-5 text-white md:p-6">
+          <span className="text-sm font-semibold">
+            {category?.name ?? "Training Class"}
+          </span>
+        </div>
+      )}
       <div className="flex flex-1 flex-col space-y-3 p-5 md:p-6">
         <div className="flex flex-wrap gap-2">
           <Badge tone={category?.accent === "red" ? "red" : "olive"}>

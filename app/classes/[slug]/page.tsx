@@ -9,7 +9,6 @@ import {
   classStatusLabels,
   formatCurrency,
   getCategory,
-  instructors,
   type TrainingClass,
 } from "@/lib/data";
 import {
@@ -17,6 +16,7 @@ import {
   getClasses,
   getClassStaticParams,
 } from "@/lib/sanity/classes";
+import { getInstructors } from "@/lib/sanity/instructors";
 
 type ClassDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -96,7 +96,8 @@ export default async function ClassDetailPage({
   }
 
   const category = getCategory(trainingClass.categoryId);
-  const instructor = instructors.find((item) =>
+  const instructorDirectory = await getInstructors();
+  const instructor = instructorDirectory.find((item) =>
     trainingClass.instructorIds.includes(item.id),
   );
   const allClasses = await getClasses();
@@ -182,6 +183,15 @@ export default async function ClassDetailPage({
             </dl>
           </Card>
         </div>
+        {trainingClass.image ? (
+          <Card className="mt-8 overflow-hidden p-0">
+            <img
+              alt={trainingClass.imageAlt || trainingClass.title}
+              className="h-full max-h-[28rem] w-full object-cover"
+              src={trainingClass.image}
+            />
+          </Card>
+        ) : null}
       </Section>
 
       <Section className="bg-neutral-50" tone="light">

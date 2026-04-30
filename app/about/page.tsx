@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { instructors } from "@/lib/data";
+import { getInstructors } from "@/lib/sanity/instructors";
+import { getSiteSettings } from "@/lib/sanity/site-settings";
 
 const audiences = [
   "Civilians seeking practical emergency or defensive training",
@@ -18,7 +19,10 @@ const philosophy = [
   "Clear prerequisites and expectations",
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const instructors = await getInstructors();
+  const siteSettings = await getSiteSettings();
+
   return (
     <>
       <Section className="bg-white" tone="light">
@@ -29,9 +33,9 @@ export default function AboutPage() {
             readiness.
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
-            NorCal MedTac provides hands-on medical, defensive, workplace, and
-            group training for students who need clear instruction before real
-            situations happen.
+            {siteSettings.businessName} provides hands-on medical, defensive,
+            workplace, and group training for students who need clear
+            instruction before real situations happen.
           </p>
         </div>
       </Section>
@@ -45,10 +49,10 @@ export default function AboutPage() {
             </h2>
           </div>
           <p className="leading-relaxed text-charcoal/62">
-            The site presents NorCal MedTac as a professional training provider
-            that accepts registrations, not as a store that sells classes.
-            Course details, instructor credibility, safety expectations, and
-            registration clarity come first.
+            {siteSettings.businessName} serves {siteSettings.serviceArea} as a
+            professional training provider that accepts registrations, not as a
+            store that sells classes. Course details, instructor credibility,
+            safety expectations, and registration clarity come first.
           </p>
         </div>
       </Section>

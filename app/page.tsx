@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { categories, merchandise } from "@/lib/data";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
+import { getHomepageContent } from "@/lib/sanity/homepage";
+import { getSiteSettings } from "@/lib/sanity/site-settings";
 
 const pathwayIds = [
   "medical-certification",
@@ -15,38 +17,10 @@ const pathwayIds = [
   "group-workplace",
 ];
 
-const valuePoints = [
-  "Practical curriculum",
-  "Mobile instruction",
-  "Medical and defensive expertise",
-  "Calm instruction",
-  "Safety-first environment",
-  "Clear student expectations",
-];
-
-const expectations = [
-  "Preparation details are shown before registration.",
-  "Class environment and safety expectations are stated clearly.",
-  "Prerequisites are listed before students reserve a seat.",
-  "Registration details stay separate from merchandise shopping.",
-];
-
-const learningPoints = [
-  "Bleeding control & trauma response",
-  "Situational awareness & decision-making",
-  "Real-world scenario training",
-  "Certification-ready skills",
-];
-
-const trustStats = [
-  "500+ students trained",
-  "AHA & ASHI certified instruction",
-  "10+ years field experience",
-  "Used by EMS, security, and civilians",
-];
-
 export default async function Home() {
   const classes = await getUpcomingClasses();
+  const homepageContent = await getHomepageContent();
+  const siteSettings = await getSiteSettings();
   const pathways = pathwayIds
     .map((id) => categories.find((category) => category.id === id))
     .filter(Boolean);
@@ -57,17 +31,15 @@ export default async function Home() {
       <Section tone="light" className="border-b border-neutral-200 bg-white">
         <div className="grid min-h-[70vh] gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-center">
           <div className="max-w-3xl">
-            <Badge tone="olive">Northern California Training Provider</Badge>
+            <Badge tone="olive">{homepageContent.heroLabel}</Badge>
             <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.04] tracking-tight text-charcoal md:text-5xl lg:text-6xl">
-              Medical and defensive training built for real-world situations.
+              {homepageContent.heroHeadline}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-charcoal/62">
-              Practical, safety-first, real-world readiness training for
-              individuals, professionals, and groups.
+              {homepageContent.heroBody}
             </p>
             <p className="mt-4 max-w-2xl text-sm font-medium text-charcoal/58">
-              Trusted training aligned with AHA, ASHI, and real-world field
-              experience.
+              {homepageContent.heroTrustLine}
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Button href="/classes" size="lg" variant="primary">
@@ -84,7 +56,7 @@ export default async function Home() {
               Practical skills for high-pressure moments.
             </h2>
             <ul className="space-y-3 text-sm leading-relaxed text-charcoal/68">
-              {learningPoints.map((point) => (
+              {homepageContent.learningPoints.map((point) => (
                 <li className="flex gap-3" key={point}>
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-600" />
                   <span>{point}</span>
@@ -103,7 +75,7 @@ export default async function Home() {
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {trustStats.map((stat) => (
+          {homepageContent.trustStats.map((stat) => (
             <Card key={stat} className="rounded-xl p-6">
               <p className="text-lg font-semibold leading-tight text-neutral-900">
                 {stat}
@@ -194,7 +166,7 @@ export default async function Home() {
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            {valuePoints.map((point) => (
+            {homepageContent.valuePoints.map((point) => (
               <Card key={point} className="rounded-xl p-4">
                 <p className="font-semibold leading-tight">{point}</p>
               </Card>
@@ -216,13 +188,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            {[
-              "AHA",
-              "ASHI",
-              "ITLS",
-              "EMT skills",
-              "Instructor credentials",
-            ].map((credential) => (
+            {homepageContent.credentials.map((credential) => (
               <div
                 className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-5 text-neutral-300 transition-all duration-200 hover:bg-neutral-800"
                 key={credential}
@@ -239,12 +205,10 @@ export default async function Home() {
           <div>
             <Badge tone="olive">Group Training</Badge>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight md:text-3xl">
-              Custom training for businesses, clubs, and organizations.
+              {homepageContent.groupTrainingHeadline}
             </h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-charcoal/62">
-              Workplace CPR and first aid, emergency preparedness, tactical
-              medicine, defensive skills, and team refreshers can be structured
-              around group needs.
+              {homepageContent.groupTrainingBody}
             </p>
           </div>
           <Button href="/group-training" size="lg" variant="outline">
@@ -261,7 +225,7 @@ export default async function Home() {
           </h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {expectations.map((item) => (
+          {homepageContent.expectations.map((item) => (
             <Card key={item} className="p-6">
               <p className="text-sm leading-6 text-charcoal/68">{item}</p>
             </Card>
@@ -295,11 +259,13 @@ export default async function Home() {
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
-              Ready to train with confidence?
+              {homepageContent.finalCtaHeadline}
             </h2>
             <p className="mt-3 max-w-2xl leading-relaxed text-neutral-300">
-              View upcoming classes or contact NorCal MedTac to find the right
-              training for you.
+              {homepageContent.finalCtaBody.replace(
+                "NorCal MedTac",
+                siteSettings.businessName,
+              )}
             </p>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row">

@@ -5,6 +5,9 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { classStatusLabels, formatCurrency, getCategory } from "@/lib/data";
 import { getClassBySlug, getClassStaticParams } from "@/lib/sanity/classes";
+import { getRemainingSeatsForClass } from "@/lib/supabase/registrations";
+
+export const dynamic = "force-dynamic";
 
 type RegisterPageProps = {
   params: Promise<{ slug: string }>;
@@ -23,6 +26,19 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
   }
 
   const category = getCategory(trainingClass.categoryId);
+  const remainingSeatCount = await getRemainingSeatsForClass(
+    trainingClass.slug,
+    trainingClass.capacity,
+  );
+
+  if (remainingSeatCount.error) {
+    console.error(
+      "Supabase registration seat lookup failed.",
+      remainingSeatCount.error,
+    );
+  }
+
+  const remainingSeats = remainingSeatCount.remainingSeats;
 
   return (
     <>
@@ -33,9 +49,8 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
             Reserve Seat
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
-            Complete the front-end Attendee Information form to preview the
-            registration request flow. No backend, seat enforcement, or payment
-            processing is active.
+            Complete the Attendee Information form to submit a training
+            registration request. No payment is collected.
           </p>
         </div>
       </Section>
@@ -53,9 +68,15 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
           <h2 className="mt-5 text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl">
             {trainingClass.title}
           </h2>
-          <p className="mt-3 text-sm font-semibold text-medical-red">
-            Only {trainingClass.seatsAvailable} seats remaining
-          </p>
+          {remainingSeats !== null ? (
+            <p className="mt-3 text-sm font-semibold text-medical-red">
+              Only {remainingSeats} seat(s) remaining
+            </p>
+          ) : (
+            <p className="mt-3 text-sm font-semibold text-medical-red">
+              Live seat availability is temporarily unavailable.
+            </p>
+          )}
           <dl className="mt-6 grid gap-4 text-sm leading-relaxed text-charcoal/62 md:grid-cols-3">
             <div>
               <dt className="font-medium text-neutral-900">Date</dt>
@@ -84,7 +105,10 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
           </dl>
         </Card>
 
-        <ClassRegistrationForm trainingClass={trainingClass} />
+        <ClassRegistrationForm
+          remainingSeats={remainingSeats}
+          trainingClass={trainingClass}
+        />
       </Section>
     </>
   );

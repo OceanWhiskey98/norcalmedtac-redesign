@@ -11,22 +11,33 @@ import {
 } from "@/lib/data";
 
 type ClassRegistrationFormProps = {
+  remainingSeats: number | null;
   trainingClass: TrainingClass;
 };
 
 export function ClassRegistrationForm({
+  remainingSeats,
   trainingClass,
 }: ClassRegistrationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [seatsRemainingAfterRegistration, setSeatsRemainingAfterRegistration] =
+    useState<number | null>(null);
   const [seats, setSeats] = useState(1);
   const total = useMemo(
     () => trainingClass.price * seats,
     [seats, trainingClass.price],
   );
   const disabled =
-    trainingClass.status === "soldOut" || trainingClass.status === "closed";
+    trainingClass.status === "soldOut" ||
+    trainingClass.status === "closed" ||
+    remainingSeats === null ||
+    remainingSeats === 0;
+  const availabilityLabel =
+    remainingSeats === null
+      ? "Live seat availability is temporarily unavailable."
+      : `${remainingSeats} seat(s) remaining`;
   const trustBullets = [
     "Confirmation details shown after submission",
     "Certification information stays tied to this class",
@@ -44,6 +55,12 @@ export function ClassRegistrationForm({
           Your registration request has been saved. No payment was collected.
           Confirmation details are shown here as a placeholder.
         </p>
+        {seatsRemainingAfterRegistration !== null ? (
+          <p className="mt-3 text-sm font-medium text-charcoal/62">
+            {seatsRemainingAfterRegistration} seat(s) remaining after this
+            registration request.
+          </p>
+        ) : null}
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           <div>
             <h3 className="font-semibold text-neutral-900">What To Bring</h3>
@@ -117,13 +134,22 @@ export function ClassRegistrationForm({
                 body: JSON.stringify(payload),
               });
 
+              const result = (await response.json()) as {
+                message?: string;
+                seatsRemaining?: number;
+              };
+
               if (!response.ok) {
-                const result = (await response.json()) as { message?: string };
                 throw new Error(
                   result.message ?? "Registration could not be saved.",
                 );
               }
 
+              setSeatsRemainingAfterRegistration(
+                typeof result.seatsRemaining === "number"
+                  ? result.seatsRemaining
+                  : null,
+              );
               setSubmitted(true);
             } catch (error) {
               setErrorMessage(
@@ -162,14 +188,22 @@ export function ClassRegistrationForm({
             Number of seats
             <input
               className="min-h-11 rounded-xl border border-neutral-300 bg-white px-3 text-sm outline-none transition-all duration-200 focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
-              max={Math.max(trainingClass.seatsAvailable, 1)}
+              disabled={disabled}
+              max={Math.max(remainingSeats ?? 0, 1)}
               min={1}
               name="seats"
-              onChange={(event) => setSeats(Number(event.target.value))}
+              onChange={(event) => {
+                const requestedSeats = Number(event.target.value);
+                const maxSeats = Math.max(remainingSeats ?? 0, 1);
+                setSeats(Math.min(Math.max(requestedSeats, 1), maxSeats));
+              }}
               type="number"
               value={seats}
             />
           </label>
+          <p className="text-sm font-medium text-charcoal/62">
+            Live availability: {availabilityLabel}
+          </p>
           <label className="grid gap-2 text-sm font-medium text-neutral-900">
             Notes/questions
             <textarea
@@ -198,7 +232,11 @@ export function ClassRegistrationForm({
           ) : null}
           {disabled ? (
             <p className="text-sm font-medium text-medical-red">
-              {classStatusLabels[trainingClass.status]}
+              {remainingSeats === 0
+                ? "Registration is unavailable because this class has no seats remaining."
+                : remainingSeats === null
+                  ? "Registration is temporarily unavailable while live seat availability is checked."
+                  : classStatusLabels[trainingClass.status]}
             </p>
           ) : null}
         </form>
@@ -217,6 +255,10 @@ export function ClassRegistrationForm({
           <div className="border-b border-neutral-200 pb-3">
             <dt className="font-medium text-neutral-900">Seats</dt>
             <dd>{seats}</dd>
+          </div>
+          <div className="border-b border-neutral-200 pb-3">
+            <dt className="font-medium text-neutral-900">Remaining Seats</dt>
+            <dd>{availabilityLabel}</dd>
           </div>
           <div>
             <dt className="font-medium text-neutral-900">Total price</dt>

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { classStatusLabels, formatCurrency, getCategory } from "@/lib/data";
 import { getClassBySlug, getClassStaticParams } from "@/lib/sanity/classes";
+import { getRegistrationPage } from "@/lib/sanity/registration-page";
 import { getRemainingSeatsForClass } from "@/lib/supabase/registrations";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,10 @@ export function generateStaticParams() {
 
 export default async function RegisterPage({ params }: RegisterPageProps) {
   const { slug } = await params;
-  const trainingClass = await getClassBySlug(slug);
+  const [content, trainingClass] = await Promise.all([
+    getRegistrationPage(),
+    getClassBySlug(slug),
+  ]);
 
   if (!trainingClass) {
     notFound();
@@ -44,13 +48,12 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
     <>
       <Section className="bg-white" tone="light">
         <div className="max-w-3xl">
-          <Badge tone="red">Register</Badge>
+          <Badge tone="red">{content.heroLabel}</Badge>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
-            Reserve Seat
+            {content.heroHeadline}
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
-            Complete the Attendee Information form to submit a training
-            registration request. No payment is collected.
+            {content.heroBody}
           </p>
         </div>
       </Section>
@@ -74,9 +77,12 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
             </p>
           ) : (
             <p className="mt-3 text-sm font-semibold text-medical-red">
-              Live seat availability is temporarily unavailable.
+              {content.seatAvailabilityFallbackMessage}
             </p>
           )}
+          <p className="mt-3 text-sm font-medium text-charcoal/62">
+            {content.noPaymentNote}
+          </p>
           <dl className="mt-6 grid gap-4 text-sm leading-relaxed text-charcoal/62 md:grid-cols-3">
             <div>
               <dt className="font-medium text-neutral-900">Date</dt>
@@ -106,6 +112,7 @@ export default async function RegisterPage({ params }: RegisterPageProps) {
         </Card>
 
         <ClassRegistrationForm
+          content={content}
           remainingSeats={remainingSeats}
           trainingClass={trainingClass}
         />

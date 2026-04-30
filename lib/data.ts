@@ -190,6 +190,19 @@ export type CalendarPageContent = {
   emptyStateBody: string;
 };
 
+export type RegistrationPageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  noPaymentNote: string;
+  seatAvailabilityFallbackMessage: string;
+  formIntroHeadline: string;
+  formIntroHelpText: string;
+  successLabel: string;
+  successHeadline: string;
+  successBody: string;
+};
+
 export type Category = {
   id: string;
   name: string;
@@ -647,6 +660,23 @@ export const calendarPageContent: CalendarPageContent = {
   emptyStateHeadline: "No scheduled classes are published.",
   emptyStateBody:
     "Published scheduled classes from Sanity Studio will appear here in chronological order.",
+};
+
+export const registrationPageContent: RegistrationPageContent = {
+  heroLabel: "Register",
+  heroHeadline: "Reserve Seat",
+  heroBody:
+    "Complete the Attendee Information form to submit a training registration request. No payment is collected.",
+  noPaymentNote: "No payment is collected during this registration request.",
+  seatAvailabilityFallbackMessage:
+    "Live seat availability is temporarily unavailable.",
+  formIntroHeadline: "Attendee Information",
+  formIntroHelpText:
+    "Enter the attendee details for this training registration request. Required fields are kept focused so you can reserve a seat quickly.",
+  successLabel: "Registration request received",
+  successHeadline: "Registration request received",
+  successBody:
+    "Your registration request has been saved. No payment was collected. Confirmation details are shown here as a placeholder.",
 };
 
 export const classes: TrainingClass[] = [

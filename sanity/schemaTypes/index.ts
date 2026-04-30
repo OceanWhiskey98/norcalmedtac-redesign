@@ -6,6 +6,7 @@ import { homepageContentType } from "./homepageContent";
 import { groupTrainingPageType } from "./groupTrainingPage";
 import { instructorType } from "./instructor";
 import { merchProductType } from "./merchProduct";
+import { registrationPageType } from "./registrationPage";
 import { scheduledClassType } from "./scheduledClass";
 import { siteSettingsType } from "./siteSettings";
 
@@ -18,6 +19,7 @@ export const schemaTypes = [
   groupTrainingPageType,
   instructorType,
   merchProductType,
+  registrationPageType,
   scheduledClassType,
   siteSettingsType,
 ];

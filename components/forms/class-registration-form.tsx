@@ -7,15 +7,25 @@ import { Card } from "@/components/ui/card";
 import {
   classStatusLabels,
   formatCurrency,
+  type RegistrationPageContent,
   type TrainingClass,
 } from "@/lib/data";
 
 type ClassRegistrationFormProps = {
+  content: Pick<
+    RegistrationPageContent,
+    | "formIntroHeadline"
+    | "formIntroHelpText"
+    | "successLabel"
+    | "successHeadline"
+    | "successBody"
+  >;
   remainingSeats: number | null;
   trainingClass: TrainingClass;
 };
 
 export function ClassRegistrationForm({
+  content,
   remainingSeats,
   trainingClass,
 }: ClassRegistrationFormProps) {
@@ -47,13 +57,12 @@ export function ClassRegistrationForm({
   if (submitted) {
     return (
       <Card className="p-6 md:p-8">
-        <Badge tone="olive">Registration request received</Badge>
+        <Badge tone="olive">{content.successLabel}</Badge>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-          Registration request received
+          {content.successHeadline}
         </h2>
         <p className="mt-3 leading-relaxed text-charcoal/62">
-          Your registration request has been saved. No payment was collected.
-          Confirmation details are shown here as a placeholder.
+          {content.successBody}
         </p>
         {seatsRemainingAfterRegistration !== null ? (
           <p className="mt-3 text-sm font-medium text-charcoal/62">
@@ -101,11 +110,10 @@ export function ClassRegistrationForm({
       <Card className="p-6 shadow-lg md:p-8">
         <Badge tone="red">Attendee Information</Badge>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-          Attendee Information
+          {content.formIntroHeadline}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-charcoal/62">
-          Enter the attendee details for this training registration request.
-          Required fields are kept focused so you can reserve a seat quickly.
+          {content.formIntroHelpText}
         </p>
         <form
           className="mt-8 grid gap-5"

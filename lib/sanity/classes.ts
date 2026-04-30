@@ -41,6 +41,7 @@ export type SanityScheduledClassDocument = {
   legalRequirements?: string[] | null;
   instructorIds?: string[] | null;
   image?: string | null;
+  imageAlt?: string | null;
   relatedClassIds?: string[] | null;
 };
 
@@ -79,6 +80,7 @@ const classFields = groq`
   legalRequirements,
   "instructorIds": select(defined(instructor) => [instructor], []),
   "image": image.asset->url,
+  imageAlt,
   "relatedClassIds": relatedClasses[]->_id
 `;
 
@@ -148,6 +150,7 @@ function normalizeClass(
     legalRequirements: asStringList(document.legalRequirements),
     instructorIds: asStringList(document.instructorIds),
     image: document.image ?? "",
+    imageAlt: document.imageAlt ?? "",
     relatedClassIds: asStringList(document.relatedClassIds),
   };
 }
@@ -180,6 +183,10 @@ async function fetchSanityClasses(): Promise<NormalizedTrainingClass[] | null> {
       {},
       { next: { revalidate: 60 } },
     );
+
+    if (!documents.length) {
+      return null;
+    }
 
     return sortByDateAscending(documents.map(normalizeClass));
   } catch (error) {
@@ -243,13 +250,8 @@ export async function getClassBySlug(
     return result.trainingClass;
   }
 
-  if (result.status === "missing") {
-    return undefined;
-  }
-
-  return getFallbackClasses().find(
-    (trainingClass) => trainingClass.slug === slug,
-  );
+  const classes = await getClasses();
+  return classes.find((trainingClass) => trainingClass.slug === slug);
 }
 
 export async function getClassStaticParams(): Promise<Array<{ slug: string }>> {

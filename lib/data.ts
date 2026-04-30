@@ -41,6 +41,7 @@ export type TrainingClass = {
   legalRequirements: string[];
   instructorIds: string[];
   image: string;
+  imageAlt: string;
   relatedClassIds: string[];
 };
 
@@ -53,7 +54,40 @@ export type Instructor = {
   specialties: string[];
   certificationBodies: string[];
   image: string;
+  imageAlt: string;
   featured: boolean;
+};
+
+export type SiteSettings = {
+  businessName: string;
+  tagline: string;
+  serviceArea: string;
+  contactEmail: string;
+  phone: string;
+  logo: string;
+  logoAlt: string;
+  socialLinks: Array<{
+    label: string;
+    url: string;
+  }>;
+};
+
+export type HomepageContent = {
+  heroLabel: string;
+  heroHeadline: string;
+  heroBody: string;
+  heroTrustLine: string;
+  heroImage: string;
+  heroImageAlt: string;
+  learningPoints: string[];
+  trustStats: string[];
+  valuePoints: string[];
+  expectations: string[];
+  credentials: string[];
+  groupTrainingHeadline: string;
+  groupTrainingBody: string;
+  finalCtaHeadline: string;
+  finalCtaBody: string;
 };
 
 export type Category = {
@@ -184,6 +218,7 @@ export const instructors: Instructor[] = [
     specialties: ["CPR", "First Aid", "Workplace Training"],
     certificationBodies: ["AHA", "ASHI", "EMT"],
     image: "",
+    imageAlt: "",
     featured: true,
   },
   {
@@ -195,9 +230,67 @@ export const instructors: Instructor[] = [
     specialties: ["Concealed Carry", "Handgun", "Safety Procedures"],
     certificationBodies: ["CCW", "Internal"],
     image: "",
+    imageAlt: "",
     featured: true,
   },
 ];
+
+export const siteSettings: SiteSettings = {
+  businessName: "NorCal MedTac",
+  tagline: "Professional medical and defensive training.",
+  serviceArea: "Northern California",
+  contactEmail: "",
+  phone: "",
+  logo: "",
+  logoAlt: "NorCal MedTac",
+  socialLinks: [],
+};
+
+export const homepageContent: HomepageContent = {
+  heroLabel: "Northern California Training Provider",
+  heroHeadline:
+    "Medical and defensive training built for real-world situations.",
+  heroBody:
+    "Practical, safety-first, real-world readiness training for individuals, professionals, and groups.",
+  heroTrustLine:
+    "Trusted training aligned with AHA, ASHI, and real-world field experience.",
+  heroImage: "",
+  heroImageAlt: "",
+  learningPoints: [
+    "Bleeding control & trauma response",
+    "Situational awareness & decision-making",
+    "Real-world scenario training",
+    "Certification-ready skills",
+  ],
+  trustStats: [
+    "500+ students trained",
+    "AHA & ASHI certified instruction",
+    "10+ years field experience",
+    "Used by EMS, security, and civilians",
+  ],
+  valuePoints: [
+    "Practical curriculum",
+    "Mobile instruction",
+    "Medical and defensive expertise",
+    "Calm instruction",
+    "Safety-first environment",
+    "Clear student expectations",
+  ],
+  expectations: [
+    "Preparation details are shown before registration.",
+    "Class environment and safety expectations are stated clearly.",
+    "Prerequisites are listed before students reserve a seat.",
+    "Registration details stay separate from merchandise shopping.",
+  ],
+  credentials: ["AHA", "ASHI", "ITLS", "EMT skills", "Instructor credentials"],
+  groupTrainingHeadline:
+    "Custom training for businesses, clubs, and organizations.",
+  groupTrainingBody:
+    "Workplace CPR and first aid, emergency preparedness, tactical medicine, defensive skills, and team refreshers can be structured around group needs.",
+  finalCtaHeadline: "Ready to train with confidence?",
+  finalCtaBody:
+    "View upcoming classes or contact NorCal MedTac to find the right training for you.",
+};
 
 export const classes: TrainingClass[] = [
   {
@@ -233,6 +326,7 @@ export const classes: TrainingClass[] = [
     legalRequirements: [],
     instructorIds: ["alex-morgan"],
     image: "",
+    imageAlt: "",
     relatedClassIds: ["class-stop-the-bleed-may"],
   },
   {
@@ -268,6 +362,7 @@ export const classes: TrainingClass[] = [
     legalRequirements: [],
     instructorIds: ["alex-morgan"],
     image: "",
+    imageAlt: "",
     relatedClassIds: ["class-cpr-first-aid-may"],
   },
   {
@@ -303,6 +398,7 @@ export const classes: TrainingClass[] = [
     legalRequirements: ["Students must meet applicable eligibility requirements"],
     instructorIds: ["jordan-reyes"],
     image: "",
+    imageAlt: "",
     relatedClassIds: ["class-defensive-handgun-june"],
   },
   {
@@ -338,6 +434,7 @@ export const classes: TrainingClass[] = [
     legalRequirements: ["Students must legally possess required equipment"],
     instructorIds: ["jordan-reyes"],
     image: "",
+    imageAlt: "",
     relatedClassIds: ["class-ccw-june"],
   },
 ];

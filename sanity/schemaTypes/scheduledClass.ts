@@ -342,6 +342,14 @@ export const scheduledClassType = defineType({
       },
     }),
     defineField({
+      name: "imageAlt",
+      title: "Image Alt Text",
+      type: "string",
+      description:
+        "Short accessible description for the class image. Leave blank only if the image is decorative.",
+      fieldset: "relationships",
+    }),
+    defineField({
       name: "relatedClasses",
       title: "Related Classes",
       type: "array",

@@ -1,9 +1,11 @@
 import { defineCliConfig } from "sanity/cli";
 
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "g3igmils";
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+
 export default defineCliConfig({
   api: {
-    projectId:
-      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "replace-with-project-id",
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
+    projectId,
+    dataset,
   },
 });

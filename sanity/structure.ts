@@ -12,13 +12,7 @@ const singletonTypes = new Set([
 ]);
 
 export const studioStructure: StructureResolver = (S) => {
-  const singletonItems = [
-    S.listItem()
-      .title("Site Settings")
-      .id("siteSettings")
-      .child(
-        S.document().schemaType("siteSettings").documentId("siteSettings"),
-      ),
+  const sitePageItems = [
     S.listItem()
       .title("Homepage Content")
       .id("homepageContent")
@@ -63,29 +57,75 @@ export const studioStructure: StructureResolver = (S) => {
       ),
   ];
 
-  const collectionItems = [
-    S.listItem()
-      .title("Merch Products")
-      .id("merchProducts")
-      .child(S.documentTypeList("merchProduct").title("Merch Products")),
-    S.listItem()
-      .title("Scheduled Classes")
-      .id("scheduledClasses")
-      .child(S.documentTypeList("scheduledClass").title("Scheduled Classes")),
-    S.listItem()
-      .title("Instructors")
-      .id("instructors")
-      .child(S.documentTypeList("instructor").title("Instructors")),
-  ];
-
   return S.list()
     .title("Content")
     .items([
       S.listItem()
-        .title("Page Content")
-        .id("pageContent")
-        .child(S.list().title("Page Content").items(singletonItems)),
-      ...collectionItems,
+        .title("Site Pages")
+        .id("sitePages")
+        .child(S.list().title("Site Pages").items(sitePageItems)),
+      S.listItem()
+        .title("Classes")
+        .id("classesGroup")
+        .child(
+          S.list()
+            .title("Classes")
+            .items([
+              S.listItem()
+                .title("Scheduled Classes")
+                .id("scheduledClasses")
+                .child(
+                  S.documentTypeList("scheduledClass").title(
+                    "Scheduled Classes",
+                  ),
+                ),
+            ]),
+        ),
+      S.listItem()
+        .title("People")
+        .id("peopleGroup")
+        .child(
+          S.list()
+            .title("People")
+            .items([
+              S.listItem()
+                .title("Instructors")
+                .id("instructors")
+                .child(S.documentTypeList("instructor").title("Instructors")),
+            ]),
+        ),
+      S.listItem()
+        .title("Merch")
+        .id("merchGroup")
+        .child(
+          S.list()
+            .title("Merch")
+            .items([
+              S.listItem()
+                .title("Merch Products")
+                .id("merchProducts")
+                .child(
+                  S.documentTypeList("merchProduct").title("Merch Products"),
+                ),
+            ]),
+        ),
+      S.listItem()
+        .title("Settings")
+        .id("settingsGroup")
+        .child(
+          S.list()
+            .title("Settings")
+            .items([
+              S.listItem()
+                .title("Site Settings")
+                .id("siteSettings")
+                .child(
+                  S.document()
+                    .schemaType("siteSettings")
+                    .documentId("siteSettings"),
+                ),
+            ]),
+        ),
       S.divider(),
       ...S.documentTypeListItems().filter(
         (listItem) => !singletonTypes.has(listItem.getId() ?? ""),

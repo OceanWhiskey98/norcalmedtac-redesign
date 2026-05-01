@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  classStatusLabels,
   formatCurrency,
+  getClassStatusLabel,
+  isClassRegistrationOpen,
+  isClassWaitlist,
   type RegistrationPageContent,
   type TrainingClass,
 } from "@/lib/data";
@@ -24,6 +26,22 @@ type ClassRegistrationFormProps = {
   trainingClass: TrainingClass;
 };
 
+function formatRemainingSeats(remainingSeats: number): string {
+  return `${remainingSeats} ${remainingSeats === 1 ? "seat" : "seats"} remaining`;
+}
+
+function normalizeRegistrationErrorMessage(message: string): string {
+  const remainingSeatsMatch = message.match(
+    /^(?:Only )?(\d+) seat\(s\) remaining for this class\.$/,
+  );
+
+  if (!remainingSeatsMatch) {
+    return message;
+  }
+
+  return `${formatRemainingSeats(Number(remainingSeatsMatch[1]))} for this class.`;
+}
+
 export function ClassRegistrationForm({
   content,
   remainingSeats,
@@ -39,34 +57,67 @@ export function ClassRegistrationForm({
     () => trainingClass.price * seats,
     [seats, trainingClass.price],
   );
+  const isWaitlist = isClassWaitlist(trainingClass.status);
+  const isRegistrationOpen = isClassRegistrationOpen(trainingClass.status);
   const disabled =
-    trainingClass.status === "soldOut" ||
-    trainingClass.status === "closed" ||
-    remainingSeats === null ||
-    remainingSeats === 0;
+    (!isWaitlist && !isRegistrationOpen) ||
+    (isRegistrationOpen && (remainingSeats === null || remainingSeats === 0));
   const availabilityLabel =
     remainingSeats === null
       ? "Live seat availability is temporarily unavailable."
-      : `${remainingSeats} seat(s) remaining`;
-  const trustBullets = [
-    "Confirmation details shown after submission",
-    "Certification information stays tied to this class",
-    "What to bring and prerequisites are included before class day",
-  ];
+      : formatRemainingSeats(remainingSeats);
+  const formBadge = isWaitlist ? "Waitlist Request" : "Attendee Information";
+  const formHeadline = isWaitlist ? "Join Waitlist" : content.formIntroHeadline;
+  const formHelpText = isWaitlist
+    ? "Submit attendee details for the waitlist. No payment is collected, and the team will follow up if space becomes available or details change."
+    : content.formIntroHelpText;
+  const successLabel = isWaitlist
+    ? "Waitlist request received"
+    : content.successLabel;
+  const successHeadline = isWaitlist
+    ? "Waitlist request received"
+    : content.successHeadline;
+  const successBody = isWaitlist
+    ? "Your waitlist request has been saved. No payment was collected. The team will follow up if space becomes available or details change."
+    : content.successBody;
+  const submitLabel = isWaitlist ? "Submit Waitlist Request" : "Reserve Seat";
+  const submittingLabel = isWaitlist
+    ? "Submitting Waitlist..."
+    : "Saving Registration...";
+  const fallbackErrorMessage = isWaitlist
+    ? "Waitlist request could not be saved."
+    : "Registration could not be saved.";
+  const seatsLabel = isWaitlist ? "Requested spots" : "Number of seats";
+  const summaryLabel = isWaitlist
+    ? "Waitlist Request Summary"
+    : "Registration Summary";
+  const totalLabel = isWaitlist ? "Class price" : "Total price";
+  const supportHeading = isWaitlist ? "Waitlist support" : "Registration support";
+  const trustBullets = isWaitlist
+    ? [
+        "Waitlist request details are saved after submission",
+        "No payment is collected during the waitlist request",
+        "The team will follow up if space becomes available or details change",
+      ]
+    : [
+        "Confirmation details shown after submission",
+        "Certification information stays tied to this class",
+        "What to bring and prerequisites are included before class day",
+      ];
 
   if (submitted) {
     return (
       <Card className="p-6 md:p-8">
-        <Badge tone="olive">{content.successLabel}</Badge>
+        <Badge tone="olive">{successLabel}</Badge>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-          {content.successHeadline}
+          {successHeadline}
         </h2>
         <p className="mt-3 leading-relaxed text-charcoal/62">
-          {content.successBody}
+          {successBody}
         </p>
-        {seatsRemainingAfterRegistration !== null ? (
+        {!isWaitlist && seatsRemainingAfterRegistration !== null ? (
           <p className="mt-3 text-sm font-medium text-charcoal/62">
-            {seatsRemainingAfterRegistration} seat(s) remaining after this
+            {formatRemainingSeats(seatsRemainingAfterRegistration)} after this
             registration request.
           </p>
         ) : null}
@@ -108,12 +159,12 @@ export function ClassRegistrationForm({
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_24rem] lg:items-start">
       <Card className="p-6 shadow-lg md:p-8">
-        <Badge tone="red">Attendee Information</Badge>
+        <Badge tone="red">{formBadge}</Badge>
         <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-          {content.formIntroHeadline}
+          {formHeadline}
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-charcoal/62">
-          {content.formIntroHelpText}
+          {formHelpText}
         </p>
         <form
           className="mt-8 grid gap-5"
@@ -129,6 +180,7 @@ export function ClassRegistrationForm({
               lastName: String(formData.get("lastName") ?? ""),
               email: String(formData.get("email") ?? ""),
               phone: String(formData.get("phone") ?? ""),
+              requestType: isWaitlist ? "waitlist" : "registration",
               seats,
               notes: String(formData.get("notes") ?? ""),
             };
@@ -162,8 +214,8 @@ export function ClassRegistrationForm({
             } catch (error) {
               setErrorMessage(
                 error instanceof Error
-                  ? error.message
-                  : "Registration could not be saved.",
+                  ? normalizeRegistrationErrorMessage(error.message)
+                  : fallbackErrorMessage,
               );
             } finally {
               setIsSubmitting(false);
@@ -193,7 +245,7 @@ export function ClassRegistrationForm({
             ))}
           </div>
           <label className="grid gap-2 text-sm font-medium text-neutral-900">
-            Number of seats
+            {seatsLabel}
             <input
               className="min-h-11 rounded-xl border border-neutral-300 bg-white px-3 text-sm outline-none transition-all duration-200 focus:border-red-600 focus:ring-2 focus:ring-red-600/10"
               disabled={disabled}
@@ -209,9 +261,16 @@ export function ClassRegistrationForm({
               value={seats}
             />
           </label>
-          <p className="text-sm font-medium text-charcoal/62">
-            Live availability: {availabilityLabel}
-          </p>
+          {isWaitlist ? (
+            <p className="text-sm font-medium text-charcoal/62">
+              This submits a waitlist request. The team will follow up if space
+              becomes available or details change.
+            </p>
+          ) : (
+            <p className="text-sm font-medium text-charcoal/62">
+              Live availability: {availabilityLabel}
+            </p>
+          )}
           <label className="grid gap-2 text-sm font-medium text-neutral-900">
             Notes/questions
             <textarea
@@ -226,12 +285,15 @@ export function ClassRegistrationForm({
             type="submit"
           >
             {isSubmitting
-              ? "Saving Registration..."
-              : `Reserve Seat - ${formatCurrency(total)}`}
+              ? submittingLabel
+              : isWaitlist
+                ? submitLabel
+                : `${submitLabel} - ${formatCurrency(total)}`}
           </Button>
           <p className="text-sm leading-relaxed text-charcoal/58">
-            After submission, your registration request is saved and this page
-            shows preparation details. No payment is collected.
+            {isWaitlist
+              ? "After submission, your waitlist request is saved. No payment is collected."
+              : "After submission, your registration request is saved and this page shows preparation details. No payment is collected."}
           </p>
           {errorMessage ? (
             <p className="text-sm font-medium text-medical-red">
@@ -244,16 +306,16 @@ export function ClassRegistrationForm({
                 ? "Registration is unavailable because this class has no seats remaining."
                 : remainingSeats === null
                   ? "Registration is temporarily unavailable while live seat availability is checked."
-                  : classStatusLabels[trainingClass.status]}
+                  : getClassStatusLabel(trainingClass.status)}
             </p>
           ) : null}
         </form>
       </Card>
 
       <Card className="order-first border-medical-red/20 bg-white p-6 shadow-lg lg:order-none lg:sticky lg:top-28">
-        <Badge tone="neutral">Registration Summary</Badge>
+        <Badge tone="neutral">{summaryLabel}</Badge>
         <h2 className="mt-4 text-xl font-semibold text-neutral-900">
-          Registration Summary
+          {summaryLabel}
         </h2>
         <dl className="mt-5 grid gap-4 text-sm leading-relaxed text-charcoal/62">
           <div className="border-b border-neutral-200 pb-3">
@@ -261,15 +323,17 @@ export function ClassRegistrationForm({
             <dd>{trainingClass.title}</dd>
           </div>
           <div className="border-b border-neutral-200 pb-3">
-            <dt className="font-medium text-neutral-900">Seats</dt>
+            <dt className="font-medium text-neutral-900">{seatsLabel}</dt>
             <dd>{seats}</dd>
           </div>
-          <div className="border-b border-neutral-200 pb-3">
-            <dt className="font-medium text-neutral-900">Remaining Seats</dt>
-            <dd>{availabilityLabel}</dd>
-          </div>
+          {!isWaitlist ? (
+            <div className="border-b border-neutral-200 pb-3">
+              <dt className="font-medium text-neutral-900">Remaining Seats</dt>
+              <dd>{availabilityLabel}</dd>
+            </div>
+          ) : null}
           <div>
-            <dt className="font-medium text-neutral-900">Total price</dt>
+            <dt className="font-medium text-neutral-900">{totalLabel}</dt>
             <dd className="text-lg font-semibold text-neutral-900">
               {formatCurrency(total)}
             </dd>
@@ -277,7 +341,7 @@ export function ClassRegistrationForm({
         </dl>
         <div className="mt-6 border-t border-neutral-200 pt-5">
           <h3 className="text-sm font-semibold text-neutral-900">
-            Registration support
+            {supportHeading}
           </h3>
           <ul className="mt-3 grid gap-2 text-sm leading-relaxed text-charcoal/62">
             {trustBullets.map((item) => (

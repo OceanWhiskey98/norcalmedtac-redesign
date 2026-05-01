@@ -2,10 +2,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  classCtaLabels,
-  classStatusLabels,
   formatCurrency,
+  getClassCtaLabel,
+  getClassStatusLabel,
   getCategory,
+  isClassClosedToRequests,
   type TrainingClass,
 } from "@/lib/data";
 
@@ -17,15 +18,14 @@ const statusTone = {
   open: "olive",
   limited: "gold",
   waitlist: "gold",
-  soldOut: "red",
+  full: "red",
   closed: "neutral",
 } as const;
 
 export function ClassCard({ trainingClass }: ClassCardProps) {
   const category = getCategory(trainingClass.categoryId);
-  const ctaLabel = classCtaLabels[trainingClass.status];
-  const disabled =
-    trainingClass.status === "soldOut" || trainingClass.status === "closed";
+  const ctaLabel = getClassCtaLabel(trainingClass.status);
+  const disabled = isClassClosedToRequests(trainingClass.status);
 
   return (
     <Card className="flex h-full flex-col overflow-hidden bg-[#fbfaf7]">
@@ -50,7 +50,7 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
             {category?.name ?? "Training"}
           </Badge>
           <Badge tone={statusTone[trainingClass.status]}>
-            {classStatusLabels[trainingClass.status]}
+            {getClassStatusLabel(trainingClass.status)}
           </Badge>
         </div>
         <div>
@@ -83,6 +83,18 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
             <dt>Price</dt>
             <dd className="font-semibold text-charcoal">
               {formatCurrency(trainingClass.price)}
+            </dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt>Status</dt>
+            <dd className="font-medium text-charcoal/82">
+              {getClassStatusLabel(trainingClass.status)}
+            </dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt>Capacity</dt>
+            <dd className="font-medium text-charcoal/82">
+              {trainingClass.capacity}
             </dd>
           </div>
         </dl>

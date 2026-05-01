@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import {
-  classCtaLabels,
-  classStatusLabels,
   formatCurrency,
+  getClassCtaLabel,
+  getClassStatusLabel,
   getCategory,
+  isClassClosedToRequests,
+  isClassWaitlist,
   type TrainingClass,
 } from "@/lib/data";
 import {
@@ -26,7 +28,7 @@ const statusTone = {
   open: "olive",
   limited: "gold",
   waitlist: "gold",
-  soldOut: "red",
+  full: "red",
   closed: "neutral",
 } as const;
 
@@ -36,12 +38,6 @@ const skillLevelLabels: Record<TrainingClass["skillLevel"], string> = {
   advanced: "Advanced",
   allLevels: "All Levels",
 };
-
-const policies = [
-  "Cancellation, transfer, and refund expectations are presented before registration completion.",
-  "Weather, waiver, late arrival, and class-specific safety expectations may apply.",
-  "Registration requests are saved for team follow-up. No payment is collected online.",
-];
 
 export function generateStaticParams() {
   return getClassStaticParams();
@@ -104,9 +100,19 @@ export default async function ClassDetailPage({
   const relatedClasses = allClasses.filter((item) =>
     trainingClass.relatedClassIds.includes(item.id),
   );
-  const disabled =
-    trainingClass.status === "soldOut" || trainingClass.status === "closed";
-  const ctaLabel = classCtaLabels[trainingClass.status];
+  const disabled = isClassClosedToRequests(trainingClass.status);
+  const ctaLabel = getClassCtaLabel(trainingClass.status);
+  const policies = isClassWaitlist(trainingClass.status)
+    ? [
+        "Waitlist requests are saved for team follow-up if space becomes available or details change.",
+        "Weather, waiver, late arrival, and class-specific safety expectations may apply.",
+        "No payment is collected online for waitlist requests.",
+      ]
+    : [
+        "Cancellation, transfer, and refund expectations are presented before registration completion.",
+        "Weather, waiver, late arrival, and class-specific safety expectations may apply.",
+        "Registration requests are saved for team follow-up. No payment is collected online.",
+      ];
 
   return (
     <>
@@ -118,7 +124,7 @@ export default async function ClassDetailPage({
                 {category?.name ?? "Training"}
               </Badge>
               <Badge tone={statusTone[trainingClass.status]}>
-                {classStatusLabels[trainingClass.status]}
+                {getClassStatusLabel(trainingClass.status)}
               </Badge>
             </div>
             <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl lg:text-6xl">
@@ -159,10 +165,12 @@ export default async function ClassDetailPage({
                 ],
                 ["Price", formatCurrency(trainingClass.price)],
                 [
-                  "Seats/status",
-                  `${trainingClass.seatsAvailable} seats available / ${
-                    classStatusLabels[trainingClass.status]
-                  }`,
+                  "Registration status",
+                  getClassStatusLabel(trainingClass.status),
+                ],
+                [
+                  "Capacity",
+                  trainingClass.capacity.toString(),
                 ],
                 ["Skill level", skillLevelLabels[trainingClass.skillLevel]],
                 [
@@ -277,8 +285,8 @@ export default async function ClassDetailPage({
               <div>
                 <dt className="font-medium text-neutral-900">Arrival</dt>
                 <dd>
-                  Parking and arrival notes are presented before registration
-                  completion where applicable.
+                  Parking and arrival notes are confirmed before class day when
+                  applicable.
                 </dd>
               </div>
             </dl>
@@ -320,7 +328,7 @@ export default async function ClassDetailPage({
               {trainingClass.date} - {formatCurrency(trainingClass.price)}
             </p>
             <p className="text-xs text-charcoal/58">
-              {classStatusLabels[trainingClass.status]}
+              {getClassStatusLabel(trainingClass.status)}
             </p>
           </div>
           <Button

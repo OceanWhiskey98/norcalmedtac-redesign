@@ -2,6 +2,7 @@ import { defineField, defineType } from "sanity";
 
 const statusOptions = [
   { title: "Open", value: "open" },
+  { title: "Limited Seats", value: "limited" },
   { title: "Full", value: "full" },
   { title: "Waitlist", value: "waitlist" },
   { title: "Closed", value: "closed" },
@@ -241,7 +242,7 @@ export const scheduledClassType = defineType({
       name: "status",
       title: "Status",
       description:
-        "Controls the public registration CTA: Open, Full, Waitlist, or Closed.",
+        "Controls the public registration CTA: Open, Limited Seats, Full, Waitlist, or Closed.",
       type: "string",
       fieldset: "registration",
       options: {

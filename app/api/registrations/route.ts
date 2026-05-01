@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isClassClosedToRequests } from "@/lib/data";
 import { getClassBySlug } from "@/lib/sanity/classes";
 import {
   getSupabaseAdminClient,
@@ -37,6 +38,10 @@ type ParsedRegistrationPayload =
   | { ok: false; message: string };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function formatRemainingSeatMessage(remainingSeats: number): string {
+  return `${remainingSeats} ${remainingSeats === 1 ? "seat" : "seats"} remaining for this class.`;
+}
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -130,7 +135,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (trainingClass.status === "soldOut" || trainingClass.status === "closed") {
+  if (isClassClosedToRequests(trainingClass.status)) {
     return NextResponse.json(
       { message: "Registration is not available for this class." },
       { status: 409 },
@@ -159,7 +164,7 @@ export async function POST(request: Request) {
   if (registration.seats > remainingSeats) {
     return NextResponse.json(
       {
-        message: `Only ${remainingSeats} seat(s) remaining for this class.`,
+        message: formatRemainingSeatMessage(remainingSeats),
       },
       { status: 409 },
     );

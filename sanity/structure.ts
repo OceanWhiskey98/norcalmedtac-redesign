@@ -11,6 +11,12 @@ const singletonTypes = new Set([
   "registrationPage",
 ]);
 
+const groupedDocumentTypes = new Set([
+  "scheduledClass",
+  "instructor",
+  "merchProduct",
+]);
+
 export const studioStructure: StructureResolver = (S) => {
   const sitePageItems = [
     S.listItem()
@@ -128,7 +134,10 @@ export const studioStructure: StructureResolver = (S) => {
         ),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (listItem) => !singletonTypes.has(listItem.getId() ?? ""),
+        (listItem) => {
+          const id = listItem.getId() ?? "";
+          return !singletonTypes.has(id) && !groupedDocumentTypes.has(id);
+        },
       ),
     ]);
 };

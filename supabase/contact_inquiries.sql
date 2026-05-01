@@ -57,6 +57,9 @@ $$;
 alter table public.contact_inquiries validate constraint contact_inquiries_status_check;
 alter table public.contact_inquiries validate constraint contact_inquiries_source_check;
 
+create index if not exists contact_inquiries_ip_hash_created_at_idx
+  on public.contact_inquiries ("ipHash", "createdAt" desc);
+
 alter table public.contact_inquiries enable row level security;
 
 revoke all on table public.contact_inquiries from anon, authenticated;

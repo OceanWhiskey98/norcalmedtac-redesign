@@ -40,7 +40,7 @@ const skillLevelLabels: Record<TrainingClass["skillLevel"], string> = {
 const policies = [
   "Cancellation, transfer, and refund expectations are presented before registration completion.",
   "Weather, waiver, late arrival, and class-specific safety expectations may apply.",
-  "This prototype uses front-end placeholder registration only; no payment processing is active.",
+  "Registration requests are saved for team follow-up. No payment is collected online.",
 ];
 
 export function generateStaticParams() {

@@ -19,8 +19,7 @@ export default async function MerchPage() {
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-charcoal/62">
             Browse NorCal MedTac merchandise separately from training
-            registration. Product filters and cart content are front-end
-            placeholders for this prototype.
+            registration. Online merchandise purchasing is not available yet.
           </p>
         </div>
       </Section>
@@ -47,14 +46,13 @@ export default async function MerchPage() {
 
       <Section className="bg-white" tone="light">
         <Card className="p-6 md:p-8">
-          <Badge tone="neutral">Cart Placeholder</Badge>
+          <Badge tone="neutral">Merch Availability</Badge>
           <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900">
-            Front-end cart preview
+            Online merch purchasing is coming soon
           </h2>
           <p className="mt-3 leading-relaxed text-charcoal/62">
-            Merchandise cart, shipping, checkout, and order confirmation screens
-            are placeholders only in this front-end prototype. No payment
-            processing or inventory management is active.
+            Merchandise cart, shipping, checkout, and order confirmation are not
+            active yet. No payment processing or inventory management is active.
           </p>
         </Card>
       </Section>

@@ -17,6 +17,8 @@ export function ContactForm() {
       onSubmit={async (event) => {
         event.preventDefault();
         setIsSubmitting(true);
+        setSubmitted(false);
+        setInquiryId(null);
         setErrorMessage(null);
         setSuccessMessage(null);
 

@@ -13,11 +13,27 @@ const inventoryLabels: Record<Merchandise["inventoryStatus"], string> = {
   outOfStock: "Out of Stock",
 };
 
+function getExternalShoppingUrl(value: string): string | undefined {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:"
+      ? url.toString()
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function ProductCard({ product }: ProductCardProps) {
   const primaryImage = product.images[0];
-  const shoppingUrl = product.shoppingUrl.startsWith("http")
-    ? product.shoppingUrl
-    : undefined;
+  const shoppingUrl = getExternalShoppingUrl(product.shoppingUrl);
+  const isUnavailable =
+    product.inventoryStatus === "outOfStock" || !shoppingUrl;
+  const buttonLabel = !shoppingUrl
+    ? "Coming Soon"
+    : product.inventoryStatus === "outOfStock"
+      ? "Not Available Yet"
+      : "Add to Cart";
 
   return (
     <Card className="flex h-full flex-col overflow-hidden">
@@ -52,11 +68,11 @@ export function ProductCard({ product }: ProductCardProps) {
             </p>
           </div>
           <Button
-            disabled={product.inventoryStatus === "outOfStock"}
-            href={shoppingUrl}
+            disabled={isUnavailable}
+            href={isUnavailable ? undefined : shoppingUrl}
             variant="primary"
           >
-            Add to Cart
+            {buttonLabel}
           </Button>
         </div>
       </div>

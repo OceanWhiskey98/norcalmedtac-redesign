@@ -4,9 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { categories, merchandise } from "@/lib/data";
+import { categories } from "@/lib/data";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
 import { getHomepageContent } from "@/lib/sanity/homepage";
+import { getMerchProducts } from "@/lib/sanity/merch";
 import { getSiteSettings } from "@/lib/sanity/site-settings";
 
 const pathwayIds = [
@@ -20,6 +21,7 @@ const pathwayIds = [
 export default async function Home() {
   const classes = await getUpcomingClasses();
   const homepageContent = await getHomepageContent();
+  const merchandise = await getMerchProducts();
   const siteSettings = await getSiteSettings();
   const pathways = pathwayIds
     .map((id) => categories.find((category) => category.id === id))

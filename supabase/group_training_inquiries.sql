@@ -77,6 +77,9 @@ alter table public.group_training_inquiries validate constraint group_training_i
 alter table public.group_training_inquiries validate constraint group_training_inquiries_source_check;
 alter table public.group_training_inquiries validate constraint group_training_inquiries_group_size_check;
 
+create index if not exists group_training_inquiries_ip_hash_created_at_idx
+  on public.group_training_inquiries ("ipHash", "createdAt" desc);
+
 alter table public.group_training_inquiries enable row level security;
 
 revoke all on table public.group_training_inquiries from anon, authenticated;

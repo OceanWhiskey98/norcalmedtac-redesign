@@ -93,6 +93,9 @@ alter table public.registrations validate constraint registrations_amount_due_ch
 alter table public.registrations validate constraint registrations_currency_lowercase_check;
 alter table public.registrations validate constraint registrations_source_check;
 
+create index if not exists registrations_class_slug_idx
+  on public.registrations ("classSlug");
+
 alter table public.registrations enable row level security;
 
 revoke all on table public.registrations from anon, authenticated;

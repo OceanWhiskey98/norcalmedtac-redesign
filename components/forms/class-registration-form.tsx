@@ -96,8 +96,8 @@ export function ClassRegistrationForm({
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-charcoal/68">
               {trainingClass.locationName}, {trainingClass.locationCity},{" "}
-              {trainingClass.locationState}. Arrival notes are placeholder
-              front-end content for this prototype.
+              {trainingClass.locationState}. Arrival notes are confirmed before
+              class day when applicable.
             </p>
           </div>
         </div>

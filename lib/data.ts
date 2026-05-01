@@ -623,7 +623,7 @@ export const classesPageContent: ClassesPageContent = {
   heroBody:
     "Browse scheduled medical, defensive, certification, and preparedness training.",
   filterHelperText:
-    "Filters are included as front-end placeholders for this prototype.",
+    "Filters are planned for a future browsing update.",
   featuredClassLabel: "Featured Next Class",
   groupTrainingCtaHeadline: "Need a private, workplace, or club class?",
   groupTrainingCtaBody:
@@ -654,9 +654,9 @@ export const calendarPageContent: CalendarPageContent = {
   heroLabel: "Calendar",
   heroHeadline: "Calendar",
   heroBody:
-    "View upcoming classes in chronological order. The monthly selector and filters are front-end placeholders for this prototype.",
+    "View upcoming classes in chronological order. Monthly browsing and filters are planned for a future calendar update.",
   filterIntroCopy:
-    "Use these front-end placeholder controls to preview the future calendar filtering experience.",
+    "Calendar filters are planned for a future browsing update.",
   emptyStateHeadline: "No scheduled classes are published.",
   emptyStateBody:
     "Published scheduled classes from Sanity Studio will appear here in chronological order.",
@@ -676,7 +676,7 @@ export const registrationPageContent: RegistrationPageContent = {
   successLabel: "Registration request received",
   successHeadline: "Registration request received",
   successBody:
-    "Your registration request has been saved. No payment was collected. Confirmation details are shown here as a placeholder.",
+    "Your registration request has been saved. No payment was collected. Review the confirmation details below.",
 };
 
 export const classes: TrainingClass[] = [

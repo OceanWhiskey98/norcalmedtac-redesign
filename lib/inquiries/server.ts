@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const defaultIpHashSalt = "norcalmedtac-inquiry";
+const maxUserAgentLength = 512;
 
 type RateLimitOptions = {
   ipHash: string | null;
@@ -38,7 +39,13 @@ export function normalizeOptionalText(
 
 export function getUserAgent(request: Request): string | null {
   const userAgent = request.headers.get("user-agent");
-  return userAgent?.trim() ? userAgent.trim() : null;
+  const normalized = userAgent?.trim();
+
+  if (!normalized) {
+    return null;
+  }
+
+  return normalized.slice(0, maxUserAgentLength);
 }
 
 function getClientIp(request: Request): string | null {

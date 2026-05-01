@@ -39,7 +39,7 @@ export type SanityScheduledClassDocument = {
   whatToBring?: string[] | null;
   safetyRequirements?: string[] | null;
   legalRequirements?: string[] | null;
-  instructorIds?: string[] | null;
+  instructorIds?: Array<string | null> | null;
   image?: string | null;
   imageAlt?: string | null;
   relatedClassIds?: string[] | null;
@@ -78,7 +78,11 @@ const classFields = groq`
   whatToBring,
   safetyRequirements,
   legalRequirements,
-  "instructorIds": select(defined(instructor) => [instructor], []),
+  "instructorIds": select(
+    defined(instructor->_id) => [instructor->_id, instructor->slug.current],
+    defined(instructor) => [instructor],
+    []
+  ),
   "image": image.asset->url,
   imageAlt,
   "relatedClassIds": relatedClasses[]->_id
@@ -96,8 +100,16 @@ const classBySlugQuery = groq`
   }
 `;
 
-function asStringList(value: string[] | null | undefined): string[] {
-  return Array.isArray(value) ? value : [];
+function asStringList(
+  value: Array<string | null | undefined> | null | undefined,
+): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter(
+    (item): item is string => typeof item === "string" && item.trim().length > 0,
+  );
 }
 
 function normalizeStatus(

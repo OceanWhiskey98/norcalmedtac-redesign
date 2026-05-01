@@ -38,11 +38,6 @@ const categoryOptions = [
   { title: "Shotgun", value: "shotgun" },
 ];
 
-const instructorOptions = [
-  { title: "Alex Morgan", value: "alex-morgan" },
-  { title: "Jordan Reyes", value: "jordan-reyes" },
-];
-
 const stringListField = (
   name: string,
   title: string,
@@ -327,12 +322,10 @@ export const scheduledClassType = defineType({
     defineField({
       name: "instructor",
       title: "Instructor",
-      type: "string",
+      type: "reference",
       description: "Choose the instructor shown on the class detail page.",
       fieldset: "relationships",
-      options: {
-        list: instructorOptions,
-      },
+      to: [{ type: "instructor" }],
     }),
     defineField({
       name: "image",

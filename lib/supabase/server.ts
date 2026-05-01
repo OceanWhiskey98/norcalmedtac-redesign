@@ -9,7 +9,7 @@ export type RegistrationInsert = {
   email: string;
   paymentStatus: "unpaid";
   phone: string;
-  registrationStatus: "pending";
+  registrationStatus: "pending" | "waitlist_requested";
   seats: number;
   notes: string | null;
   source: "website";

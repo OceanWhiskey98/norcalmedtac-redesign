@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { isClassClosedToRequests } from "@/lib/data";
+import {
+  isClassClosedToRequests,
+  isClassRegistrationOpen,
+  isClassWaitlist,
+} from "@/lib/data";
 import { getClassBySlug } from "@/lib/sanity/classes";
 import {
   getSupabaseAdminClient,
@@ -20,7 +24,9 @@ type RegistrationRequestBody = Partial<
     | "seats"
     | "notes"
   >
->;
+> & {
+  requestType?: "registration" | "waitlist";
+};
 
 type ParsedRegistration = Pick<
   RegistrationInsert,
@@ -142,10 +148,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const remainingSeatCount = await getRemainingSeatsForClass(
-    registration.classSlug,
-    trainingClass.capacity,
-  );
+  const isWaitlistRequest = isClassWaitlist(trainingClass.status);
+  const shouldCheckSeatAvailability =
+    isClassRegistrationOpen(trainingClass.status);
+  const remainingSeatCount = shouldCheckSeatAvailability
+    ? await getRemainingSeatsForClass(
+        registration.classSlug,
+        trainingClass.capacity,
+      )
+    : { remainingSeats: null, registeredSeats: 0, error: null };
 
   if (remainingSeatCount.error) {
     console.error(
@@ -161,7 +172,7 @@ export async function POST(request: Request) {
 
   const remainingSeats = remainingSeatCount.remainingSeats ?? 0;
 
-  if (registration.seats > remainingSeats) {
+  if (shouldCheckSeatAvailability && registration.seats > remainingSeats) {
     return NextResponse.json(
       {
         message: formatRemainingSeatMessage(remainingSeats),
@@ -175,7 +186,9 @@ export async function POST(request: Request) {
     amountDue: Math.round(trainingClass.price * registration.seats * 100),
     currency: "usd",
     paymentStatus: "unpaid",
-    registrationStatus: "pending",
+    registrationStatus: isWaitlistRequest
+      ? "waitlist_requested"
+      : "pending",
     source: "website",
   };
 
@@ -196,8 +209,12 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     id: data.id,
-    message: "Registration request received.",
+    message: isWaitlistRequest
+      ? "Waitlist request received."
+      : "Registration request received.",
     seatsRequested: registration.seats,
-    seatsRemaining: remainingSeats - registration.seats,
+    seatsRemaining: shouldCheckSeatAvailability
+      ? remainingSeats - registration.seats
+      : null,
   });
 }

@@ -28,18 +28,22 @@ alter table public.registrations
   add column if not exists "canceledAt" timestamptz,
   add column if not exists "updatedAt" timestamptz;
 
+alter table public.registrations
+  drop constraint if exists registrations_registration_status_check;
+
+alter table public.registrations
+  add constraint registrations_registration_status_check
+    check (
+      "registrationStatus" in (
+        'pending',
+        'waitlist_requested',
+        'confirmed',
+        'canceled'
+      )
+    ) not valid;
+
 do $$
 begin
-  if not exists (
-    select 1
-    from pg_constraint
-    where conname = 'registrations_registration_status_check'
-      and conrelid = 'public.registrations'::regclass
-  ) then
-    alter table public.registrations
-      add constraint registrations_registration_status_check
-        check ("registrationStatus" in ('pending', 'confirmed', 'canceled')) not valid;
-  end if;
 
   if not exists (
     select 1

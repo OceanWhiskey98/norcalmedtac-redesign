@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import {
-  classCtaLabels,
-  classStatusLabels,
   formatCurrency,
   getCategory,
+  getClassCtaLabel,
+  getClassStatusLabel,
+  isClassClosedToRequests,
 } from "@/lib/data";
 import { getCalendarPage } from "@/lib/sanity/calendar-page";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
@@ -92,9 +93,9 @@ export default async function CalendarPage() {
                   <div className="mt-6 grid gap-4">
                     {grouped[month].map((trainingClass) => {
                       const category = getCategory(trainingClass.categoryId);
-                      const disabled =
-                        trainingClass.status === "soldOut" ||
-                        trainingClass.status === "closed";
+                      const disabled = isClassClosedToRequests(
+                        trainingClass.status,
+                      );
 
                     return (
                       <Card className="p-5 md:p-6" key={trainingClass.id}>
@@ -103,7 +104,7 @@ export default async function CalendarPage() {
                             <div className="flex flex-wrap gap-2">
                               <Badge tone="neutral">{category?.name}</Badge>
                               <Badge tone="red">
-                                {classStatusLabels[trainingClass.status]}
+                                {getClassStatusLabel(trainingClass.status)}
                               </Badge>
                             </div>
                             <h3 className="mt-4 text-xl font-semibold text-neutral-900">
@@ -121,7 +122,7 @@ export default async function CalendarPage() {
                               disabled={disabled}
                               href={disabled ? "#" : `/register/${trainingClass.slug}`}
                             >
-                              {classCtaLabels[trainingClass.status]}
+                              {getClassCtaLabel(trainingClass.status)}
                             </Button>
                             <Button href={`/classes/${trainingClass.slug}`} variant="outline">
                               View Details

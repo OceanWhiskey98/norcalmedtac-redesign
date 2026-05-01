@@ -1,4 +1,4 @@
-export type ClassStatus = "open" | "limited" | "waitlist" | "soldOut" | "closed";
+export type ClassStatus = "open" | "limited" | "waitlist" | "full" | "closed";
 export type SkillLevel = "beginner" | "intermediate" | "advanced" | "allLevels";
 export type CertificationBody =
   | "AHA"
@@ -809,7 +809,7 @@ export const classes: TrainingClass[] = [
     currency: "USD",
     capacity: 12,
     seatsAvailable: 0,
-    status: "soldOut",
+    status: "full",
     skillLevel: "intermediate",
     certification: "none",
     certificationBody: "Internal",
@@ -908,14 +908,38 @@ export const classStatusLabels: Record<ClassStatus, string> = {
   open: "Open",
   limited: "Limited Seats",
   waitlist: "Waitlist",
-  soldOut: "Sold Out",
-  closed: "Registration Closed",
+  full: "Sold Out",
+  closed: "Closed",
 };
 
 export const classCtaLabels: Record<ClassStatus, string> = {
   open: "Register",
   limited: "Register",
   waitlist: "Join Waitlist",
-  soldOut: "Sold Out",
-  closed: "Registration Closed",
+  full: "Sold Out",
+  closed: "Closed",
 };
+
+export function getClassStatusLabel(status: ClassStatus): string {
+  return classStatusLabels[status];
+}
+
+export function getClassCtaLabel(status: ClassStatus): string {
+  return classCtaLabels[status];
+}
+
+export function isClassRegistrationOpen(status: ClassStatus): boolean {
+  return status === "open" || status === "limited";
+}
+
+export function isClassWaitlist(status: ClassStatus): boolean {
+  return status === "waitlist";
+}
+
+export function isClassClosedToRequests(status: ClassStatus): boolean {
+  return status === "full" || status === "closed";
+}
+
+export function shouldShowLiveSeatCount(status: ClassStatus): boolean {
+  return isClassRegistrationOpen(status);
+}

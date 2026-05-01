@@ -8,7 +8,13 @@ import {
   type TrainingClass,
 } from "@/lib/data";
 
-type SanityClassStatus = "open" | "full" | "waitlist" | "closed";
+type SanityClassStatus =
+  | "open"
+  | "limited"
+  | "full"
+  | "soldOut"
+  | "waitlist"
+  | "closed";
 export type NormalizedTrainingClass = TrainingClass;
 
 export type SanityScheduledClassDocument = {
@@ -116,8 +122,11 @@ function normalizeStatus(
   status: SanityScheduledClassDocument["status"],
 ): ClassStatus {
   switch (status) {
+    case "limited":
+      return "limited";
     case "full":
-      return "soldOut";
+    case "soldOut":
+      return "full";
     case "waitlist":
       return "waitlist";
     case "closed":

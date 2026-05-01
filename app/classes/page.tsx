@@ -3,7 +3,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
-import { getCategory } from "@/lib/data";
+import {
+  getCategory,
+  getClassCtaLabel,
+  getClassStatusLabel,
+  isClassClosedToRequests,
+} from "@/lib/data";
 import { getClassesPage } from "@/lib/sanity/classes-page";
 import { getUpcomingClasses } from "@/lib/sanity/classes";
 
@@ -25,6 +30,9 @@ export default async function ClassesPage() {
   const featuredCategory = featuredClass
     ? getCategory(featuredClass.categoryId)
     : undefined;
+  const featuredClassDisabled = featuredClass
+    ? isClassClosedToRequests(featuredClass.status)
+    : false;
 
   return (
     <>
@@ -86,13 +94,26 @@ export default async function ClassesPage() {
                   <dd>{featuredCategory?.name}</dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-neutral-900">Seats</dt>
-                  <dd>{featuredClass.seatsAvailable} available</dd>
+                  <dt className="font-medium text-neutral-900">
+                    Registration status
+                  </dt>
+                  <dd>{getClassStatusLabel(featuredClass.status)}</dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-neutral-900">Capacity</dt>
+                  <dd>{featuredClass.capacity}</dd>
                 </div>
               </dl>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={`/register/${featuredClass.slug}`}>
-                  Register
+                <Button
+                  disabled={featuredClassDisabled}
+                  href={
+                    featuredClassDisabled
+                      ? "#"
+                      : `/register/${featuredClass.slug}`
+                  }
+                >
+                  {getClassCtaLabel(featuredClass.status)}
                 </Button>
                 <Button
                   href={`/classes/${featuredClass.slug}`}

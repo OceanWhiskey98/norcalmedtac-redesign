@@ -1,7 +1,9 @@
+import Image from "next/image";
 import { GroupInquiryForm } from "@/components/forms/group-inquiry-form";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
+import { PLACEHOLDER_IMAGES } from "@/lib/placeholder-images";
 import { getGroupTrainingPage } from "@/lib/sanity/group-training";
 
 export default async function GroupTrainingPage() {
@@ -19,6 +21,16 @@ export default async function GroupTrainingPage() {
             {content.heroBody}
           </p>
         </div>
+        <Card className="relative mt-10 aspect-[16/9] max-w-5xl overflow-hidden p-0">
+          <Image
+            fill
+            alt="Workplace group training placeholder"
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 960px"
+            src={PLACEHOLDER_IMAGES.groupTraining.workplace}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/28 via-black/9 to-transparent" />
+        </Card>
       </Section>
 
       <Section className="bg-neutral-50" tone="light">
@@ -33,6 +45,28 @@ export default async function GroupTrainingPage() {
               ) : null}
             </Card>
           ))}
+        </div>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <Card className="relative aspect-[16/9] overflow-hidden p-0">
+            <Image
+              fill
+              alt="Private class group training placeholder"
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              src={PLACEHOLDER_IMAGES.groupTraining.privateClass}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-black/4 to-transparent" />
+          </Card>
+          <Card className="relative aspect-[16/9] overflow-hidden p-0">
+            <Image
+              fill
+              alt="Team medical training placeholder"
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              src={PLACEHOLDER_IMAGES.groupTraining.teamTraining}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-black/4 to-transparent" />
+          </Card>
         </div>
       </Section>
 

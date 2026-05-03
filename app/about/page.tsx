@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
+import { PLACEHOLDER_IMAGES } from "@/lib/placeholder-images";
 import { getAboutPage } from "@/lib/sanity/about";
 import { getInstructors } from "@/lib/sanity/instructors";
 
@@ -22,6 +24,16 @@ export default async function AboutPage() {
             {content.heroBody}
           </p>
         </div>
+        <Card className="relative mt-10 aspect-[16/9] max-w-5xl overflow-hidden p-0">
+          <Image
+            fill
+            alt="Training environment placeholder"
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 960px"
+            src={PLACEHOLDER_IMAGES.about.trainingEnvironment}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
+        </Card>
       </Section>
 
       <Section className="bg-neutral-50" tone="light">
@@ -32,9 +44,21 @@ export default async function AboutPage() {
               {content.missionHeadline}
             </h2>
           </div>
-          <p className="leading-relaxed text-charcoal/62">
-            {content.missionBody}
-          </p>
+          <div className="space-y-6">
+            <p className="leading-relaxed text-charcoal/62">
+              {content.missionBody}
+            </p>
+            <Card className="relative aspect-[16/9] overflow-hidden p-0">
+              <Image
+                fill
+                alt="Equipment layout placeholder"
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                src={PLACEHOLDER_IMAGES.about.equipmentLayout}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent" />
+            </Card>
+          </div>
         </div>
       </Section>
 
@@ -78,6 +102,16 @@ export default async function AboutPage() {
             {content.instructorHeadline}
           </h2>
         </div>
+        <Card className="relative mb-8 aspect-[16/9] max-w-4xl overflow-hidden p-0">
+          <Image
+            fill
+            alt="Instructor demonstration placeholder"
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 900px"
+            src={PLACEHOLDER_IMAGES.about.instructorDemo}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/22 via-black/6 to-transparent" />
+        </Card>
         <div className="grid gap-6 md:grid-cols-2">
           {instructors.map((instructor) => (
             <Card className="p-6" key={instructor.id}>

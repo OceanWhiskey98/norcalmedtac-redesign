@@ -1,19 +1,11 @@
-# Placeholder Images
+# NorCalMedTac Placeholder Images
 
-These images are temporary visual placeholders for layout, CMS testing, and presentation polish.
+Generated branded placeholder image assets for layout, CMS fallback, and visual QA.
 
-## Rules
+These files intentionally use stable filenames so they can be replaced later with real photography or final branded artwork without code changes.
 
-- Replace with approved real NorCalMedTac photography when available.
-- Keep filenames stable when replacing files.
-- Do not use class ecommerce/product language in image alt text.
-- Prefer calm, professional, safety-first training imagery.
-- Avoid aggressive tactical/military visuals.
-- Use WebP format when possible.
-
-## Aspect Ratios
-
-- Hero/detail images: 16:9
-- Class cards: 4:3
-- Instructor portraits: 1:1
-- Merch cards: 1:1
+Notes:
+- Class placeholders are for training registrations, not products.
+- Merch placeholders are separate product-style assets.
+- Do not use class ecommerce language in alt text.
+- Prefer WebP assets and keep filenames lowercase/hyphenated.

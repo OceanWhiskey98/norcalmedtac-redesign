@@ -6,10 +6,9 @@ import {
 } from "@/lib/data";
 import { getClassBySlug } from "@/lib/sanity/classes";
 import {
-  getSupabaseAdminClient,
   type RegistrationInsert,
 } from "@/lib/supabase/server";
-import { getRemainingSeatsForClass } from "@/lib/supabase/registrations";
+import { createRegistrationRequestAtomic } from "@/lib/supabase/registrations";
 
 export const dynamic = "force-dynamic";
 
@@ -101,15 +100,6 @@ function parseRegistrationPayload(
 }
 
 export async function POST(request: Request) {
-  const supabase = getSupabaseAdminClient();
-
-  if (!supabase) {
-    return NextResponse.json(
-      { message: "Registration storage is not configured." },
-      { status: 503 },
-    );
-  }
-
   let body: RegistrationRequestBody;
 
   try {
@@ -151,55 +141,60 @@ export async function POST(request: Request) {
   const isWaitlistRequest = isClassWaitlist(trainingClass.status);
   const shouldCheckSeatAvailability =
     isClassRegistrationOpen(trainingClass.status);
-  const remainingSeatCount = shouldCheckSeatAvailability
-    ? await getRemainingSeatsForClass(
-        registration.classSlug,
-        trainingClass.capacity,
-      )
-    : { remainingSeats: null, registeredSeats: 0, error: null };
-
-  if (remainingSeatCount.error) {
-    console.error(
-      "Supabase registration seat lookup failed.",
-      remainingSeatCount.error,
-    );
-
-    return NextResponse.json(
-      { message: "Registration could not be saved." },
-      { status: 500 },
-    );
-  }
-
-  const remainingSeats = remainingSeatCount.remainingSeats ?? 0;
-
-  if (shouldCheckSeatAvailability && registration.seats > remainingSeats) {
-    return NextResponse.json(
-      {
-        message: formatRemainingSeatMessage(remainingSeats),
-      },
-      { status: 409 },
-    );
-  }
-
-  const registrationInsert: RegistrationInsert = {
+  const registrationInsertBase: Pick<
+    RegistrationInsert,
+    | "classSlug"
+    | "firstName"
+    | "lastName"
+    | "email"
+    | "phone"
+    | "seats"
+    | "notes"
+    | "amountDue"
+    | "currency"
+    | "source"
+  > = {
     ...registration,
     amountDue: Math.round(trainingClass.price * registration.seats * 100),
     currency: "usd",
-    paymentStatus: "unpaid",
-    registrationStatus: isWaitlistRequest
-      ? "waitlist_requested"
-      : "pending",
     source: "website",
   };
 
-  const { data, error } = await supabase
-    .from("registrations")
-    .insert(registrationInsert)
-    .select("id")
-    .single();
+  const atomicResult = await createRegistrationRequestAtomic({
+    ...registrationInsertBase,
+    classCapacity: trainingClass.capacity,
+    isWaitlistRequest,
+  });
 
-  if (error) {
-    console.error("Supabase registration insert failed.", error);
+  if (!atomicResult.ok) {
+    if (atomicResult.errorCode === "supabase_not_configured") {
+      return NextResponse.json(
+        { message: "Registration storage is not configured." },
+        { status: 503 },
+      );
+    }
+
+    if (atomicResult.errorCode === "insufficient_seats") {
+      return NextResponse.json(
+        {
+          message: formatRemainingSeatMessage(atomicResult.remainingSeats ?? 0),
+        },
+        { status: 409 },
+      );
+    }
+
+    if (atomicResult.errorCode === "invalid_input") {
+      return NextResponse.json(
+        { message: atomicResult.message ?? "Invalid registration request." },
+        { status: 400 },
+      );
+    }
+
+    console.error("Supabase atomic registration insert failed.", {
+      errorCode: atomicResult.errorCode,
+      error: atomicResult.error,
+      message: atomicResult.message,
+    });
 
     return NextResponse.json(
       { message: "Registration could not be saved." },
@@ -208,13 +203,13 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({
-    id: data.id,
+    id: atomicResult.registrationId,
     message: isWaitlistRequest
       ? "Waitlist request received."
       : "Registration request received.",
     seatsRequested: registration.seats,
     seatsRemaining: shouldCheckSeatAvailability
-      ? remainingSeats - registration.seats
+      ? atomicResult.remainingSeats
       : null,
   });
 }

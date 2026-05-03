@@ -17,6 +17,16 @@ Open [http://localhost:3000](http://localhost:3000).
 npm run build
 ```
 
+## Deployment Docs
+
+For Phase 2 deployment stabilization and review workflows, use:
+
+- `docs/ai/ROADMAP.md`
+- `docs/ai/DEPLOYMENT_READINESS_CHECKLIST.md`
+- `docs/ai/PROJECT_CONTEXT.md`
+- `docs/ai/ARCHITECTURE_DECISIONS.md`
+- `docs/ai/KNOWN_RISKS.md`
+
 ## Environment
 
 Create `.env.local` from `.env.example`:
@@ -34,6 +44,8 @@ INQUIRY_IP_HASH_SALT=replace_with_a_long_random_secret
 Use the Supabase service role key only on the server. Do not expose it in
 client components or browser code. `INQUIRY_IP_HASH_SALT` is used to hash
 request IPs for inquiry rate limiting without storing raw IP addresses.
+`SANITY_API_WRITE_TOKEN` is for seeding workflows only and is not required at
+runtime.
 
 ## Sanity CMS
 
@@ -81,14 +93,18 @@ security posture, and indexes.
 Class registration requests from `/register/[slug]` are stored in
 `public.registrations`.
 
-Registration behavior:
+Registration and waitlist behavior:
 
 1. The form posts to `/api/registrations`.
 2. The route validates attendee fields and class slug.
 3. The route checks remaining seats from saved registration requests.
-4. The route saves the registration request with `registrationStatus: pending`
-   and `paymentStatus: unpaid`.
-5. The page shows the registration confirmation state.
+4. For `open` and `limited` classes, the route saves the request with
+   `registrationStatus: pending` and `paymentStatus: unpaid`.
+5. For `waitlist` classes, the route saves the request with
+   `registrationStatus: waitlist_requested` and `paymentStatus: unpaid`.
+6. Waitlist requests bypass live remaining-seat checks.
+7. Full/closed classes do not allow normal registration.
+8. The page shows the registration confirmation state.
 
 No payment is collected. There is no Stripe integration, checkout, account
 system, email notification system, or admin dashboard yet.

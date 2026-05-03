@@ -9,6 +9,7 @@ import {
   isClassClosedToRequests,
   type TrainingClass,
 } from "@/lib/data";
+import { getClassPlaceholderImage } from "@/lib/placeholder-images";
 
 type ClassCardProps = {
   trainingClass: TrainingClass;
@@ -26,24 +27,22 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
   const category = getCategory(trainingClass.categoryId);
   const ctaLabel = getClassCtaLabel(trainingClass.status);
   const disabled = isClassClosedToRequests(trainingClass.status);
+  const fallbackImage = getClassPlaceholderImage(category?.slug, category?.name);
+  const classImage = trainingClass.image || fallbackImage;
+  const classImageAlt = trainingClass.image
+    ? trainingClass.imageAlt || trainingClass.title
+    : `${category?.name ?? "Training class"} placeholder image`;
 
   return (
     <Card className="flex h-full flex-col overflow-hidden bg-[#fbfaf7]">
-      {trainingClass.image ? (
-        <div className="aspect-[16/9] overflow-hidden">
-          <img
-            alt={trainingClass.imageAlt || trainingClass.title}
-            className="h-full w-full object-cover"
-            src={trainingClass.image}
-          />
-        </div>
-      ) : (
-        <div className="flex aspect-[16/9] items-end bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 p-5 text-white md:p-6">
-          <span className="text-sm font-semibold">
-            {category?.name ?? "Training Class"}
-          </span>
-        </div>
-      )}
+      <div className="relative aspect-[16/9] overflow-hidden">
+        <img
+          alt={classImageAlt}
+          className="h-full w-full object-cover"
+          src={classImage}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-black/5 to-transparent" />
+      </div>
       <div className="flex flex-1 flex-col space-y-3 p-5 md:p-6">
         <div className="flex flex-wrap gap-2">
           <Badge tone={category?.accent === "red" ? "red" : "olive"}>

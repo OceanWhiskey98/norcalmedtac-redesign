@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatCurrency, type Merchandise } from "@/lib/data";
+import { getMerchPlaceholderImage } from "@/lib/placeholder-images";
 
 type ProductCardProps = {
   product: Merchandise;
@@ -25,7 +26,13 @@ function getExternalShoppingUrl(value: string): string | undefined {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const primaryImage = product.images[0];
+  const merchPlaceholder = getMerchPlaceholderImage(
+    `${product.category} ${product.title}`,
+  );
+  const primaryImage = product.images[0] || merchPlaceholder;
+  const primaryImageAlt = product.images[0]
+    ? product.imageAlt || product.title
+    : `${product.category} placeholder image`;
   const shoppingUrl = getExternalShoppingUrl(product.shoppingUrl);
   const isUnavailable =
     product.inventoryStatus === "outOfStock" || !shoppingUrl;
@@ -37,19 +44,14 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="flex h-full flex-col overflow-hidden">
-      {primaryImage ? (
+      <div className="relative h-56 w-full overflow-hidden">
         <img
-          alt={product.imageAlt || product.title}
-          className="h-56 w-full object-cover"
+          alt={primaryImageAlt}
+          className="h-full w-full object-cover"
           src={primaryImage}
         />
-      ) : (
-        <div className="flex min-h-56 items-end bg-warm-gray p-5 transition-transform duration-200 group-hover:scale-[1.02]">
-          <span className="text-sm font-semibold text-charcoal">
-            {product.category}
-          </span>
-        </div>
-      )}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-transparent" />
+      </div>
       <div className="flex flex-1 flex-col gap-5 p-5 md:p-6">
         <Badge tone="neutral">{product.category}</Badge>
         <div>

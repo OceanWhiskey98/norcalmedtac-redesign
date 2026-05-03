@@ -47,15 +47,69 @@ export const PLACEHOLDER_IMAGES = {
   },
 } as const;
 
-export function getClassPlaceholderImage(category?: string) {
-  const normalized = category?.toLowerCase() ?? "";
+function normalizePlaceholderInput(value?: string): string {
+  return value?.toLowerCase().replace(/[_-]+/g, " ").trim() ?? "";
+}
 
-  if (normalized.includes("cpr")) return PLACEHOLDER_IMAGES.classes.cpr;
-  if (normalized.includes("first aid")) return PLACEHOLDER_IMAGES.classes.firstAid;
-  if (normalized.includes("bleed")) return PLACEHOLDER_IMAGES.classes.stopTheBleed;
-  if (normalized.includes("defensive")) return PLACEHOLDER_IMAGES.classes.defensiveMedicine;
-  if (normalized.includes("firearm")) return PLACEHOLDER_IMAGES.classes.firearmsSafety;
-  if (normalized.includes("tactical")) return PLACEHOLDER_IMAGES.classes.tacticalMedicine;
+function matchesAny(text: string, terms: string[]): boolean {
+  return terms.some((term) => text.includes(term));
+}
+
+export function getClassPlaceholderImage(
+  primaryInput?: string,
+  secondaryInput?: string,
+) {
+  const normalizedPrimary = normalizePlaceholderInput(primaryInput);
+  const normalizedSecondary = normalizePlaceholderInput(secondaryInput);
+  const normalized = [normalizedPrimary, normalizedSecondary]
+    .filter(Boolean)
+    .join(" ");
+
+  if (matchesAny(normalized, ["cpr"])) {
+    return PLACEHOLDER_IMAGES.classes.cpr;
+  }
+
+  if (matchesAny(normalized, ["first aid", "firstaid"])) {
+    return PLACEHOLDER_IMAGES.classes.firstAid;
+  }
+
+  if (matchesAny(normalized, ["bleed", "trauma"])) {
+    return PLACEHOLDER_IMAGES.classes.stopTheBleed;
+  }
+
+  if (matchesAny(normalized, ["tactical"])) {
+    return PLACEHOLDER_IMAGES.classes.tacticalMedicine;
+  }
+
+  if (matchesAny(normalized, ["firearm", "handgun", "rifle", "shotgun", "ccw"])) {
+    return PLACEHOLDER_IMAGES.classes.firearmsSafety;
+  }
+
+  if (matchesAny(normalized, ["defensive"])) {
+    return PLACEHOLDER_IMAGES.classes.defensiveMedicine;
+  }
 
   return PLACEHOLDER_IMAGES.classes.fallback;
+}
+
+export function getMerchPlaceholderImage(input?: string) {
+  const normalized = normalizePlaceholderInput(input);
+
+  if (matchesAny(normalized, ["shirt", "tee", "apparel"])) {
+    return PLACEHOLDER_IMAGES.merch.shirt;
+  }
+
+  if (matchesAny(normalized, ["patch"])) {
+    return PLACEHOLDER_IMAGES.merch.patch;
+  }
+
+  if (matchesAny(normalized, ["kit", "medical", "trauma", "aid"])) {
+    return PLACEHOLDER_IMAGES.merch.medicalKit;
+  }
+
+  if (matchesAny(normalized, ["gear", "pouch", "equipment"])) {
+    return PLACEHOLDER_IMAGES.merch.gear;
+  }
+
+  return PLACEHOLDER_IMAGES.merch.fallback;
 }

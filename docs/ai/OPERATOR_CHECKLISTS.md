@@ -2,6 +2,10 @@
 
 These are command-oriented checklists for common project operations.
 
+Related operations runbook:
+
+- `docs/operations/SUPABASE_WORKFLOW.md`
+
 ---
 
 ## 1. Start-of-Session Checklist

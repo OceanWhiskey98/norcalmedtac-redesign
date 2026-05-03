@@ -75,7 +75,18 @@ Mitigation:
 - Never commit `.env.local`
 
 Status:
-Verify token revocation.
+Closeout required: verify revocation/rotation status and capture it in deployment/operator checklists.
+
+---
+
+## 4.1 Secret/Token Hygiene Closeout Checklist
+
+- [ ] Confirm any previously exposed Sanity write token has been revoked.
+- [ ] Confirm `SANITY_API_WRITE_TOKEN` is not set as a runtime dependency in Vercel.
+- [ ] Confirm `SANITY_API_WRITE_TOKEN` is only used for explicit seed workflows.
+- [ ] Confirm `.env.local` remains gitignored and untracked.
+- [ ] Confirm no secrets appear in docs, screenshots, or debug logs.
+- [ ] Confirm service-role and hash-salt secrets are scoped to server runtime only.
 
 ---
 

@@ -225,3 +225,37 @@ Consequences:
 - Waitlist requests bypass capacity checks and continue to store `registrationStatus = waitlist_requested`.
 - Full/closed class blocking remains in API route behavior before insert attempts.
 - No payments/auth/email/CAPTCHA/admin features are introduced by this change.
+
+---
+
+## ADR-013: API Error Response and Logging Posture
+
+Decision:
+Keep public API responses user-safe and generic while logging backend failures server-side for diagnostics.
+
+Reason:
+- Prevent sensitive backend details from leaking in client-visible responses.
+- Maintain actionable operator visibility for failures.
+- Preserve current lightweight ops posture without adding new infrastructure.
+
+Consequences:
+- Validation and state errors return bounded client messages with appropriate HTTP status codes.
+- Server-side failures return generic failure messages (no raw DB/provider payloads in response bodies).
+- Backend insert/RPC failures are logged server-side for operator debugging.
+- If/when logging volume or observability needs grow, structured logging can be added as a separate scoped milestone.
+
+---
+
+## ADR-014: Supabase Table Editor as Interim Staff Operations Surface
+
+Decision:
+Use Supabase Table Editor as the interim staff operations workflow for registrations, waitlists, and inquiries, documented in `docs/operations/SUPABASE_WORKFLOW.md`.
+
+Reason:
+- No admin dashboard is in scope for current milestones.
+- Staff still need a consistent daily process for triage and follow-up.
+- Keeps Phase 4 prep lightweight and documentation-first.
+
+Consequences:
+- Operations remain manual and checklist-driven for now.
+- Notification automation and dashboard work remain separate future milestones.

@@ -19,13 +19,14 @@ npm run build
 
 ## Deployment Docs
 
-For Phase 2 deployment stabilization and review workflows, use:
+For Phase 3 closeout and Phase 4 operations prep, use:
 
 - `docs/ai/ROADMAP.md`
 - `docs/ai/DEPLOYMENT_READINESS_CHECKLIST.md`
 - `docs/ai/PROJECT_CONTEXT.md`
 - `docs/ai/ARCHITECTURE_DECISIONS.md`
 - `docs/ai/KNOWN_RISKS.md`
+- `docs/operations/SUPABASE_WORKFLOW.md`
 
 ## Environment
 

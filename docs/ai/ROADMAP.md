@@ -141,7 +141,6 @@ Use these status markers throughout the roadmap:
 
 ### Known important risks
 
-- `/studio` production access policy still needs a final decision.
 - `/studio` production access policy should be revisited later if business/security needs change.
 - Inquiry and registration records currently require staff to check Supabase manually.
 - Documentation can drift from runtime behavior if not updated after feature work.
@@ -156,8 +155,8 @@ Use these status markers throughout the roadmap:
 | Phase 0 | Foundation / Prototype | Done | Build core public site and front-end structure |
 | Phase 1 | CMS + Operational Backends | Done | Add Sanity CMS and Supabase-backed submissions |
 | Phase 2 | Deployment Stabilization | Done | Prepare stable Vercel/Supabase/Sanity preview/production path |
-| Phase 3 | Production Readiness Hardening | Next | Resolve high-risk operational gaps before real public use |
-| Phase 4 | Business Operations Workflow | Next/Later | Improve staff visibility and follow-up workflow |
+| Phase 3 | Production Readiness Hardening | Current | Resolve high-risk operational gaps before real public use |
+| Phase 4 | Business Operations Workflow | Next | Improve staff visibility and follow-up workflow |
 | Phase 5 | Payments Planning | Later | Plan payment flow without turning classes into products |
 | Phase 6 | Growth / Content / SEO | Later | Expand resources, credibility, content, and analytics |
 
@@ -265,7 +264,7 @@ Get the project into a stable preview/production-ready deployment posture withou
 
 ### 2.1 Documentation sync
 
-**Status:** Current
+**Status:** Done
 
 - [ ] Confirm README reflects current registration/waitlist behavior
 - [ ] Document that open/limited registrations store `pending`
@@ -277,7 +276,7 @@ Get the project into a stable preview/production-ready deployment posture withou
 
 ### 2.2 Environment variable readiness
 
-**Status:** Current
+**Status:** Done
 
 - [ ] Confirm Vercel Production env vars
 - [ ] Confirm Vercel Preview env vars
@@ -301,7 +300,7 @@ SANITY_API_WRITE_TOKEN      # seed-only, not runtime
 
 ### 2.3 Supabase verification
 
-**Status:** Current
+**Status:** Done
 
 - [ ] Verify `public.registrations`
 - [ ] Verify `public.contact_inquiries`
@@ -314,7 +313,7 @@ SANITY_API_WRITE_TOKEN      # seed-only, not runtime
 
 ### 2.4 Sanity verification
 
-**Status:** Current
+**Status:** Done
 
 - [ ] Verify `/studio` loads in deployed preview
 - [ ] Verify `/studio` does not render public header/footer
@@ -326,7 +325,7 @@ SANITY_API_WRITE_TOKEN      # seed-only, not runtime
 
 ### 2.5 Route smoke tests
 
-**Status:** Current
+**Status:** Done
 
 - [ ] `/`
 - [ ] `/about`
@@ -341,7 +340,7 @@ SANITY_API_WRITE_TOKEN      # seed-only, not runtime
 
 ### 2.6 Form smoke tests
 
-**Status:** Current
+**Status:** Done
 
 - [ ] Submit open/limited registration
 - [ ] Confirm row stores `registrationStatus = pending`
@@ -354,7 +353,7 @@ SANITY_API_WRITE_TOKEN      # seed-only, not runtime
 
 ### 2.7 Product language QA
 
-**Status:** Current
+**Status:** Done
 
 - [ ] No “Shop Classes”
 - [ ] No class “Add to Cart”
@@ -451,7 +450,7 @@ Implement an atomic server-side registration/write path, likely with a Supabase 
 
 ## 3.2 Studio access decision
 
-**Status:** Next / Blocked pending decision
+**Status:** Done (initial policy accepted)
 
 ### Problem
 
@@ -484,7 +483,7 @@ README.md
 
 ## 3.3 Secret/token hygiene
 
-**Status:** Next
+**Status:** Current
 
 ### Tasks
 
@@ -504,7 +503,7 @@ README.md
 
 ## 3.4 Error and abuse handling
 
-**Status:** Later within Phase 3
+**Status:** Current
 
 ### Tasks
 
@@ -522,7 +521,7 @@ Do not add CAPTCHA/Turnstile unless explicitly requested.
 
 # Phase 4 — Business Operations Workflow
 
-**Status:** Next / Later
+**Status:** Current (prep)
 
 ## Goal
 
@@ -538,7 +537,7 @@ Staff currently use Supabase Table Editor:
 
 ## 4.1 Operational runbook
 
-**Status:** Next
+**Status:** Current
 
 Create a staff-facing or internal runbook documenting:
 
@@ -726,16 +725,16 @@ These should not be implemented unless explicitly requested and scoped as their 
 
 # Current Recommended Next Milestone
 
-## Milestone: Deployment Stabilization and Documentation Sync
+## Milestone: Phase 3 Closeout and Phase 4 Operations Prep
 
 ### Objective
 
-Prepare the project for reliable preview/production deployment without adding major features.
+Complete hardening closeout tasks and provide an explicit staff Supabase operations workflow without adding major product features.
 
 ### Suggested branch
 
 ```text
-deployment-stabilization
+phase-3-closeout-phase-4-prep
 ```
 
 ### Suggested prompt
@@ -744,15 +743,13 @@ deployment-stabilization
 Read project-brief.md, AGENTS.md, and docs/ai.
 
 Current task:
-Perform the Deployment Stabilization milestone from docs/ai/ROADMAP.md.
+Continue Phase 3 closeout and Phase 4 prep from docs/ai/ROADMAP.md.
 
 Scope:
-- README/docs sync
-- deployment readiness review
-- env var checklist
-- Supabase verification checklist
-- Sanity verification checklist
-- smoke test checklist
+- Secret/token hygiene closeout checklist
+- API error/response/logging posture review
+- Supabase staff operations runbook
+- Resolve roadmap/risk/doc drift from Phase 3.1 completion
 
 Guardrails:
 - Do not add Stripe/payments.
@@ -773,12 +770,10 @@ Report files changed, commands run, assumptions, blockers, and next exact steps.
 
 ### Exit criteria
 
-- README accurately reflects current behavior
-- Docs link or mention roadmap/checklists
-- Build passes
-- Preview deployment plan is clear
-- Supabase/Sanity readiness is verified or blockers listed
-- Smoke test plan is ready
+- Secret/token hygiene checklist is explicit and current
+- API error/response/logging posture is documented with no sensitive leakage
+- Staff Supabase workflow doc exists and is linked
+- Roadmap/risk/readiness docs match Phase 3.1 completion status
 
 ---
 
@@ -822,3 +817,5 @@ docs/ai/OPERATOR_CHECKLISTS.md
 docs/ai/CODEX_PROMPT_OPTIMIZATION_GUIDE.md
 docs/ai/HANDOFF_TEMPLATE.md
 ```
+
+

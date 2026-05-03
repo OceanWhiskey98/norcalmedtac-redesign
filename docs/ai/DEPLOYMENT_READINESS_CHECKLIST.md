@@ -7,6 +7,7 @@ Related planning docs:
 - `docs/ai/ROADMAP.md` (Phase 2: Deployment Stabilization)
 - `docs/ai/PROJECT_CONTEXT.md`
 - `docs/ai/KNOWN_RISKS.md`
+- `docs/operations/SUPABASE_WORKFLOW.md`
 
 ## Verification Results (2026-05-03)
 
@@ -168,8 +169,17 @@ ipHash stored, not raw IP
 
 ## 8. Production Risks to Decide
 
-- [ ] Studio access policy
-- [ ] Registration concurrency mitigation timeline
+- [ ] Studio access policy revisit timeline (if business/security posture changes)
+- [ ] Registration concurrency monitoring cadence (mitigation is live)
 - [ ] Inquiry notification workflow
 - [ ] Admin/roster viewing workflow
 - [ ] Payment roadmap timing
+
+---
+
+## 9. Secret/Token Hygiene Closeout
+
+- [ ] Confirm any previously exposed Sanity write token is revoked.
+- [ ] Confirm `SANITY_API_WRITE_TOKEN` is not required for runtime deployment.
+- [ ] Confirm seed token usage is temporary and rotated/revoked after use.
+- [ ] Confirm no secrets are present in docs, screenshots, logs, or committed files.

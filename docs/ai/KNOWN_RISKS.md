@@ -3,7 +3,7 @@
 ## 1. Registration Seat Concurrency
 
 Risk:
-Current registration seat enforcement uses a check-then-insert pattern. Near-simultaneous submissions may oversubscribe a class.
+Oversubscription from near-simultaneous submissions has been mitigated for open/limited registrations.
 
 Impact:
 Medium now, high if traffic increases or payments are introduced.
@@ -16,7 +16,7 @@ Mitigation options:
 - Queue/manual approval workflow
 
 Status:
-Known limitation. Not yet fixed.
+Mitigated by atomic Supabase RPC (`create_registration_request_atomic`) using transaction-scoped advisory locking by `classSlug`. Continue monitoring operationally.
 
 ---
 

@@ -135,15 +135,14 @@ Use these status markers throughout the roadmap:
 - Email notifications
 - CAPTCHA/Turnstile
 - Admin dashboard
-- Transaction-safe seat reservation
 - Real merch checkout
 - Full analytics/SEO strategy
 - Blog/resource migration
 
 ### Known important risks
 
-- Registration seat checks are not transaction-safe yet.
 - `/studio` production access policy still needs a final decision.
+- `/studio` production access policy should be revisited later if business/security needs change.
 - Inquiry and registration records currently require staff to check Supabase manually.
 - Documentation can drift from runtime behavior if not updated after feature work.
 - Any exposed Sanity write token should be revoked.
@@ -395,7 +394,7 @@ Phase 2 is complete when:
 
 # Phase 3 — Production Readiness Hardening
 
-**Status:** Next
+**Status:** Current
 
 ## Goal
 
@@ -403,7 +402,7 @@ Address operational risks before relying on the site for real public traffic.
 
 ## 3.1 Transaction-safe registration capacity
 
-**Status:** Next
+**Status:** Done
 
 ### Problem
 
@@ -436,6 +435,17 @@ Implement an atomic server-side registration/write path, likely with a Supabase 
 - Full/closed classes remain blocked
 - Build passes
 - Supabase SQL/docs updated
+
+### Verification closeout (2026-05-03)
+
+- Atomic Supabase RPC is implemented for registration inserts.
+- Transaction-scoped advisory locking by `classSlug` is in use.
+- Active capacity counting uses `pending` + `confirmed` and excludes canceled rows.
+- Live registration writes verified:
+  - Open/limited -> `registrationStatus = pending`, `paymentStatus = unpaid`, `source = website`
+  - Waitlist -> `registrationStatus = waitlist_requested`, `paymentStatus = unpaid`, `source = website`
+- Waitlist behavior remained unchanged.
+- No payment/auth/email/CAPTCHA/admin features were added.
 
 ---
 

@@ -101,22 +101,21 @@ Registration and waitlist behavior:
 
 1. The form posts to `/api/registrations`.
 2. The route validates attendee fields and class slug.
-3. The route checks remaining seats from saved registration requests.
+3. The route calls an atomic Supabase RPC to enforce class capacity for open/limited registrations.
 4. For `open` and `limited` classes, the route saves the request with
    `registrationStatus: pending` and `paymentStatus: unpaid`.
 5. For `waitlist` classes, the route saves the request with
    `registrationStatus: waitlist_requested` and `paymentStatus: unpaid`.
-6. Waitlist requests bypass live remaining-seat checks.
-7. Full/closed classes do not allow normal registration.
-8. The page shows the registration confirmation state.
+6. Capacity counting includes active `pending` + `confirmed` registrations and excludes canceled rows.
+7. Waitlist requests bypass capacity checks and continue to store `registrationStatus: waitlist_requested`.
+8. Full/closed classes do not allow normal registration.
+9. The page shows the registration confirmation state.
 
 No payment is collected. There is no Stripe integration, checkout, account
 system, email notification system, or admin dashboard yet.
 
-Known limitation: the registration seat check is not transaction-safe yet. Two
-near-simultaneous submissions can both pass the availability check before either
-insert is visible to the other request. This should be addressed before relying
-on seat counts for high-volume public registration.
+Capacity enforcement is transaction-safe via a Supabase/Postgres RPC using a
+transaction-scoped advisory lock by class slug.
 
 ### Inquiry Backend
 

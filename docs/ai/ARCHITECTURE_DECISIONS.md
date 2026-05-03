@@ -207,3 +207,21 @@ Reason:
 Consequences:
 - Revisit platform-level or middleware protection later if business/security needs change.
 - Keep this decision documented in README, roadmap/risk docs, and future hardening milestones.
+
+---
+
+## ADR-012: Atomic Registration Capacity via Supabase RPC
+
+Decision:
+Use `public.create_registration_request_atomic` in Supabase/Postgres for open/limited registration inserts, with `pg_advisory_xact_lock` keyed by `classSlug`.
+
+Reason:
+- Eliminates oversubscription risk from app-side check-then-insert race conditions.
+- Fits current server-side Supabase architecture with minimal public UX change.
+- Preserves waitlist behavior in the existing registrations table contract.
+
+Consequences:
+- Capacity is counted from active rows only: `registrationStatus in ('pending','confirmed')` and `canceledAt is null`.
+- Waitlist requests bypass capacity checks and continue to store `registrationStatus = waitlist_requested`.
+- Full/closed class blocking remains in API route behavior before insert attempts.
+- No payments/auth/email/CAPTCHA/admin features are introduced by this change.

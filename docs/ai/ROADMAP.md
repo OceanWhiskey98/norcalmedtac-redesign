@@ -1,6 +1,6 @@
 # NorCalMedTac Website Roadmap
 
-**Last updated:** 2026-05-02  
+**Last updated:** 2026-05-03  
 **Recommended location:** `docs/ai/ROADMAP.md`  
 **Project root:** `C:\Projects\norcalmedtac-redesign`
 
@@ -156,7 +156,7 @@ Use these status markers throughout the roadmap:
 |---|---|---|---|
 | Phase 0 | Foundation / Prototype | Done | Build core public site and front-end structure |
 | Phase 1 | CMS + Operational Backends | Done | Add Sanity CMS and Supabase-backed submissions |
-| Phase 2 | Deployment Stabilization | Current | Prepare stable Vercel/Supabase/Sanity preview/production path |
+| Phase 2 | Deployment Stabilization | Done | Prepare stable Vercel/Supabase/Sanity preview/production path |
 | Phase 3 | Production Readiness Hardening | Next | Resolve high-risk operational gaps before real public use |
 | Phase 4 | Business Operations Workflow | Next/Later | Improve staff visibility and follow-up workflow |
 | Phase 5 | Payments Planning | Later | Plan payment flow without turning classes into products |
@@ -245,7 +245,7 @@ Move from static prototype toward a manageable pre-deployment beta.
 
 # Phase 2 — Deployment Stabilization
 
-**Status:** Current
+**Status:** Done
 
 ## Goal
 
@@ -377,6 +377,19 @@ Phase 2 is complete when:
 - Sanity content/fallback behavior is verified
 - Studio access decision is documented
 - README and docs are synced
+
+### Verification closeout (2026-05-03)
+
+- Vercel production deployment confirmed working.
+- Production environment variables confirmed present.
+- Public routes confirmed loading.
+- `/studio` confirmed loading, Sanity-connected, and isolated from public header/footer.
+- Supabase write verification confirmed:
+  - Open/limited registration requests store `registrationStatus = pending`, `paymentStatus = unpaid`, `source = website`.
+  - Waitlist requests store `registrationStatus = waitlist_requested`, `paymentStatus = unpaid`, `source = website`.
+  - Contact inquiries store `status = new`, `source = website`, with `ipHash` present.
+  - Group training inquiries store `status = new`, `source = website`, with `ipHash` present.
+- Initial production Studio policy documented: rely on Sanity authentication without additional Vercel/middleware gate; revisit later if needed.
 
 ---
 

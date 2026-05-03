@@ -66,6 +66,10 @@ Run the dev server and open [http://localhost:3000/studio](http://localhost:3000
 to edit content. Classes are registrations, not products. Merchandise remains
 separate from class registration.
 
+Initial production policy: `/studio` remains publicly reachable and relies on
+Sanity authentication; no additional Vercel/middleware gate is applied for the
+initial launch.
+
 ### Scheduled Classes
 
 Scheduled class documents power the homepage, `/classes`, `/calendar`,

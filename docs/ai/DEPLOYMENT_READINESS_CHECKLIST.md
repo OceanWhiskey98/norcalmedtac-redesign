@@ -8,6 +8,18 @@ Related planning docs:
 - `docs/ai/PROJECT_CONTEXT.md`
 - `docs/ai/KNOWN_RISKS.md`
 
+## Verification Results (2026-05-03)
+
+- [x] Vercel production deployment works
+- [x] Production env vars are added
+- [x] Public routes load
+- [x] `/studio` loads, is Sanity-connected, and is isolated from public header/footer
+- [x] Contact inquiries write with `status = new`, `source = website`, and `ipHash` present
+- [x] Group training inquiries write with `status = new`, `source = website`, and `ipHash` present
+- [x] Open/limited registrations write `registrationStatus = pending`, `paymentStatus = unpaid`, `source = website`
+- [x] Waitlist requests write `registrationStatus = waitlist_requested`, `paymentStatus = unpaid`, `source = website`
+- [x] Initial `/studio` production policy documented (Sanity auth only; revisit later if needed)
+
 ---
 
 ## 1. Build and Runtime

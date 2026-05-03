@@ -35,7 +35,7 @@ Mitigation options:
 - Add Vercel/platform-level protection
 
 Status:
-Decision needed before production launch.
+Decision recorded for initial production: accept Sanity auth for `/studio` without added Vercel/middleware protection. Revisit later if business/security needs change.
 
 ---
 

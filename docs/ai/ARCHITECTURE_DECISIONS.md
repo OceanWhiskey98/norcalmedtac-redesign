@@ -191,3 +191,19 @@ Consequences:
 - Check copy, navigation, CTA labels, visual design, and content hierarchy against the brief.
 - Check runtime/backend behavior against current code and `/docs/ai`.
 - When there is conflict, preserve implemented architecture unless explicitly asked to roll it back.
+
+---
+
+## ADR-011: Initial Production `/studio` Access Policy
+
+Decision:
+For initial production launch, accept Sanity authentication as the access control for `/studio` with no additional Vercel or middleware gate.
+
+Reason:
+- Current launch scope prioritizes deployment stabilization and documentation sync.
+- `/studio` is already isolated from public marketing chrome.
+- Sanity auth provides baseline editor access control for the initial launch posture.
+
+Consequences:
+- Revisit platform-level or middleware protection later if business/security needs change.
+- Keep this decision documented in README, roadmap/risk docs, and future hardening milestones.

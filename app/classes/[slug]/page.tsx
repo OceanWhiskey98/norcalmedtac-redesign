@@ -19,6 +19,7 @@ import {
   getClassStaticParams,
 } from "@/lib/sanity/classes";
 import { getInstructors } from "@/lib/sanity/instructors";
+import { getClassPlaceholderImage } from "@/lib/placeholder-images";
 
 type ClassDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -92,6 +93,12 @@ export default async function ClassDetailPage({
   }
 
   const category = getCategory(trainingClass.categoryId);
+  const classDetailImage =
+    trainingClass.image ||
+    getClassPlaceholderImage(category?.slug, category?.name);
+  const classDetailImageAlt = trainingClass.image
+    ? trainingClass.imageAlt || trainingClass.title
+    : `${category?.name ?? "Training class"} placeholder image`;
   const instructorDirectory = await getInstructors();
   const instructor = instructorDirectory.find((item) =>
     trainingClass.instructorIds.includes(item.id),
@@ -191,15 +198,14 @@ export default async function ClassDetailPage({
             </dl>
           </Card>
         </div>
-        {trainingClass.image ? (
-          <Card className="mt-8 overflow-hidden p-0">
-            <img
-              alt={trainingClass.imageAlt || trainingClass.title}
-              className="h-full max-h-[28rem] w-full object-cover"
-              src={trainingClass.image}
-            />
-          </Card>
-        ) : null}
+        <Card className="relative mt-8 overflow-hidden p-0">
+          <img
+            alt={classDetailImageAlt}
+            className="h-full max-h-[28rem] w-full object-cover"
+            src={classDetailImage}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-black/6 to-transparent" />
+        </Card>
       </Section>
 
       <Section className="bg-neutral-50" tone="light">

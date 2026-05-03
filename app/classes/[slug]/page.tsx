@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ClassCard } from "@/components/domain/class-card";
 import { Badge } from "@/components/ui/badge";
@@ -198,13 +199,15 @@ export default async function ClassDetailPage({
             </dl>
           </Card>
         </div>
-        <Card className="relative mt-8 overflow-hidden p-0">
-          <img
+        <Card className="relative mt-8 aspect-[16/9] max-h-[28rem] w-full overflow-hidden p-0 md:aspect-[21/9]">
+          <Image
+            fill
             alt={classDetailImageAlt}
-            className="h-full max-h-[28rem] w-full object-cover"
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 960px"
             src={classDetailImage}
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-black/6 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent" />
         </Card>
       </Section>
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,14 +44,16 @@ export function ProductCard({ product }: ProductCardProps) {
       : "Add to Cart";
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden">
+    <Card className="group flex h-full flex-col overflow-hidden">
       <div className="relative h-56 w-full overflow-hidden">
-        <img
+        <Image
+          fill
           alt={primaryImageAlt}
-          className="h-full w-full object-cover"
+          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={primaryImage}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/12 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/8 via-transparent to-transparent" />
       </div>
       <div className="flex flex-1 flex-col gap-5 p-5 md:p-6">
         <Badge tone="neutral">{product.category}</Badge>

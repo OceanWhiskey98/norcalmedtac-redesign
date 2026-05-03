@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -34,14 +35,16 @@ export function ClassCard({ trainingClass }: ClassCardProps) {
     : `${category?.name ?? "Training class"} placeholder image`;
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden bg-[#fbfaf7]">
+    <Card className="group flex h-full flex-col overflow-hidden bg-[#fbfaf7]">
       <div className="relative aspect-[16/9] overflow-hidden">
-        <img
+        <Image
+          fill
           alt={classImageAlt}
-          className="h-full w-full object-cover"
+          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={classImage}
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/18 via-black/5 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent" />
       </div>
       <div className="flex flex-1 flex-col space-y-3 p-5 md:p-6">
         <div className="flex flex-wrap gap-2">

@@ -2,24 +2,64 @@
 
 ## 1. Project Overview
 
-NorCal MedTac is a Northern California training provider offering practical medical, defensive, firearms-related, workplace, and group training. The business serves individuals, businesses, clubs, armed professionals, public safety personnel, medical personnel, and organizations that need hands-on preparedness training.
+NorCal MedTac is a Northern California training provider offering practical medical, defensive, firearms-related, workplace, group, and preparedness training. The business serves individuals, businesses, clubs, armed professionals, public safety personnel, medical personnel, and organizations that need hands-on, credible, safety-first instruction.
 
-The current website presents this training business through an outdated WordPress/WooCommerce interface. Classes are treated like store products, navigation is cluttered, class information is difficult to scan, and the visual system does not communicate the professionalism the business requires.
+The legacy website presents the business through an outdated WordPress/WooCommerce-style experience. Classes have historically been treated like store products, navigation has been cluttered, class information has been difficult to scan, and the visual system has not fully communicated the professionalism the business requires.
 
-The redesign must rebuild the site as a premium training platform. Ecommerce is secondary. The core strategic shift is:
+The redesign rebuilds the site as a premium training platform. Ecommerce is secondary. The core strategic shift remains:
 
 **NorCal MedTac is not a shop that sells classes. It is a professional training organization that accepts registrations.**
 
-This shift controls the information architecture, page language, CTA labels, checkout concepts, visual hierarchy, and user flows.
+This shift controls the site architecture, page language, CTA labels, checkout concepts, class registration flows, visual hierarchy, and user experience.
 
-This build is a front-end prototype/spec implementation. It must use static/mock data and front-end placeholder interactions only.
+---
 
-## 2. Business Model & User Types
+## 2. Implementation Status Note
+
+This brief was originally written for the front-end redesign/spec phase. It remains the source of truth for:
+
+- Product positioning
+- User experience
+- Navigation
+- Visual direction
+- Tone and copy rules
+- Content model
+- Class-vs-merch language rules
+
+The implementation has since evolved beyond the original prototype phase. The current project now includes:
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Sanity CMS
+- Supabase-backed registrations
+- Supabase-backed waitlist requests
+- Supabase-backed contact inquiries
+- Supabase-backed group training inquiries
+- Local fallback data when CMS content is unavailable
+- Deployment readiness documentation
+
+For current runtime architecture, known risks, deployment status, AI operating context, and roadmap priorities, use:
+
+- `docs/ai/PROJECT_CONTEXT.md`
+- `docs/ai/ARCHITECTURE_DECISIONS.md`
+- `docs/ai/ROADMAP.md`
+- `docs/ai/KNOWN_RISKS.md`
+- `docs/ai/DEPLOYMENT_READINESS_CHECKLIST.md`
+- `docs/ai/PROJECT_BRIEF_ALIGNMENT.md`
+
+If this brief appears to conflict with current implementation docs, use this brief for product/design/language decisions and use current code plus `docs/ai` for runtime architecture.
+
+Do not remove implemented Sanity or Supabase functionality simply because the original brief described a front-end-only prototype phase.
+
+---
+
+## 3. Business Model & User Types
 
 NorCal MedTac has three primary business lines:
 
 - Individual class registration
-- Group, workplace, and custom training inquiries
+- Group, workplace, private, and custom training inquiries
 - Merchandise sales
 
 Target audiences:
@@ -36,13 +76,52 @@ Primary user use cases:
 - Browse upcoming classes
 - Filter classes by category, date, location, skill level, availability, or certification
 - View class details before registering
-- Start a front-end registration flow for a scheduled class
+- Submit a registration request for a scheduled class
+- Join a waitlist for classes that are not openly registering
 - Review what to bring, prerequisites, and class expectations
-- Request private, group, or workplace training
+- Request private, group, workplace, or custom training
 - Browse merchandise separately from training registration
 - Contact NorCal MedTac with questions before registering
 
-## 3. Core Design Principles
+---
+
+## 4. Core Product Principle
+
+Classes are registrations, not ecommerce products.
+
+A class record represents a scheduled training event. It should be presented as a professional registration opportunity, not as a store item.
+
+Use class language such as:
+
+- Register
+- Reserve Seat
+- Join Waitlist
+- Training Registration
+- Attendee Information
+- Registration Request
+- Registration Summary
+- Submit Registration
+- Class Confirmation
+- Seats
+- Class
+
+Do not use class language such as:
+
+- Add to Cart
+- Product
+- Quantity
+- Buy Now
+- Checkout
+- Shop Classes
+- Store
+- Continue Shopping
+- Merchandise Checkout
+
+Merchandise may use ecommerce language, but merchandise must remain separate from class registration.
+
+---
+
+## 5. Core Design Principles
 
 Tone:
 
@@ -60,10 +139,11 @@ Visual direction:
 
 - Use a refined tactical-medical aesthetic.
 - Use dark charcoal for the header, footer, hero, and selected feature bands.
-- Use light neutral backgrounds for content-heavy areas so classes, dates, and registration details are easy to scan.
+- Use light neutral backgrounds for content-heavy areas so classes, dates, registration details, and inquiry content are easy to scan.
 - Use olive and muted medical red as controlled accents.
 - Avoid bright category colors, distressed effects, stencil typography, heavy grunge textures, and generic military styling.
-- Use consistent training imagery. If final brand photography is unavailable, use polished placeholder imagery with consistent aspect ratios and clear replacement paths.
+- Use consistent training imagery where available.
+- If final brand photography is unavailable, use polished placeholders with consistent aspect ratios and clear replacement paths.
 
 Typography intent:
 
@@ -71,7 +151,7 @@ Typography intent:
 - Body text must prioritize readability.
 - Avoid novelty tactical fonts.
 - Avoid excessive all-caps text.
-- Use strong hierarchy with clear heading, subheading, metadata, and CTA levels.
+- Use clear hierarchy with heading, subheading, metadata, and CTA levels.
 
 UX priorities:
 
@@ -83,8 +163,35 @@ UX priorities:
 - Persistent conversion actions on class detail pages
 - Minimal navigation clutter
 - No duplicate sidebars
+- Clear group training inquiry flow
+- Clear contact path for questions before registration
 
-## 4. Site Architecture
+---
+
+## 6. Current Technical Direction
+
+The product should preserve the current implementation direction:
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Sanity CMS for editable site content
+- Supabase Postgres for operational submissions
+- Server-side Supabase writes only
+- Local fallback data for CMS resilience
+- No app user authentication yet
+- No Stripe or payment collection yet
+- No email notification automation yet
+- No CAPTCHA/Turnstile yet
+- No admin dashboard yet
+
+Sanity CMS is used for non-technical content editing. Supabase is used for operational submissions such as registrations, waitlists, contact inquiries, and group training inquiries.
+
+Fallback content remains mandatory. The public site must continue to render usable content if Sanity is empty, partially populated, or temporarily unavailable.
+
+---
+
+## 7. Site Architecture
 
 Primary navigation:
 
@@ -100,7 +207,7 @@ Header CTA:
 
 - View Upcoming Classes
 
-Footer navigation:
+Footer navigation may include:
 
 - FAQs
 - Policies
@@ -118,18 +225,93 @@ Navigation rules:
 - Do not place merchandise inside class categories.
 - Do not use a right sidebar for duplicate navigation.
 - Keep primary navigation flat and clear.
-- Use dropdowns only for class category shortcuts.
+- Use dropdowns only for class category shortcuts if needed.
+- Do not bury Calendar under Classes.
+- Do not bury Group Training under Contact.
 - On mobile, use a simple menu with the header CTA visible or accessible within the first menu screen.
 
-## 5. Content Model (CRITICAL)
+Primary public routes:
+
+- `/`
+- `/about`
+- `/classes`
+- `/classes/[slug]`
+- `/calendar`
+- `/group-training`
+- `/contact`
+- `/merch`
+- `/register/[slug]`
+- `/studio`
+
+Operational API routes:
+
+- `/api/registrations`
+- `/api/contact-inquiries`
+- `/api/group-training-inquiries`
+
+---
+
+## 8. CMS and Editing Experience
+
+Sanity Studio is embedded at:
+
+- `/studio`
+
+The Studio editing experience should support non-technical staff.
+
+CMS editing goals:
+
+- Staff can edit page content without code changes.
+- Staff can edit scheduled classes.
+- Staff can edit instructors.
+- Staff can edit merch products.
+- Staff can edit page shell copy where applicable.
+- Public site remains stable if Sanity is empty or unavailable.
+
+Sanity Studio should be organized clearly for business users.
+
+Recommended content groups:
+
+- Site Pages
+- Classes
+- People
+- Merch
+- Settings
+
+CMS-controlled areas may include:
+
+- Site Settings
+- Homepage Content
+- About Page
+- Classes Page
+- Calendar Page
+- Registration Page
+- Group Training Page
+- Contact Page
+- Scheduled Classes
+- Instructors
+- Merch Products
+
+CMS rules:
+
+- Preserve fallback data.
+- Do not remove local fallback behavior.
+- Avoid exposing implementation details to non-technical editors.
+- Use clear field labels and descriptions.
+- Use validation where it prevents broken public content.
+- Do not make editors manage unnecessary technical fields unless required.
+
+---
+
+## 9. Content Model
 
 Use consistent structured data for all site content. Do not model classes as merchandise.
 
-### Classes
+### 9.1 Classes
 
 A class record represents a scheduled training event, not a generic product.
 
-Each class must include:
+Each class should include:
 
 - `id`: unique string
 - `title`: class title
@@ -148,8 +330,8 @@ Each class must include:
 - `price`: numeric price
 - `currency`: default `USD`
 - `capacity`: total seats
-- `seatsAvailable`: available seats
-- `status`: `open`, `limited`, `waitlist`, `soldOut`, or `closed`
+- `seatsAvailable`: available seats or derived remaining seats
+- `status`: current registration availability state
 - `skillLevel`: `beginner`, `intermediate`, `advanced`, or `allLevels`
 - `certification`: certification name or `none`
 - `certificationBody`: `AHA`, `ASHI`, `ITLS`, `EMT`, `NRA`, `CCW`, `Internal`, or `none`
@@ -161,28 +343,45 @@ Each class must include:
 - `legalRequirements`: list of legal requirements where relevant
 - `instructorIds`: linked instructors
 - `image`: class image URL or asset reference
-- `registrationUrl`: front-end registration route or placeholder route
+- `registrationUrl`: registration route
 - `relatedClassIds`: related classes
+
+Current canonical runtime statuses:
+
+- `open`
+- `limited`
+- `waitlist`
+- `full`
+- `closed`
+
+Legacy or imported content may refer to `soldOut`; current runtime behavior should normalize sold-out display to `full` / “Sold Out” behavior.
 
 Class status display rules:
 
 - `open`: show “Open”
 - `limited`: show “Limited Seats”
 - `waitlist`: show “Waitlist”
-- `soldOut`: show “Sold Out”
-- `closed`: show “Registration Closed”
+- `full`: show “Sold Out”
+- `closed`: show “Registration Closed” or “Closed”
 
 Class CTA rules:
 
 - `open`: button label is “Register”
 - `limited`: button label is “Register”
 - `waitlist`: button label is “Join Waitlist”
-- `soldOut`: disabled button label is “Sold Out”
+- `full`: disabled button label is “Sold Out”
 - `closed`: disabled button label is “Registration Closed”
 
-### Instructors
+Runtime storage behavior:
 
-Each instructor must include:
+- Open/limited registration requests store `registrationStatus = pending`
+- Waitlist requests store `registrationStatus = waitlist_requested`
+- Waitlist requests should not be blocked by normal remaining-seat checks
+- Full/closed classes should not show a normal registration form
+
+### 9.2 Instructors
+
+Each instructor should include:
 
 - `id`: unique string
 - `name`: full name
@@ -194,9 +393,11 @@ Each instructor must include:
 - `image`: portrait URL or asset reference
 - `featured`: boolean
 
-### Categories
+Instructor content should emphasize credibility, practical experience, certifications, and calm instructional professionalism.
 
-Class categories must include:
+### 9.3 Categories
+
+Class categories should include:
 
 - `id`: unique string
 - `name`: display name
@@ -224,9 +425,9 @@ Defensive Firearms subcategories:
 
 Merchandise is not a class category.
 
-### Merchandise
+### 9.4 Merchandise
 
-Merchandise must include:
+Merchandise should include:
 
 - `id`: unique string
 - `title`: product title
@@ -238,7 +439,7 @@ Merchandise must include:
 - `images`: list of product images
 - `variants`: size, color, or style variants
 - `inventoryStatus`: `inStock`, `lowStock`, or `outOfStock`
-- `shoppingUrl`: front-end product route or placeholder route
+- `shoppingUrl`: product route, external shopping URL, or placeholder route
 - `featured`: boolean
 
 Merchandise categories:
@@ -249,17 +450,29 @@ Merchandise categories:
 - Gift Certificates
 - Accessories
 
-## 6. Homepage Structure
+Merch rules:
+
+- Merch may use “Shop,” “Product,” “Add to Cart,” “Cart,” and “Checkout.”
+- Merch must not be mixed into class registration.
+- Merch may be previewed on the homepage but must remain visually secondary to training.
+
+---
+
+## 10. Homepage Structure
+
+The homepage should establish NorCal MedTac as a professional training organization and quickly route users to the right action.
+
+Recommended structure:
 
 1. **Hero**
-   - Purpose: establish NorCal MedTac as a professional training organization.
+   - Purpose: establish positioning and credibility.
    - Content: headline, short positioning statement, primary CTA, secondary CTA, trust line.
    - Primary CTA: View Upcoming Classes.
    - Secondary CTA: Request Group Training.
 
 2. **Upcoming Classes**
    - Purpose: move users quickly into registration.
-   - Content: 3-6 upcoming class cards with date, title, category, location, price, status, and Register CTA.
+   - Content: 3-6 upcoming class cards with date, title, category, location, price, status, and status-aware CTA.
 
 3. **Training Pathways**
    - Purpose: route users by training need.
@@ -275,7 +488,7 @@ Merchandise categories:
 
 6. **Group Training CTA**
    - Purpose: capture higher-value business, club, and organizational leads.
-   - CTA: Request a Custom Class.
+   - CTA: Request Group Training or Request a Custom Class.
 
 7. **What To Expect**
    - Purpose: reduce uncertainty for first-time students.
@@ -283,25 +496,38 @@ Merchandise categories:
 
 8. **Merch Preview**
    - Purpose: expose merchandise without distracting from training.
-   - Content: 3 featured products and Shop Merch CTA.
+   - Content: featured products and Shop Merch CTA.
 
 9. **Final CTA**
    - Purpose: close with decisive action.
    - CTAs: View Calendar and Contact Us.
 
-## 7. Classes Experience
+Homepage rules:
 
-### 7.1 Class Listing Page
+- Do not make merch the dominant homepage action.
+- Keep class discovery and group training as primary conversion paths.
+- Trust and credibility should appear before the final CTA.
+- Avoid generic fear-based preparedness copy.
+
+---
+
+## 11. Classes Experience
+
+### 11.1 Class Listing Page
 
 Page title:
 
 - Upcoming Classes
 
+Purpose:
+
+The Classes page should help users quickly understand what is available, filter the schedule, and move into class detail or registration.
+
 Layout:
 
 - Page header with short intro copy
 - Filter controls
-- Featured next upcoming class area
+- Featured next upcoming class area if useful
 - Responsive class card grid/list
 - Group training CTA band
 - FAQ or policy link band
@@ -309,13 +535,13 @@ Layout:
 Desktop layout:
 
 - Filters appear as a horizontal control bar above results.
-- Class results appear in a responsive card grid.
+- Class results appear in a responsive card grid or clean list/grid hybrid.
 
 Mobile layout:
 
 - Class cards stack vertically.
-- Filters collapse into a filter drawer.
-- Date, title, location, status, and CTA must be visible in each card without requiring expansion.
+- Filters collapse cleanly.
+- Date, title, location, status, and CTA must be visible without requiring expansion.
 
 Filters:
 
@@ -342,14 +568,20 @@ Class card structure:
 - Duration
 - Price
 - Seats/status
-- Certification label, if applicable
+- Certification label if applicable
 - Short summary
 - Primary CTA: Register, Join Waitlist, Sold Out, or Registration Closed based on status
 - Secondary CTA: View Details
 
-Do not display product archive language such as “Default sorting,” “Product,” “Add to cart,” or “Shop.”
+Do not display product archive language such as:
 
-### 7.2 Class Detail Page
+- Default sorting
+- Product
+- Add to cart
+- Shop
+- Shop Classes
+
+### 11.2 Class Detail Page
 
 The class detail page must answer all practical questions before registration.
 
@@ -360,7 +592,7 @@ Required structure:
    - Category label
    - Short summary
    - Primary CTA based on class status
-   - Secondary CTA: Ask a Question
+   - Secondary CTA: Ask a Question or Contact Us
 
 2. **Class Snapshot**
    - Date
@@ -406,25 +638,80 @@ Required structure:
 Conversion elements:
 
 - Primary CTA above the fold
-- Sticky mobile registration bar with date, price, status, and status-aware CTA
-- Registration CTA opens or links to a front-end placeholder registration screen
-- Disabled states must be visibly distinct for sold-out and closed classes
+- Sticky mobile registration bar where appropriate
+- Date, price, status, and status-aware CTA visible near conversion points
+- Disabled states visibly distinct for full and closed classes
+- Waitlist classes clearly indicate waitlist behavior
 
-## 8. Calendar Experience
+---
+
+## 12. Registration Experience
+
+The registration experience should feel like submitting a class registration request, not checking out from a store.
+
+The registration page should show:
+
+- Class title
+- Date
+- Time
+- Location
+- Price
+- Status
+- Attendee count or seats requested
+- Any relevant registration notes
+- What happens after submission
+
+Registration form should collect:
+
+- First name
+- Last name
+- Email
+- Phone
+- Seats requested
+- Notes or special considerations where applicable
+
+Registration behavior:
+
+- Open/limited classes allow normal registration request submission.
+- Waitlist classes allow waitlist request submission.
+- Full/closed classes do not allow normal registration.
+- No payment is collected in the current phase.
+- Confirmation language should not imply payment completion.
+
+Registration success copy should communicate:
+
+- The request was received.
+- Staff will follow up or the registration will be reviewed as appropriate.
+- No payment has been collected unless a future payment integration explicitly changes this.
+
+Do not use:
+
+- Cart
+- Checkout
+- Product
+- Quantity
+- Continue shopping
+- Order confirmation
+
+---
+
+## 13. Calendar Experience
 
 The Calendar page must prioritize usable class discovery over decorative calendar UI.
 
 Default view:
 
 - Chronological list on all screen sizes
-- Desktop includes a compact monthly grid above or beside the list as a secondary navigation aid
+- Desktop may include a compact monthly grid above or beside the list as a secondary navigation aid
 
 Required behavior:
 
 - Show upcoming classes in date order.
-- Group classes by month.
+- Group classes by month when useful.
 - Each class item must show date, time, title, category, location, price, status, and Register/View Details actions.
 - Users must be able to filter without leaving the calendar page.
+- Sold-out/full classes remain visible but clearly marked.
+- Past classes are hidden by default.
 
 Filters:
 
@@ -437,12 +724,13 @@ Filters:
 Calendar rules:
 
 - The list view is the primary experience.
-- The desktop grid is a supporting control and must not replace the list.
-- Sold-out classes remain visible but clearly marked.
-- Past classes are hidden by default.
-- Selecting a date in the grid scrolls or filters the list to matching classes.
+- A desktop grid is a supporting control and must not replace the list.
+- Selecting a date in a grid should scroll or filter the list to matching classes if this behavior is implemented.
+- Do not prioritize decorative calendar UI over practical class discovery.
 
-## 9. Group Training Page
+---
+
+## 14. Group Training Page
 
 Purpose:
 
@@ -477,6 +765,7 @@ Content structure:
    - Relevant certifications and instructor qualifications
 
 6. **Lead Capture Form**
+   - Capture group training inquiry details.
 
 Lead capture fields:
 
@@ -490,17 +779,67 @@ Lead capture fields:
 - Location
 - Message
 
-Form behavior:
+Current runtime behavior:
 
-- The form is front-end only.
-- Submission shows a success state.
-- No email, database, CRM, or backend integration is required.
+- Group training inquiries are submitted through the site.
+- Submissions are stored in Supabase.
+- The form may include basic spam controls.
+- No email notification automation is currently assumed.
+- No CRM integration is currently assumed.
 
 Form CTA:
 
 - Request Group Training
 
-## 10. Merch Experience
+Copy rules:
+
+- Do not say the form is “front-end only” or “not stored.”
+- Do not overpromise immediate scheduling.
+- Do not imply automated email confirmation unless implemented.
+- Do communicate that the inquiry was received and that staff can follow up.
+
+---
+
+## 15. Contact Page
+
+Purpose:
+
+The Contact page should provide a clear path for questions before registration, general inquiries, and business communication.
+
+Contact page should include:
+
+- Direct contact framing
+- Contact form
+- Business or service area context
+- Links to classes and group training
+- Expectations for follow-up
+- Optional FAQ/policy links
+
+Contact form may collect:
+
+- Name
+- Email
+- Phone
+- Inquiry type
+- Message
+
+Current runtime behavior:
+
+- Contact inquiries are submitted through the site.
+- Submissions are stored in Supabase.
+- The form may include basic spam controls.
+- No email notification automation is currently assumed.
+- No CRM integration is currently assumed.
+
+Copy rules:
+
+- Do not say the contact form is “front-end only” or “not stored.”
+- Do not imply instant response.
+- Do not imply email automation unless implemented.
+
+---
+
+## 16. Merch Experience
 
 Merch is a separate shopping experience and must not be mixed with classes.
 
@@ -511,7 +850,8 @@ Merch page structure:
 - Product category filters
 - Product grid
 - Product cards
-- Front-end cart placeholder where applicable
+- Product detail or external shopping path where applicable
+- Front-end cart placeholder only if implemented and appropriate
 
 Product card structure:
 
@@ -520,19 +860,26 @@ Product card structure:
 - Category
 - Price
 - Inventory status
-- CTA: Add to Cart
+- CTA: Add to Cart, View Item, or external shopping CTA depending on implementation
 
-Merch shopping flow:
+Merch shopping flow may include:
 
 1. User opens Merch.
 2. User browses products.
-3. User opens product detail or adds product to cart.
-4. User reviews a front-end cart placeholder.
-5. User sees a front-end checkout placeholder if implemented.
+3. User opens product detail or external shopping link.
+4. User adds product to cart only if a merch cart exists.
+5. User reviews cart/checkout only if implemented.
 
-Merchandise may be previewed on the homepage but must remain visually secondary to training.
+Current guardrails:
 
-## 11. Registration vs Ecommerce Rules (VERY IMPORTANT)
+- Do not add a real merch checkout unless explicitly scoped.
+- Do not mix merch checkout with class registration.
+- Do not show merchandise upsells before class registration completion.
+- Merchandise may be previewed on the homepage but must remain visually secondary to training.
+
+---
+
+## 17. Registration vs Ecommerce Rules
 
 Classes use registration language.
 
@@ -540,9 +887,11 @@ Use these terms for classes:
 
 - Register
 - Reserve Seat
+- Join Waitlist
 - Training Registration
 - Attendee Information
 - Registration Summary
+- Submit Registration
 - Complete Registration
 - Seats
 - Class
@@ -557,6 +906,9 @@ Do not use these terms for classes:
 - Store
 - Merchandise checkout
 - Continue shopping
+- Buy Now
+- Checkout
+- Order Confirmation
 
 Merchandise uses ecommerce language.
 
@@ -573,16 +925,14 @@ Use these terms for merchandise:
 
 UX differences:
 
-- Class registration is a front-end placeholder flow only.
-- Merchandise checkout is a front-end placeholder flow only.
-- Class registration must show class date, time, location, price, and attendee count throughout the flow.
-- Merchandise checkout must show products, quantities, shipping, and order totals.
-- Class confirmation must include what to bring, prerequisites, arrival details, and policies.
-- Merchandise confirmation must include order and shipping information.
-- Merchandise upsells must not appear before class registration completion.
-- If class registration and merchandise share the same underlying mock state, the front-end language and UI must still present them as separate flows.
+- Class registration must show class date, time, location, price, status, and attendee count/seats requested.
+- Class confirmation must include what happens next and should reference what to bring, prerequisites, arrival details, or policies where appropriate.
+- Merchandise checkout, if implemented later, must show products, quantities, shipping, and order totals.
+- Class registration and merchandise checkout must remain separate even if future systems share underlying infrastructure.
 
-## 12. Trust & Credibility Elements
+---
+
+## 18. Trust & Credibility Elements
 
 Trust must appear throughout the site, not only on the About page.
 
@@ -594,23 +944,30 @@ Required trust elements:
 - Clear “what to expect” content
 - Safety-first language
 - Consistent class photography or polished placeholders
-- Testimonials or review snippets
+- Testimonials or review snippets where available
 - Plain-language cancellation and refund policies
-- Waiver references
-- Secure registration/payment indicators only as visual placeholders
+- Waiver references where appropriate
 - Contact information that is easy to find
 - Group training credibility for businesses and organizations
 - Class-specific confirmation details before registration completion
 
-Do not use exaggerated tactical claims, fear-based messaging, or vague authority language.
+Do not use:
 
-## 13. UX Rules & Constraints
+- Exaggerated tactical claims
+- Fear-based messaging
+- Vague authority language
+- Overly aggressive or militarized copy
+- Unverified credential claims
+
+---
+
+## 19. UX Rules & Constraints
 
 Mobile-first requirements:
 
 - All primary flows must work cleanly on mobile.
 - Class cards must remain readable and actionable on small screens.
-- Class detail pages must include a sticky mobile registration CTA.
+- Class detail pages should include persistent or repeated registration CTAs.
 - Filters must collapse cleanly on mobile.
 - No table-based layouts for key mobile content.
 
@@ -621,18 +978,17 @@ CTA hierarchy:
 - Homepage secondary CTA: Request Group Training
 - Class listing primary CTA: Register or status-aware equivalent
 - Class detail primary CTA: Register for This Class or status-aware equivalent
+- Waitlist CTA: Join Waitlist
 - Group training primary CTA: Request Group Training
-- Merch primary CTA: Add to Cart
+- Merch primary CTA: Add to Cart or merch-specific equivalent
 
 CTA consistency rules:
 
-- "View Upcoming Classes" is the only global/header CTA
-- "Register" is used only for specific class instances
-- "Request Group Training" is used only for group training lead flow
-- "Add to Cart" is used only for merchandise
-
-Do not mix or substitute these labels.
-Do not introduce new CTA wording.
+- “View Upcoming Classes” is the only global/header CTA.
+- “Register” is used only for specific class instances.
+- “Join Waitlist” is used only for waitlist class instances.
+- “Request Group Training” is used only for group training lead flow.
+- “Add to Cart” is used only for merchandise.
 
 Navigation rules:
 
@@ -658,10 +1014,15 @@ Avoid:
 
 Component rules:
 
-- Reuse shared components for cards, buttons, badges, and layout
-- Do not create multiple inconsistent versions of the same UI element
-- Maintain a single source of truth for design patterns
-## 14. Visual Style System
+- Reuse shared components for cards, buttons, badges, forms, and layout.
+- Do not create multiple inconsistent versions of the same UI element.
+- Maintain a single source of truth for design patterns.
+- Forms must use clear labels, accessible inputs, and clear submit states.
+- Empty image states must look intentional, not broken.
+
+---
+
+## 20. Visual Style System
 
 Base colors:
 
@@ -696,13 +1057,13 @@ Spacing philosophy:
 
 Component style:
 
-- Cards use subtle borders, clean backgrounds, and 4-8px border radius.
+- Cards use subtle borders, clean backgrounds, and modest border radius.
 - Buttons use clear filled or outlined styles with strong contrast.
 - Class cards prioritize metadata hierarchy over imagery.
-- Product cards prioritize image, name, price, and Add to Cart.
+- Product cards prioritize image, name, price, and merch CTA.
 - Forms use clear labels, accessible inputs, and strong submit buttons.
 - Badges are used for category, certification, skill level, and status.
-- Section backgrounds alternate between light neutral and dark feature bands.
+- Section backgrounds alternate between light neutral and dark feature bands where useful.
 
 Imagery:
 
@@ -714,32 +1075,146 @@ Imagery:
 
 Image rules:
 
-- Do not use empty image placeholders or broken image icons
-- If no image is available, use a styled placeholder block with a category label
-- All class cards must maintain consistent image or header aspect ratio
-- Avoid mixing black-and-white and color imagery randomly
-- Prefer no image over a bad or inconsistent image
+- Do not use empty image placeholders or broken image icons.
+- If no image is available, use a styled placeholder block with a category label.
+- All class cards must maintain consistent image or header aspect ratio.
+- Avoid mixing black-and-white and color imagery randomly.
+- Prefer no image over a bad or inconsistent image.
 
-## 15. Non-Goals (IMPORTANT)
+---
 
-This build is a front-end redesign specification only.
+## 21. Current Guardrails and Non-Goals
 
-Do not implement:
+The following should not be implemented unless explicitly requested and scoped as a dedicated milestone:
 
-- Backend registration logic
-- Real payment processing
-- Real checkout integration
-- CMS integration
-- WordPress/WooCommerce integration
-- User accounts
-- Admin dashboards
-- Email confirmation automation
+- Stripe/payment processing
+- Real checkout for classes
+- App user accounts
+- Admin dashboard
+- Email notification automation
+- CAPTCHA/Turnstile
 - Inventory management
-- Real seat capacity enforcement
-- Real map integration
-- Deep SEO strategy
+- Full merch checkout
 - Blog migration
+- Deep SEO strategy
 - Analytics setup
 - Legal policy drafting
+- WordPress/WooCommerce integration
 
-Use static or mock data where needed. Build the front-end structure, content model, page hierarchy, visual system, and interaction patterns so backend, payment, and CMS functionality can be added later.
+The following original prototype constraints have been superseded by current implementation:
+
+- No CMS integration
+- No backend registration logic
+- No operational form storage
+- No real seat/status persistence
+
+Current implementation includes Sanity CMS and Supabase-backed operational submissions. Do not remove these systems unless explicitly requested.
+
+Still-current implementation guardrails:
+
+- Do not expose secrets.
+- Do not commit `.env.local`.
+- Do not place Supabase service role keys in client code.
+- Do not remove fallback data.
+- Do not casually bump Sanity package versions.
+- Do not run `npm audit fix --force`.
+- Do not remodel classes as products.
+- Do not mix merch and class registration.
+- Do not add payment language before payment exists.
+- Do not imply email/CRM automation before it exists.
+
+---
+
+## 22. Current Known Runtime Behavior
+
+Registration behavior:
+
+- Open/limited class submissions are stored as registration requests.
+- Waitlist submissions are stored distinctly as waitlist requests.
+- Full/closed classes should not allow normal registration.
+- No payment is collected in the current phase.
+
+Inquiry behavior:
+
+- Contact inquiries are submitted through the website.
+- Group training inquiries are submitted through the website.
+- Inquiry submissions are stored in Supabase.
+- Inquiry workflows currently do not assume email notification automation.
+
+CMS behavior:
+
+- Sanity provides editable content.
+- Local fallback data keeps the public site functional if CMS content is missing or unavailable.
+- `/studio` is the editing interface and should remain isolated from public marketing chrome.
+
+Known limitations:
+
+- Registration seat enforcement still needs transaction-safe hardening before high-volume use.
+- `/studio` production access policy should be decided before launch.
+- Staff currently need an operational workflow for checking registrations, waitlists, and inquiries.
+- Documentation must stay synced with runtime behavior.
+
+---
+
+## 23. AI / Codex Usage Rules
+
+When an AI coding assistant works on this project, it should:
+
+- Read `project-brief.md` for product, design, UX, and language rules.
+- Read `AGENTS.md` for repo-specific agent behavior.
+- Read `docs/ai/PROJECT_CONTEXT.md` for current architecture.
+- Read `docs/ai/ROADMAP.md` for current milestone priorities.
+- Read `docs/ai/ARCHITECTURE_DECISIONS.md` before changing architecture.
+- Read `docs/ai/KNOWN_RISKS.md` before deployment or production hardening.
+- Read `docs/ai/PROJECT_BRIEF_ALIGNMENT.md` when reviewing UI/copy changes.
+
+AI assistants should prefer:
+
+- Small scoped changes
+- Minimal diffs
+- Clear branch-specific handoffs
+- Windows PowerShell commands
+- `npm.cmd run build` for validation when code/config changes
+- Documentation updates when behavior changes
+
+AI assistants should avoid:
+
+- Broad refactors without approval
+- Adding new major features without explicit scope
+- Secret exposure
+- Class/product language drift
+- Removing fallback behavior
+- Updating dependencies casually
+- Turning roadmap items into code without a specific task
+
+---
+
+## 24. Maintenance Rules for This Brief
+
+Update this brief when:
+
+- Product positioning changes
+- Approved navigation changes
+- Class-vs-merch language rules change
+- Visual design direction changes
+- Core content model changes
+- New primary user flows are approved
+- A previously deferred feature becomes part of the active product strategy
+
+Do not use this brief for:
+
+- Temporary branch state
+- Build logs
+- Deployment runbooks
+- Detailed API implementation notes
+- One-off bug reports
+- Chat handoff summaries
+
+Those belong in:
+
+- `docs/ai/ROADMAP.md`
+- `docs/ai/PROJECT_CONTEXT.md`
+- `docs/ai/KNOWN_RISKS.md`
+- `docs/ai/DEPLOYMENT_READINESS_CHECKLIST.md`
+- `docs/ai/HANDOFF_TEMPLATE.md`
+- README or dedicated operational docs
